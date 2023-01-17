@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ReactDOM from 'react-dom';
-import './assets/css/main.css';
+import './assets/scss/main.scss';
 import Login from "./components/login/login";
 import Signup from "./components/login/signup";
 import Home from "./components/home";
