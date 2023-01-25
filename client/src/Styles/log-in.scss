@@ -1,5 +1,7 @@
+//This file contains all the CSS styling of the login page
+@import "./variables/variables.scss";
 
-.login-form, .signup-form {
+.login-form{
   display: flex;
   flex-wrap: wrap;
   input, button {
@@ -7,16 +9,29 @@
     margin-bottom: 10px;
   }
 }
-
+  
 .login-container {
-  background-color: #EBE9E9;
-  border: solid 1px #001BFF;
-  border-radius: 20px;
-  padding: 2em;
+  margin: auto;
+  background-color: $grey_Color;
+  border: solid 1px $blue_Color;
+  border-width: 0.5ch;
+  border-radius: 30px;
+  padding: 8em;
 
-  h1 {
-    margin: 0;
+  #login_title{
+    color: $blue_Color;
+    text-align: center;
+    margin:auto;
+    padding: 3;
+    margin-top: 33;
   }
+
+}
+
+#login_title{
+  margin:auto;
+  padding: 3;
+  margin-top: 33;
 }
 
 .login-form {
@@ -29,12 +44,12 @@ input {
   background-color: white;
 }
 
-button {
-  background-color: blue;
+#login_button {
+  background-color: $blue_Color;
   color: white;
   padding: 10px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 25px;
   cursor: pointer;
 }
 }
