@@ -4,12 +4,19 @@ const port = 3001
 const cors = require('cors')
 const bodyParser = require("express");
 
+// server mongodb
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb+srv://test_user:test_user12345@minicapstone.nfejagl.mongodb.net/?retryWrites=true&w=majority")
+.then(()=> console.log("success")).catch(()=> console.log("fail"))
+
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Server is running')
 })
 
 app.post('/login', (req, res) => {
