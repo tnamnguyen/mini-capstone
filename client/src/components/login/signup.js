@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from "axios";
 
 function Signup() {
     const [username, setUsername] = useState('');
@@ -8,19 +9,28 @@ function Signup() {
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [error, setError] = useState('');
 
-    const handleSignup = () => {
+    const SERVER_URL = "//localhost:3001"
+
+    const handleSignup = async () => {
+
         // Send a request to the server to sign the user up
         // If the signup is successful, redirect the user to the home page
         // If the signup fails, update the error state with the error message
 
         // Code Example:
-        // axios.post('/api/signup', {username, email, password, passwordConfirm})
-        // .then(response => {
-        //   // Handle successful signup
-        // })
-        // .catch(error => {
-        //   setError(error.response.data.message);
-        // });
+        if (password===passwordConfirm) {
+            await axios.post(SERVER_URL + '/signup', {username, email, password})
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+                    setError(error.response.data.message);
+                });
+        } else {
+            // passwords don't match
+            // ...
+        }
+
     };
 
     return (
