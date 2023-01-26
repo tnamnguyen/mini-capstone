@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import {Link} from "react-router-dom";
 import axios from "axios";
+import NavBar from './navBar';
+import '../Styles/log-in.scss';
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -26,31 +28,35 @@ function Login() {
     };
 
     return (
+    <>
+        <NavBar></NavBar>
         <div className="login-form">
 
-            {error && <div className="error">{error}</div>}
-            <div className="login-container">
-                <h1>Log In</h1>
-                <div>
-                    <input
-                        type="text"
-                        placeholder="Username"
-                        value={username}
-                        onChange={e => setUsername(e.target.value)}
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                    />
-                </div>
-                <button onClick={handleLogin}>Login</button>
-                <Link to="/signup">Need an account?</Link>
+        {error && <div className="error">{error}</div>}
+        <div className="login-container">
+            <h2 id='login_title'>Log In</h2>
+            <div>
+                <input
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                />
             </div>
-
-
+            <button id='login_button' onClick={handleLogin}>Login</button>
+            <Link to="/signup">Need an account?</Link>
         </div>
+
+
+    </div>
+    </>
+        
     );
 }
 
