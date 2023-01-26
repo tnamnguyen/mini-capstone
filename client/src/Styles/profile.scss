@@ -1,0 +1,73 @@
+//This file contains all the CSS styling of the profile page
+@import "./variables/variables.scss";
+
+
+.container1{
+  border-color: $blue_Color;
+  border-width: 9px;
+  border-style: solid;
+  background-color: $mid_blue_Color;
+  margin: 30px;
+  padding: 70px;
+  margin-top: 400;
+  padding: 100;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 50px 30px;
+  justify-content: flex-start;
+  gap:140;
+}
+
+.profile_pic{
+  margin-left: 20;
+}
+
+.container2{
+  padding: 20px;
+  font-size: large;
+  font-weight: bold;
+  margin: 40;
+  padding: 100;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 50px 30px;
+  justify-content:space-around;
+}
+
+.greeting{
+  order: 1;
+  flex-grow: 3;
+}
+
+.education{
+  order: 2;
+  flex-grow: 3;
+}
+
+.job{
+  order: 3;
+  flex-grow: 3;
+}
+
+.languages{
+  order: 4;
+  flex-grow: 3;
+}
+
+.bio{
+  order: 5;
+  flex-grow: 3;
+}
+#bio_text{
+  font-weight: normal;
+  padding: 30px;
+  border-color: $blue_Color;
+  border-width: 6px;
+  border-style: solid;
+  background-color: $light_blue_Color; 
+}
+
+
+

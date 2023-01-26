@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import Login from "./components/login";
 import Signup from "./components/signup";
 import Home from "./components/home";
+import Profile from "./components/profile"
 import "bootstrap/dist/css/bootstrap.css"
 
 
@@ -14,6 +15,7 @@ ReactDOM.render(
                 <Route path="/" element={<Home/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/signup" element={<Signup/>}/>
+                <Route path="/profile" element={<Profile/>}/>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>,

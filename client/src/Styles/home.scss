@@ -1,0 +1,53 @@
+//This file contains all the CSS styling of the home page
+@import "./variables/variables.scss";
+
+#home_profile_pic{
+    border-radius: 50%;
+}
+
+
+.home_main_container{
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 50px 30px;
+    justify-content:space-between;
+    gap:80px;
+}
+
+.home_main_profile{
+    background-color: $grey_Color;
+    text-align: center;
+    padding: 30px;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 30%;
+    border-color: $grey_Color;
+    order: 1;
+    flex-grow: 3;
+}
+  
+.home_posts{
+background-color: $grey_Color;
+text-align: center;
+padding: 30px;
+border-style: solid;
+border-width: 3px;
+border-radius: 30%;
+border-color: $grey_Color;
+order: 2;
+flex-grow: 3;
+}
+
+.home_news{
+background-color: $grey_Color;
+text-align: center;
+padding: 30px;
+border-style: solid;
+border-width: 3px;
+border-radius: 30%;
+border-color: $grey_Color;
+order: 3;
+flex-grow: 3;
+}
