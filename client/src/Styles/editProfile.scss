@@ -1,8 +1,8 @@
-//This file contains all the CSS styling of the profile page
+//This file contains all the CSS styling of the edit profile page
 @import "./variables/variables.scss";
 
 
-.profile_container1{
+.edit_profile_container1{
   border-color: $blue_Color;
   border-width: 9px;
   border-style: solid;
@@ -19,11 +19,11 @@
   gap:140;
 }
 
-.profile_profile_pic{
+.edit_profile_profile_pic{
   margin-left: 20;
 }
 
-.profile_container2{
+.edit_profile_container2{
   padding: 20px;
   font-size: large;
   font-weight: bold;
@@ -36,36 +36,36 @@
   justify-content:space-around;
 }
 
-.profile_greeting{
+.edit_profile_greeting{
   order: 1;
   flex-grow: 3;
 }
 
-.profile_education{
+.edit_profile_education{
   order: 2;
   flex-grow: 3;
 }
 
-.profile_past_job{
+.edit_profile_past_job{
   order: 3;
   flex-grow: 3;
 }
 
-.profile_current_job{
+.edit_profile_current_job{
   order: 4;
   flex-grow: 3;
 }
 
-.profile_languages{
+.edit_profile_languages{
   order: 5;
   flex-grow: 3;
 }
 
-.profile_bio{
+.edit_profile_bio{
   order: 6;
   flex-grow: 3;
 }
-#bio_text{
+#edit_bio_text{
   font-weight: normal;
   padding: 30px;
   border-color: $blue_Color;
@@ -74,24 +74,46 @@
   background-color: $light_blue_Color; 
 }
 
-.profile_resume{
+.edit_profile_resume{
   order: 7;
   flex-grow: 3;
 }
 
 
-.profile_edit_profile{
+.edit_profile_submit{
   order: 8;
   flex-grow: 3;
 }
 
-#profile_edit_profile_button{
+#edit_profile_edit_profile_button{
   font-weight: bold;
   padding: 8px;
   border-radius: 30px;
   background-color: $light_blue_Color;
 }
-#profile_edit_profile_button:hover{
-  color: beige;
-  background-color: grey;
+
+#edit_profile_edit_button{
+  margin-left: 30px;
+  border: none;
+}
+
+#edit_profile_update_button{
+  border-radius: 40px;
+  background-color: $light_blue_Color;
+  margin-left: 15px;
+}
+
+#edit_profile_submit_button{
+  background-color: green;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 19px;
+}
+#edit_profile_submit_button:hover{
+  background-color: greenyellow;
+  color: black;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 19px;
 }
