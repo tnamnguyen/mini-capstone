@@ -74,7 +74,7 @@ function EditProfile() {
 
                         {/* ********** Education Element ********** */}
                         <div class='edit_profile_education'>Education: {education}
-                        <button onClick={() => setEditUserName(!editUserName)} id='edit_profile_edit_button'>
+                        <button onClick={() => setEditEducation(!editEducation)} id='edit_profile_edit_button'>
                             <img src={require('../assets/images/edit.png')} width='30' height='30' alt='profile pic'></img>
                         </button>
                             {editEducation && 
@@ -93,7 +93,7 @@ function EditProfile() {
 
                         {/* ********** Past Job Element ********** */}
                         <div class='edit_profile_past_job'>Past Job: {pastJob}
-                        <button onClick={() => setEditUserName(!editUserName)} id='edit_profile_edit_button'>
+                        <button onClick={() => setEditPastJob(!editPastJob)} id='edit_profile_edit_button'>
                             <img src={require('../assets/images/edit.png')} width='30' height='30' alt='profile pic'></img>
                         </button>
                             {editPastJob && 
@@ -112,7 +112,7 @@ function EditProfile() {
 
                         {/* ********** Current Job Element ********** */}
                         <div class='edit_profile_current_job'>Current Job: {currentJob}
-                        <button onClick={() => setEditUserName(!editUserName)} id='edit_profile_edit_button'>
+                        <button onClick={() => setEditCurrentJob(!editCurrentJob)} id='edit_profile_edit_button'>
                             <img src={require('../assets/images/edit.png')} width='30' height='30' alt='profile pic'></img>
                         </button>
                             {editCurrentJob && 
@@ -131,7 +131,7 @@ function EditProfile() {
 
                         {/* ********** Languages Element ********** */}
                         <div class='edit_profile_languages'>Languages: {languages}
-                        <button onClick={() => setEditUserName(!editUserName)} id='edit_profile_edit_button'>
+                        <button onClick={() => setEditLanguages(!editLanguages)} id='edit_profile_edit_button'>
                             <img src={require('../assets/images/edit.png')} width='30' height='30' alt='profile pic'></img>
                         </button>
                             {editLanguages && 
@@ -152,7 +152,7 @@ function EditProfile() {
                         <div class='edit_profile_bio'>
                             <label id='edit_bio_title'>Bio</label>
                             <p id='edit_bio_text'>{bio}</p>
-                            <button onClick={() => setEditBio(!editUserName)} id='edit_profile_edit_button'>
+                            <button onClick={() => setEditBio(!editBio)} id='edit_profile_edit_button'>
                                 <img src={require('../assets/images/edit.png')} width='30' height='30' alt='profile pic'></img>
                             </button>
                             {editBio && 
