@@ -49,7 +49,7 @@ app.post('/login', (req, res) => {
 
 // ************************ Signup ************************ //
 
-app.post('/signup', (req, res) => {
+app.post('/signup', async(req, res) => {
 
   // The response generated from this function consists of 
   // a boolean stating if there is an error as well as an error message
@@ -67,178 +67,79 @@ app.post('/signup', (req, res) => {
   const database_name = "Accounts"
   const collection_name = "users"
   mongoose.set("strictQuery", false);
-  MongoClient.connect(url, async function(err, db){
-    const dbo = db.db(database_name)
-    if (err) throw err
-
-    //Check if password match confirmPassword
-    var passwordMatch = false
-    if (input_password == input_confirm_password){
-      passMatch = true
-      passwordMatch = true
-    }
-    else{
-      anyError = true
-      erorrMessage = "Passwords don't match"
-    }
-
-    //Check if email is duplicated
-    // var  duplicatedEmail = true
-    // console.log("1")
-    // await dbo.collection(collection_name).findOne( { email: input_email }, async(err, foundMatch) => {
-    //   console.log("2")
-    //   if (err) {
-    //     mongoose.connection.close()
-    //     return res.status(500).json({ error: err })
-    //   }
-    //   else{
-    //     if (foundMatch) {
-    //       console.log("found a match")
-    //       mongoose.connection.close();
-    //       duplicatedEmail = true
-    //       anyError = true
-    //       erorrMessage = "Email already registered in database"
-    //     }
-    //     else{
-    //       duplicatedEmail = false
-    //       console.log("No match found")
-    //     }
-    //   }
-    // })
-
-    const match_user = await dbo.collection(collection_name).findOne( { email: input_email })
-    if(match_user){
-      duplicatedEmail = true
-      anyError = true
-      errorMessage = "Email already registered in database"
-    }
-    else{
-      duplicatedEmail = false
-    }
-    
-
-    console.log("3")
-    //Hashing the password before storing it in database
-    var hashedPassword = ''
-    bcrypt.hash(req.body.password, 10, (err, hp) => {
-      if (err) {
-        mongoose.connection.close();
-        res.status(500).json({ error: err });
-      }
-      hashedPassword = hp
-    })
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
 
 
-    // New user that will be added to database
-    var signedUpUser = new User({
-      name: input_name,
-      email: input_email,
-      password: hashedPassword
-    })
-              
-
-    //Storing the new registered user if all checks are completed
-    
-    if(passwordMatch == false){
-      console.log("Error! Passords don't match")
-    }
-    if (duplicatedEmail == true){
-      console.log("Error! Email already exists in database\n")
-    }
-    // if(user_test){
-    //   console.log("Error! Email already exists in database\n")
-    // }
-
-    if (passwordMatch == true &&  duplicatedEmail == false){
-      dbo.collection(collection_name).insertOne(signedUpUser, function(err, res) {
-        console.log("Trying to add user..")
-        if (err) throw err; 
-        console.log("-> 1 New User succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
-        db.close();
-      })
-    }
-  })
-
-  //Sending back response to fron end
-  if (anyError){
-    return res.send(erorrMessage)
+  //Check if password match confirmPassword
+  var passwordMatch = false
+  if (input_password == input_confirm_password){
+    passMatch = true
+    passwordMatch = true
   }
   else{
-    return res.send("User succesfully added to database")
+    anyError = true
+    erorrMessage = "Error! Passwords don't match, Please try again!"
+  }
+
+
+  //Check if email is already stored in the database
+  const match_user = await dbo.collection(collection_name).findOne( { email: input_email })
+  if(match_user){
+    duplicatedEmail = true
+    anyError = true
+    erorrMessage = "Error! email already registered in database, Please try again!"
+  }
+  else{
+    duplicatedEmail = false
+  }
+
+
+  //Hashing the password before storing it in database
+  var hashedPassword = ''
+  bcrypt.hash(req.body.password, 10, (err, hp) => {
+    if (err) {
+      mongoose.connection.close();
+      res.status(500).json({ error: err });
+    }
+    hashedPassword = hp
+  })
+
+
+  // New user that will be added to database
+  var signedUpUser = new User({
+    name: input_name,
+    email: input_email,
+    password: hashedPassword
+  })
+            
+
+  //Storing the new registered user if all checks are completed
+  if(passwordMatch == false){
+    console.log("Error! Passwords don't match")
+  }
+  if (duplicatedEmail == true){
+    console.log("Error! Email already exists in database, Please try again!\n")
+  }
+  if (passwordMatch == true &&  duplicatedEmail == false){
+    dbo.collection(collection_name).insertOne(signedUpUser, function(err, res) {
+      if (err) throw err; 
+      console.log("-> 1 New User succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
+      db_client.close();
+    })
+  }
+  
+
+  //Sending back response to front end
+  if (anyError){
+    return res.send({isError: "True", message: erorrMessage})
+  }
+  else{
+    return res.send({isError: "False", message: "User succesfully added to database, Redirecting to main page..."})
   }
 
 
 });
-
-
-// // /Perform validation /////////////////////////////////////////////////
-// dbo.collection("users").findOne( { email: req.body.email },
-//   (err, user) => {
-//                     if (err) {
-//                         mongoose.connection.close();
-//                         res.status(500).json({ error: err });
-//                     } else {
-//                                     if (user) {
-//                                         mongoose.connection.close();
-//                                         res.status(400).json({ message: 'Email already exists' });
-//                                     } 
-
-
-
-
-// ///////////////////////////////////// Hash the password/////////////////////////////////
-//                                     else{
-//                                       bcrypt.hash(req.body.password, 10, (err, hashedPassword) => 
-//                                       {
-//                                                   if (err) {
-//                                                       mongoose.connection.close();
-//                                                       res.status(500).json({ error: err });
-//                                                   } 
-
-
-
-// //////////////////////////////////////Create new query/////////////////////////////////////
-//                                                   else{
-//                                                     {var myquery = { username: req.body.username,
-//                                                   email:req.body.email ,
-//                                                   password:hashedPassword
-//                                                             };
-
-
-
-
-// //////////////////////////////////////////////// Save the new user to the database///////////////////////////////////////////////
-//                                                 dbo.collection("users").insertOne(myquery, function(err, res) {
-//                                                   if (err) throw err; 
-//                                                   console.log("1 document updated");
-//                                                   db.close();
-//                                                             })
-                                                          
-//                                                           }
-//                                                         }                                                      
-//                                                  }
-//                                           )
-
-//                                        }
-//                                }
-//                          }
-//                    )
-//              }
-//       );
-
- 
-
-            
-
- 
-
-//   // Send a response to the client- not working
-//   res.json({
-//     success: true,
-//     message: 'Successfully signed up'
-//   });
-// });
-
 
 
 app.listen(port, () => {

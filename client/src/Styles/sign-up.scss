@@ -71,3 +71,12 @@ button {
   cursor: pointer;
 }
 }
+
+.signUpStatus_err{
+  color: red;
+  font-size: 19px;
+}
+.signUpStatus_success{
+  color: green;
+  font-size: 23px;
+}
