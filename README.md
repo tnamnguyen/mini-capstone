@@ -10,7 +10,7 @@ Team #16
 | Student Name                | Student ID | Role                              |
 | --------------------------- | ---------- | --------------------------------- |
 | Daniel Soldera              | 40168674   | Scrum Master & Web designer       |
-| Eyad Al Sweidan             | 40068386   | Programmer                        |
+| Eyad Al Sweidan             | 40068386   | Frontend Programmer               |
 | Thanh-Nam Nguyen            | 40099787   | Backend Programmer                |
 | Youssef Morcos              | 40124441   | Backend Programmer                |
 | Pai Peng                    | 40155601   | Frontend Programmer               |
