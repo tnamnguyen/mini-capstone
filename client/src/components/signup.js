@@ -15,25 +15,20 @@ function Signup() {
     const SERVER_URL = "//localhost:3001"
 
     const handleSignup = async () => {
-
         // Send a request to the server to sign the user up
         // If the signup is successful, redirect the user to the home page
         // If the signup fails, update the error state with the error message
 
         // Code Example:
-        if (password===passwordConfirm) {
-            await axios.post(SERVER_URL + '/signup', {username, email, password})
-                .then(response => {
-                    console.log(response);
-                })
-                .catch(error => {
-                    setError(error.response.data.message);
-                });
-        } else {
-            // passwords don't match
-            // ...
-        }
-
+        
+        await axios.post(SERVER_URL + '/signup', {username, email, password, passwordConfirm})
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                setError(error.response.data.message);
+            });
+       
     };
 
     return (
