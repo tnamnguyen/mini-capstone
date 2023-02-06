@@ -129,3 +129,5 @@ dbo.collection("users").findOne( { email: req.body.email },
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+module.exports = app;
