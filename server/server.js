@@ -2,23 +2,28 @@ const express = require('express')
 const app = express()
 const port = 3001
 const cors = require('cors')
-const bodyParser = require("express");
-const bcrypt = require('bcrypt');
+const bodyParser = require("express")
+const bcrypt = require('bcrypt')
+const mongoose = require("mongoose")
+const User = require("./model.js")
 
 
-// server mongodb
-const mongoose = require("mongoose");
 
-mongoose.connect("mongodb+srv://test_user:test_user12345@minicapstone.nfejagl.mongodb.net/?retryWrites=true&w=majority")
-.then(()=> console.log("success")).catch(()=> console.log("fail"))
-
-const User = require("./model.js");
-
-
-//////////////////////////////////////////
+// ************************ Connecting to Mongoose DB ************************ //
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true })); 
+const MongoClient = require('mongodb').MongoClient;
+const url = "mongodb+srv://test_user:test_user12345@minicapstone.nfejagl.mongodb.net/?retryWrites=true&w=majority"
+function connectToMongooseDB(){
+  mongoose.set("strictQuery", false);
+  mongoose.connect(url)
+    .then(()=> console.log("Connected to Mongoose DB!\n"))
+    .catch(()=> console.log("Unable to connect to Mongoose DB!"))
+}
+connectToMongooseDB();
+
+
 
 app.get('/', (req, res) => {
   res.send('Server is running')
@@ -29,7 +34,7 @@ app.post('/login', (req, res) => {
   const { username, password } = req.body;
   console.log(req.body.username)
   console.log(req.body.password)
-
+ 
   // Perform validation and authentication
   // ...
 
@@ -40,90 +45,101 @@ app.post('/login', (req, res) => {
   });
 });
 
-app.post('/signup', (req, res) => {
-  // Get the username, password, and email from the request body
-  const { username, email, password } = req.body;
-  console.log(req.body.username)
-  console.log(req.body.email)
-  console.log(req.body.password)
-
-  var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb+srv://test_user:test_user12345@minicapstone.nfejagl.mongodb.net/?retryWrites=true&w=majority";
-
-MongoClient.connect(url, function(err, db) 
-{
-  if (err) throw err;
-  var dbo = db.db("Accounts");
 
 
-// /Perform validation /////////////////////////////////////////////////
-dbo.collection("users").findOne( { email: req.body.email },
-  (err, user) => {
-                    if (err) {
-                        mongoose.connection.close();
-                        res.status(500).json({ error: err });
-                    } else {
-                                    if (user) {
-                                        mongoose.connection.close();
-                                        res.status(400).json({ message: 'Email already exists' });
-                                    } 
+// ************************ Signup ************************ //
+
+app.post('/signup', async(req, res) => {
+
+  // The response generated from this function consists of 
+  // a boolean stating if there is an error as well as an error message
+  // in case of an error
+  var anyError = false
+  var erorrMessage = 'No errors detected'
+
+  // Storing the username, password, and email from the request body
+  const input_name = req.body.username
+  const input_email = req.body.email
+  const input_password = req.body.password
+  const input_confirm_password = req.body.passwordConfirm
+
+  //Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  mongoose.set("strictQuery", false);
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
 
 
+  //Check if password match confirmPassword
+  var passwordMatch = false
+  if (input_password == input_confirm_password){
+    passMatch = true
+    passwordMatch = true
+  }
+  else{
+    anyError = true
+    erorrMessage = "Error! Passwords don't match, Please try again!"
+  }
 
 
-///////////////////////////////////// Hash the password/////////////////////////////////
-                                    else{
-                                      bcrypt.hash(req.body.password, 10, (err, hashedPassword) => 
-                                      {
-                                                  if (err) {
-                                                      mongoose.connection.close();
-                                                      res.status(500).json({ error: err });
-                                                  } 
+  //Check if email is already stored in the database
+  const match_user = await dbo.collection(collection_name).findOne( { email: input_email })
+  if(match_user){
+    duplicatedEmail = true
+    anyError = true
+    erorrMessage = "Error! email already registered in database, Please try again!"
+  }
+  else{
+    duplicatedEmail = false
+  }
 
 
+  //Hashing the password before storing it in database
+  var hashedPassword = ''
+  bcrypt.hash(req.body.password, 10, (err, hp) => {
+    if (err) {
+      mongoose.connection.close();
+      res.status(500).json({ error: err });
+    }
+    hashedPassword = hp
+  })
 
-//////////////////////////////////////Create new query/////////////////////////////////////
-                                                  else{
-                                                    {var myquery = { username: req.body.username,
-                                                  email:req.body.email ,
-                                                  password:hashedPassword
-                                                            };
 
-
-
-
-//////////////////////////////////////////////// Save the new user to the database///////////////////////////////////////////////
-                                                dbo.collection("users").insertOne(myquery, function(err, res) {
-                                                  if (err) throw err; 
-                                                  console.log("1 document updated");
-                                                  db.close();
-                                                            })
-                                                          
-                                                          }
-                                                        }                                                      
-                                                 }
-                                          )
-
-                                       }
-                               }
-                         }
-                   )
-             }
-      );
-
- 
-
+  // New user that will be added to database
+  var signedUpUser = new User({
+    name: input_name,
+    email: input_email,
+    password: hashedPassword
+  })
             
 
- 
+  //Storing the new registered user if all checks are completed
+  if(passwordMatch == false){
+    console.log("Error! Passwords don't match")
+  }
+  if (duplicatedEmail == true){
+    console.log("Error! Email already exists in database, Please try again!\n")
+  }
+  if (passwordMatch == true &&  duplicatedEmail == false){
+    dbo.collection(collection_name).insertOne(signedUpUser, function(err, res) {
+      if (err) throw err; 
+      console.log("-> 1 New User succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
+      db_client.close();
+    })
+  }
+  
 
-  // Send a response to the client- not working
-  res.json({
-    success: true,
-    message: 'Successfully signed up'
-  });
+  //Sending back response to front end
+  if (anyError){
+    return res.send({isError: "True", message: erorrMessage})
+  }
+  else{
+    return res.send({isError: "False", message: "User succesfully added to database, Redirecting to main page..."})
+  }
+
+
 });
-
 
 
 app.listen(port, () => {
