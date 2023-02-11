@@ -1,0 +1,38 @@
+//This file contains all the CSS styling of the login page
+@import "./variables/variables.scss";
+
+button {
+    background-color: blue;
+    color: white;
+    border: solid;
+    border-radius: 40%;
+    cursor: pointer;
+    border-color: black;
+    padding: 15px
+  }
+
+  .container {
+display: flex;
+justify-content: space-between;
+flex-wrap: wrap;
+text-align: left;
+border: solid;
+border-color: blue;
+  }
+
+span {
+  
+  text-align: center;
+  flex-grow: 1;
+  flex-basis: 20%;
+ 
+  height: 50px;
+  
+}
+
+.container2 {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 110px;
+    }
+
