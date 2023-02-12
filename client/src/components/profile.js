@@ -49,8 +49,13 @@ function Profile() {
                     </div>
                     <div class='profile_resume'>Resume: {resume}</div>
                     <div class="profile_edit_profile">
+
                         <Link to="/editProfile">
                             <button id='profile_edit_profile_button'>Edit Profile</button>
+                        </Link>
+
+                        <Link to="/deleteProfile">
+                            <button id='profile_delete_profile_button'>Delete Profile</button>
                         </Link>
                     </div>
                 </div>
