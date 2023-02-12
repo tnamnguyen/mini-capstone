@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../Styles/job.scss";
+import { useState } from "react";
 
 function Job({
   title,
@@ -17,25 +18,22 @@ function Job({
     passEduc: education,
     passExp: experience,
     passTools: tools,
-    passPace: place,
+    passPlace: place,
     passLang: languages,
     passDesc: description,
     passOID: ownerID,
   };
+
+  const [data] = useState(passingObj);
+
   return (
     <div className="container">
       <span style={{ fontWeight: "bold" }}>{title}</span>
       <span>{education}</span>
       <span>{experience}</span>
       <span>{place}</span>
-      <Link
-        to={{
-          pathname: "/viewJob",
-          state: {
-            passingObj,
-          },
-        }}
-      >
+
+      <Link to="/viewJob" state={{ data: data }}>
         <button>View Job</button>
       </Link>
     </div>

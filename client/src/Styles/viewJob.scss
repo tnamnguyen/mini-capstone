@@ -1,0 +1,37 @@
+//This file contains all the CSS styling of the login page
+@import "./variables/variables.scss";
+
+.viewJob_container1{
+    border-color: $blue_Color;
+    border-width: 9px;
+    border-style: solid;
+    background-color: $grey_Color;
+    margin: 30px;
+    padding: 70px;
+    margin-top: 400;
+    padding: 100;
+    
+    gap:140px;
+  }
+
+  .viewJob_container2{
+    border-color: $blue_Color;
+    border-width: 3px;
+    border-style: dashed;
+    background-color: $grey_Color;
+    margin: 30px;
+    text-indent: 35px;
+  }
+  .extra{margin: 30px;
+text-align: left;}
+
+button {
+    background-color: blue;
+    color: white;
+    border: 10px;
+   border-color: black;
+    padding: 15px;
+    margin:30px;
+    cursor: pointer;
+   
+  }
