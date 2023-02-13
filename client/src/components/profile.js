@@ -53,7 +53,8 @@ function Profile() {
                         <Link to="/editProfile">
                             <button id='profile_edit_profile_button'>Edit Profile</button>
                         </Link>
-
+                    </div>
+                    <div class="profile_delete_profile">
                         <Link to="/deleteProfile">
                             <button id='profile_delete_profile_button'>Delete Profile</button>
                         </Link>

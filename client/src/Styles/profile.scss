@@ -85,12 +85,18 @@
   flex-grow: 3;
 }
 
+.profile_delete_profile{
+  order: 8;
+  flex-grow: 3;
+}
+
 #profile_edit_profile_button{
   font-weight: bold;
   padding: 8px;
   border-radius: 30px;
   background-color: $light_blue_Color;
 }
+
 #profile_edit_profile_button:hover{
   color: beige;
   background-color: grey;
