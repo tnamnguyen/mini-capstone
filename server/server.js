@@ -143,15 +143,13 @@ app.post('/signup', async(req, res) => {
 
 
   //Hashing the password before storing it in database
-  var hashedPassword = ''
-  bcrypt.hash(req.body.password, 10, (err, hp) => {
+  hashedPassword = bcrypt.hashSync(input_password, 10, (err, hp) => {
     if (err) {
       mongoose.connection.close();
       res.status(500).json({ error: err });
     }
     hashedPassword = hp
   })
-
 
   // New user that will be added to database
   var signedUpUser = new User({
