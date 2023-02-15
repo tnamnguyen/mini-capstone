@@ -1,0 +1,121 @@
+//This file contains all the CSS styling of the edit profile page
+@import "./variables/variables.scss";
+
+
+.edit_job_container1{
+  border-color: $blue_Color;
+  border-width: 9px;
+  border-style: solid;
+  background-color: $grey_Color;
+  margin: 30px;
+  padding: 70px;
+  margin-top: 400;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 50px 30px;
+  justify-content: flex-start;
+}
+
+.edit_job_profile_pic{
+  margin-left: 20;
+}
+
+.edit_job_container2{
+  padding: 20px;
+  font-size: large;
+  font-weight: bold;
+  margin: 40;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 50px 30px;
+  justify-content:space-around;
+}
+
+.edit_job_greeting{
+  order: 1;
+  flex-grow: 3;
+}
+
+.edit_job_education{
+  order: 2;
+  flex-grow: 3;
+}
+
+.edit_job_past_job{
+  order: 3;
+  flex-grow: 3;
+}
+
+.edit_job_current_job{
+  order: 4;
+  flex-grow: 3;
+}
+
+.edit_job_location{
+    order: 5;
+    flex-grow: 3;
+}
+
+.edit_job_languages{
+  order: 6;
+  flex-grow: 3;
+}
+
+.edit_job_bio{
+  order: 7;
+  flex-grow: 3;
+}
+#edit_bio_text{
+  font-weight: normal;
+  padding: 30px;
+  border-color: $blue_Color;
+  border-width: 6px;
+  border-style: solid;
+  background-color: $light_blue_Color; 
+}
+
+.edit_job_resume{
+  order: 7;
+  flex-grow: 3;
+}
+
+
+.edit_job_submit{
+  order: 8;
+  flex-grow: 3;
+}
+
+#edit_job_edit_job_button{
+  font-weight: bold;
+  padding: 8px;
+  border-radius: 30px;
+  background-color: $light_blue_Color;
+}
+
+#edit_job_edit_button{
+  margin-left: 30px;
+  border: none;
+}
+
+#edit_job_update_button{
+  border-radius: 40px;
+  background-color: $light_blue_Color;
+  margin-left: 15px;
+}
+
+#edit_job_submit_button{
+  background-color: green;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 19px;
+}
+#edit_job_submit_button:hover{
+  background-color: greenyellow;
+  color: black;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 19px;
+}

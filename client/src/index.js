@@ -10,6 +10,7 @@ import Jobs from "./components/jobs.js";
 import CreateJob from "./components/createJob";
 import YourJobs from "./components/yourJobs";
 import ViewJob from "./components/viewJob";
+import EditJob from "./components/editJob";
 import "bootstrap/dist/css/bootstrap.css";
 
 ReactDOM.render(
@@ -25,6 +26,7 @@ ReactDOM.render(
         <Route path="/createJob" element={<CreateJob />} />
         <Route path="/yourJobs" element={<YourJobs />} />
         <Route path="/viewJob" element={<ViewJob />} />
+        <Route path="/editJob" element={<EditJob />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

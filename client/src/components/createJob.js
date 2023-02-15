@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import NavBar from "./navBar";
-import "../Styles/sign-up.scss";
+import "../Styles/create_job.scss";
 
 function CreateJob() {
   const [title, setTitle] = useState("");
@@ -19,10 +19,10 @@ function CreateJob() {
   return (
     <>
       <NavBar></NavBar>
-      <div className="signup-form">
+      <div className="createjob-form">
         {error && <div className="error">{error}</div>}
-        <div className="signup-container">
-          <h2 id="signup_title">Create Job</h2>
+        <div className="createjob-container">
+          <h2 id="createjob_title">Create Job</h2>
           <div>
             <input
               type="text"
