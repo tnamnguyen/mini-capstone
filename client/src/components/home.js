@@ -7,7 +7,7 @@ function Home() {
     return (
         <>
             <NavBar></NavBar>
-            <div class='home_main_container'>
+            <div class='home_main_container' data-testid="home_main_container">
 
                 {/* Left element on the page */}
                 <div class='home_main_profile'>
