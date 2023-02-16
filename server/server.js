@@ -72,10 +72,11 @@ app.post('/signup', async(req, res) => {
 
 
   //In order to succesfully sign up, the following checks must be validated:
+  var allFieldsFilled = false  //All fields must be filled
   var passwordMatch = false    //password must match confirmPassword
   var validPassword = false    //password must be at least 8 characters long, contain a capital letter, a digit and a special character (! @ # $ % ^ & * - _ . ,)
   var validEmail = false       //email must be of the following format email@something.com
-  var duplicatedEmail = true  //email must not already exist in database
+  var duplicatedEmail = true   //email must not already exist in database
 
 
   //Check if password match confirmPassword
@@ -142,6 +143,19 @@ app.post('/signup', async(req, res) => {
   }
 
 
+  //Check if all fields are filled
+  if(input_name == "" || input_email == "" || input_password == "" || input_confirm_password == "")
+  {
+    allFieldsFilled = false
+    anyError = true
+    erorrMessage = "Please fill all fields!"
+    console.log(erorrMessage)
+  }
+  else{
+    allFieldsFilled = true
+  }
+
+
   //Hashing the password before storing it in database
   hashedPassword = bcrypt.hashSync(input_password, 10, (err, hp) => {
     if (err) {
@@ -160,7 +174,7 @@ app.post('/signup', async(req, res) => {
             
 
   //Storing the new registered user if all checks are completed
-  if (passwordMatch == true && validPassword == true && validEmail == true && duplicatedEmail == false){
+  if (passwordMatch == true && validPassword == true && validEmail == true && duplicatedEmail == false && allFieldsFilled == false){
     dbo.collection(collection_name).insertOne(signedUpUser, function(err, res) {
       if (err) throw err; 
       console.log("-> 1 New User succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
