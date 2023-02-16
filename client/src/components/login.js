@@ -5,9 +5,11 @@ import NavBar from './navBar';
 import '../Styles/log-in.scss';
 
 function Login() {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loginStatus_success, setLoginStatus_success] = useState('');
+    const [loginStatus_err, setLoginStatus_err] = useState('');
 
     const SERVER_URL = "http://localhost:3001"
 
@@ -16,15 +18,20 @@ function Login() {
         // Send a request to the server to log the user in
         // If the login is successful, redirect the user to the home page
         // If the login fails, update the error state with the error message
-        //
-        // Code Example:
-        await axios.post(SERVER_URL + '/login', {username, password})
+        await axios.post(SERVER_URL + '/login', {email, password})
             .then(response => {
-                console.log(response);
+                //If backend returns an error
+                if(response.data.isError == "True"){
+                    setLoginStatus_err(response.data.message)
+                    setLoginStatus_success('')
+                }
+                //If backend returns success
+                if(response.data.isError == "False"){
+                    setLoginStatus_err('')
+                    setLoginStatus_success(response.data.message)
+                }
+                
             })
-            .catch(error => {
-                setError(error.response.data.message);
-            });
     };
 
     return (
@@ -38,9 +45,9 @@ function Login() {
             <div>
                 <input
                     type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={e => setUsername(e.target.value)}
+                    placeholder="Email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
                 />
                 <input
                     type="password"
@@ -51,6 +58,9 @@ function Login() {
             </div>
             <button id='login_button' onClick={handleLogin}>Login</button>
             <Link to="/signup">Need an account?</Link>
+
+            <div className='loginStatus_err'>{loginStatus_err}</div>
+            <div className='loginStatus_success'>{loginStatus_success}</div>
         </div>
 
 
