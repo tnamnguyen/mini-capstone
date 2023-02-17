@@ -27,6 +27,7 @@ function Login() {
                 }
                 //If backend returns success
                 if(response.data.isError == "False"){
+                    localStorage.setItem("token", response.data.token)
                     setLoginStatus_err('')
                     setLoginStatus_success(response.data.message)
                 }

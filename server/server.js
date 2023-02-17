@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt')
 const mongoose = require("mongoose")
 const session = require("express-session")
 const User = require("./model.js")
+const jwt = require('jsonwebtoken')
 
 
 
@@ -26,11 +27,13 @@ connectToMongooseDB();
 
 
 
-// **************************************** Setting Up Sessions **************************************** //
+// **************************************** Setting Up Sessions & JWT **************************************** //
 app.use(
   session({
-    secret: "seret123",
+    secret: "jwtsecret",
     saveUninitialized: true,
+    user: {},
+    token: null,
     resave: false,
     cookie:{
       httpOnly: true,
@@ -38,14 +41,6 @@ app.use(
     }
   })
 );
-
-// app.use((req, res, next) => {
-//   console.log("SESSIONSSSS")
-//   console.log(req.session);
-//   console.log("dsahadslasd")
-//   next();
-// })
-
 
 
 // **************************************** Home **************************************** //
@@ -100,6 +95,7 @@ app.post('/login', async(req, res) => {
 
   //Check if email exists in database
   var databasePassword = ""
+  var user_id = -1
   var user_userName = ""
   var user_email = ""
   var user_password = ""
@@ -113,6 +109,7 @@ app.post('/login', async(req, res) => {
     }
     //If email exists 
     else{
+      user_id = result._id
       user_userName = result.name
       user_email = result.email
       user_password = result.password
@@ -149,26 +146,37 @@ app.post('/login', async(req, res) => {
 
   //Sending back response to front end
   if (anyError){
-    return res.send({isError: "True", message: erorrMessage})
+    res.json({
+      isError: "True", 
+      message: erorrMessage,
+      auth: true
+    })
   }
   else{
-    //Storing user info on the ative session
-    userInfo = {user_userName, user_email, user_password}
-    const token = createToken(userInfo)
-    const decodedToken = jwtDecode(token)
-    const expiresAt = decodedToken.exp
+    //User info
+    user_info = {
+      user_id,
+      user_userName, 
+      user_email, 
+      user_password
+    }
 
-    //Sending sucess response to front end
-    res.json({
-      message: "Authentication successful!",
-      isError: "False",
-      token,
-      userInfo,
-      expiresAt
+    
+    const token = jwt.sign({user_id, user_userName, user_email, user_password}, "jwtsecret", {
+      expiresIn: 300
     })
-    console.log(res)
+    req.session.token = token
 
-    return res
+    res.json({
+      isError: "False", 
+      message: "User successfully logged-in!",
+      auth: true,
+      token: token, 
+      result: user_info,
+    })
+    
+
+    //return res.send({isError: "False", message: "User successfully logged-in!"})
   }
 });
 
