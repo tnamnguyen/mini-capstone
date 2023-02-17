@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../Styles/job.scss";
-import { useState } from "react";
 
 function Job({
   title,
@@ -24,7 +23,7 @@ function Job({
     passOID: ownerID,
   };
 
-  const [data] = useState(passingObj);
+  const [data] = React.useState(passingObj);
 
   return (
     <div className="container">

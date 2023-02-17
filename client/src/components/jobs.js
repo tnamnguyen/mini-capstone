@@ -67,7 +67,7 @@ rows.push(Job({title : ,
   );
 
   return (
-    <>
+    <div data-testid="jobs-1">
       <NavBar></NavBar>
       <div className="container">
         <span style={{ fontWeight: "bold" }}>Job Title</span>
@@ -87,7 +87,7 @@ rows.push(Job({title : ,
           <button id="jobs_create_job">Create Job</button>
         </Link>
       </div>
-    </>
+    </div>
   );
 }
 

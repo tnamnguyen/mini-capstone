@@ -16,20 +16,31 @@
     border-color: $blue_Color;
     border-width: 3px;
     border-style: dashed;
-    background-color: $grey_Color;
+   
     margin: 30px;
     text-indent: 35px;
   }
   .extra{margin: 30px;
 text-align: left;}
 
-button {
+#viewJob_save {
     background-color: blue;
     color: white;
     border: 10px;
+    border-radius: 10%;
    border-color: black;
     padding: 15px;
     margin:30px;
     cursor: pointer;
-   
+  }
+
+  #viewJob_apply {
+    background-color: blue;
+    color: white;
+    border: 10px;
+    border-radius: 10%;
+   border-color: black;
+    padding: 15px;
+    margin:30px;
+    cursor: pointer;
   }

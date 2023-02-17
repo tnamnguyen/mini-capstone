@@ -8,7 +8,7 @@ function ViewJob(props) {
   const location = useLocation();
   console.log(props, " props");
   console.log(location, " useLocation Hook");
-  const data = location.state?.data;
+  const data = location.state.data;
 
   return (
     <>
@@ -18,7 +18,7 @@ function ViewJob(props) {
         <h2>Education Requirements: {data ? data.passEduc : "Oops"}</h2>{" "}
         <h2>Experience Requirements: {data ? data.passExp : "Oops"}</h2>
         <h3>Tools Needed/Used: {data ? data.passTools : "Oops"}</h3>{" "}
-        <h3>Location of Job Site: {data ? data.passPlace : "Oops"}</h3>{" "}
+        <h3>Location of Job Site: {data ? data.passPlace : "Oops"}</h3>
         <h3>Languages Required: {data ? data.passLang : "Oops"}</h3>
       </div>
       <div className="extra">
@@ -26,19 +26,19 @@ function ViewJob(props) {
       </div>
 
       <div className="viewJob_container2">
-        <p>{data ? data.passDesc : "Oops"}</p>
+        <h3>{data ? data.passDesc : "Oops"}</h3>
         <br></br>
-        <Link to="#">
-          <button id="viewJob_save">Save</button>
-        </Link>
-        <Link to="/jobs">
-          <button
-            id="viewJob_apply" /*onClick={} backend method to apply goes here */
-          >
-            Apply
-          </button>
-        </Link>
       </div>
+      <Link to="#">
+        <button id="viewJob_save">Save</button>
+      </Link>
+      <Link to="/jobs">
+        <button
+          id="viewJob_apply" /*onClick={} backend method to apply goes here */
+        >
+          Apply
+        </button>
+      </Link>
     </>
   );
 }

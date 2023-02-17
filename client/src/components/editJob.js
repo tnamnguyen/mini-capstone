@@ -14,7 +14,7 @@ function EditJob() {
 
   //Variables holding the values of different fields
   const [title, setTitle] = useState("Title");
-  const [education, setEducation] = useState("JobEducation");
+  const [education, setEducation] = useState("Education");
   const [experience, setExperience] = useState("Experience");
   const [tools, setTools] = useState("Tools");
   const [location, setLocation] = useState("Location");
@@ -63,7 +63,7 @@ function EditJob() {
           <div class="edit_job_education">
             Education: {education}
             <button
-              onClick={() => setEditTitle(!editTitle)}
+              onClick={() => setEditJobEducation(!editJobEducation)}
               id="edit_job_edit_button"
             >
               <img
@@ -95,7 +95,7 @@ function EditJob() {
           <div class="edit_job_past_job">
             Experience: {experience}
             <button
-              onClick={() => setEditTitle(!editTitle)}
+              onClick={() => setEditExperience(!editExperience)}
               id="edit_job_edit_button"
             >
               <img
@@ -127,7 +127,7 @@ function EditJob() {
           <div class="edit_job_current_job">
             Tools: {tools}
             <button
-              onClick={() => setEditTitle(!editTitle)}
+              onClick={() => setEditTools(!editTools)}
               id="edit_job_edit_button"
             >
               <img
@@ -159,7 +159,7 @@ function EditJob() {
           <div class="edit_job_location">
             Location: {location}
             <button
-              onClick={() => setEditTitle(!editTitle)}
+              onClick={() => setEditLocation(!editLocation)}
               id="edit_job_edit_button"
             >
               <img
@@ -191,7 +191,7 @@ function EditJob() {
           <div class="edit_job_languages">
             Languages: {language}
             <button
-              onClick={() => setEditTitle(!editTitle)}
+              onClick={() => setEditLanguage(!editLanguage)}
               id="edit_job_edit_button"
             >
               <img
@@ -224,7 +224,7 @@ function EditJob() {
             <label id="edit_bio_title">Bio</label>
             <p id="edit_bio_text">{description}</p>
             <button
-              onClick={() => setEditDescription(!editTitle)}
+              onClick={() => setEditDescription(!editDescription)}
               id="edit_job_edit_button"
             >
               <img

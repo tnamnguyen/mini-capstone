@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+/*import axios from "axios";*/
 import NavBar from "./navBar";
 import "../Styles/create_job.scss";
 
@@ -19,7 +19,7 @@ function CreateJob() {
   return (
     <>
       <NavBar></NavBar>
-      <div className="createjob-form">
+      <div className="createjob-form" data-testid="createJob-1">
         {error && <div className="error">{error}</div>}
         <div className="createjob-container">
           <h2 id="createjob_title">Create Job</h2>
@@ -67,7 +67,7 @@ function CreateJob() {
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
-          <Link to=".jobs">
+          <Link to="/jobs">
             <button id="createJob_button">Back</button>
           </Link>
           <button id="createJob_button" /*onClick={handleJobCreation}*/>
