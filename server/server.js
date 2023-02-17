@@ -39,10 +39,12 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  console.log(req.session);
-  next();
-})
+// app.use((req, res, next) => {
+//   console.log("SESSIONSSSS")
+//   console.log(req.session);
+//   console.log("dsahadslasd")
+//   next();
+// })
 
 
 
@@ -67,7 +69,7 @@ app.post('/login', async(req, res) => {
 
   // Get the username and password from the request body
   const { email, password } = req.body;
-  login_email = req.body.username
+  login_email = req.body.email
   login_password = req.body.password
  
   //Connecting to the specific database and collection
@@ -78,35 +80,71 @@ app.post('/login', async(req, res) => {
   const dbo = db_client.db(database_name)
   
   //In order to succesfully sign in, the following checks must be validated:
+  var filledFields = false    //Both fields need to have values
   var email_valid = false     //Email must exist in database
   var password_match = false  //password must match given email
 
 
-  //Check if email exists in database
-  email_valid = await dbo.collection(collection_name).findOne( { email: login_email })
-  if(!email_valid)
-  {
-    anyError = true
-    erorrMessage = "Invalid email, we don't have this email in our database!"
+  //Function that compares user password with database password
+  function authenticatePassword(param1, param2) {
+    return new Promise(function(resolve, reject) {
+        bcrypt.compare(param1, param2, function(err, res) {
+            if (err) {
+                 reject(err);
+            } else {
+                 resolve(res);
+            }
+        });
+    });
   }
 
-  //Check if password correspond to given email
-
-  //Hashing the password inputted by user
-  var hashedPassword = ''
-  bcrypt.hash(login_password, 10, (err, hp) => {
-    if (err) {
-      mongoose.connection.close();
-      res.status(500).json({ error: err });
+  //Check if email exists in database
+  var databasePassword = ""
+  var user_userName = ""
+  var user_email = ""
+  var user_password = ""
+  await dbo.collection(collection_name).findOne( { email: login_email })
+  .then(result => {
+    //If email doesn't exist
+    if (!result){
+      email_valid = false
+      anyError = true
+      erorrMessage = "Invalid email, we don't have this email in our database!"
     }
-    hashedPassword = hp
+    //If email exists 
+    else{
+      user_userName = result.name
+      user_email = result.email
+      user_password = result.password
+      databasePassword = result.password
+      email_valid = true
+    }
   })
+  .catch(err => {
+    console.log("Error:" + err)
+  })
+  
 
-  password_match = await dbo.collection(collection_name).findOne( { password: hashedPassword, email: login_email})
+  //Check if password corresponds to given email
+  password_match =  await authenticatePassword(login_password, databasePassword)
   if(!password_match)
   {
     anyError = true
-    erorrMessage = "Password doesn't correspond with given email!"
+    if (erorrMessage == 'No errors detected')
+    {
+      erorrMessage = "Invalid password, please try again!"
+    }
+  }
+
+
+  //Check if both fields were filled
+  if(login_email == "" || login_password == ""){
+    filledFields = false
+    anyError = true
+    erorrMessage = "Some fields are missing, please fill all fields!"
+  }
+  else{
+    filledFields = true
   }
 
   //Sending back response to front end
@@ -114,7 +152,23 @@ app.post('/login', async(req, res) => {
     return res.send({isError: "True", message: erorrMessage})
   }
   else{
-    return res.send({isError: "False", message: "Logging-in successful!"})
+    //Storing user info on the ative session
+    userInfo = {user_userName, user_email, user_password}
+    const token = createToken(userInfo)
+    const decodedToken = jwtDecode(token)
+    const expiresAt = decodedToken.exp
+
+    //Sending sucess response to front end
+    res.json({
+      message: "Authentication successful!",
+      isError: "False",
+      token,
+      userInfo,
+      expiresAt
+    })
+    console.log(res)
+
+    return res
   }
 });
 
