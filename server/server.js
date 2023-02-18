@@ -76,8 +76,8 @@ app.post('/login', async(req, res) => {
   // The response generated from this function consists of 
   // a boolean stating if there is an error as well as an error message
   // in case of an error
-  const anyError = false
-  const erorrMessage = 'No errors detected'
+  let anyError = false
+  let erorrMessage = 'No errors detected'
 
   // Get the username and password from the request body
   const login_email = req.body.email
@@ -91,9 +91,9 @@ app.post('/login', async(req, res) => {
   const dbo = db_client.db(database_name)
   
   //In order to succesfully sign in, the following checks must be validated:
-  const filledFields = false    //Both fields need to have values
-  const email_valid = false     //Email must exist in database
-  const password_match = false  //password must match given email
+                              //Both fields need to have values
+                              //Email must exist in database
+  let password_match = false  //password must match given email
 
 
   //Function that compares user password with database password
@@ -110,16 +110,15 @@ app.post('/login', async(req, res) => {
   }
 
   //Check if email exists in database
-  const databasePassword = ""
-  const user_id = -1
-  const user_userName = ""
-  const user_email = ""
-  const user_password = ""
+  let databasePassword = ""
+  let user_id = -1
+  let user_userName = ""
+  let user_email = ""
+  let user_password = ""
   await dbo.collection(collection_name).findOne( { email: login_email })
   .then(result => {
     //If email doesn't exist
     if (!result){
-      email_valid = false
       anyError = true
       erorrMessage = "Invalid email, we don't have this email in our database!"
     }
@@ -130,7 +129,6 @@ app.post('/login', async(req, res) => {
       user_email = result.email
       user_password = result.password
       databasePassword = result.password
-      email_valid = true
     }
   })
   .catch(err => {
@@ -152,12 +150,8 @@ app.post('/login', async(req, res) => {
 
   //Check if both fields were filled
   if(login_email == "" || login_password == ""){
-    filledFields = false
     anyError = true
     erorrMessage = "Some fields are missing, please fill all fields!"
-  }
-  else{
-    filledFields = true
   }
 
   //Sending back response to front end
@@ -207,8 +201,8 @@ app.post('/signup', async(req, res) => {
   // The response generated from this function consists of 
   // a boolean stating if there is an error as well as an error message
   // in case of an error
-  var anyError = false
-  var erorrMessage = 'No errors detected'
+  let anyError = false
+  let erorrMessage = 'No errors detected'
 
   // Storing the username, password, and email from the request body
   const input_name = req.body.username
@@ -225,7 +219,7 @@ app.post('/signup', async(req, res) => {
 
 
   //Check if password match confirmPassword
-  const passwordMatch = false
+  let passwordMatch = false
   if (input_password == input_confirm_password){
     passwordMatch = true
   }
@@ -248,7 +242,7 @@ app.post('/signup', async(req, res) => {
 
 
   //Hashing the password before storing it in database
-  const hashedPassword = ''
+  let hashedPassword = ''
   bcrypt.hash(req.body.password, 10, (err, hp) => {
     if (err) {
       mongoose.connection.close();
