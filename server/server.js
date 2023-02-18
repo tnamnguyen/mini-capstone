@@ -83,8 +83,6 @@ app.post('/login', async(req, res) => {
   const { email, password } = req.body;
   login_email = req.body.email
   login_password = req.body.password
-
-  console.log(req.body)
  
   //Connecting to the specific database and collection
   const database_name = "Accounts"

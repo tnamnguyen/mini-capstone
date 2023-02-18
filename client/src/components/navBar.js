@@ -4,18 +4,24 @@ import axios from "axios"
 
 function NavBar() {
 
-    //Check if User is logged-in
-    const SERVER_URL = "http://localhost:3001"
-    const accessToken = localStorage.getItem("token")
-    axios.post(SERVER_URL + '/home', {accessToken})
-    .then(response => {
-        setLogin(false)
-        setUserName(response.data.user.name)
-    })
-
-    //If User is logged-in, add his name in navBar and remove login button
+    //Use states holding user info
     const [login, setLogin] = useState(true)
     const [userName, setUserName] = useState('')
+
+    //If User is logged-in -> add his name to navBar & remove login button
+    const SERVER_URL = "http://localhost:3001"
+    const accessToken = localStorage.getItem("token")
+    const isTokenAvailable = (localStorage.getItem("token") != null)
+    if(isTokenAvailable){
+        axios.post(SERVER_URL + '/home', {accessToken})
+        .then(response => {
+            setLogin(false)
+            setUserName(response.data.user.name)
+        })
+    }
+    
+
+    
     
 
     //Dynamic HTML elements
