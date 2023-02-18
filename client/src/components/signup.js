@@ -51,7 +51,7 @@ function Signup() {
     return (
         <>
             <NavBar></NavBar>
-            <div className="signup-form">
+            <div className="signup-form" data-testid="signUp">
 
                 {error && <div className="error">{error}</div>}
                 <div className="signup-container">
