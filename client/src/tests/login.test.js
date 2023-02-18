@@ -1,4 +1,3 @@
-import Login from '../components/login'
 import mockAxios from '../__mocks__/axios'
 
 //Testing if login form returns an active token 
@@ -15,8 +14,8 @@ test("should return an ative token", async() => {
 
     //Work
     const SERVER_URL = "//localhost:3001"
-    var email = "test@gmail.com"
-    var password = "TEST_test_123"
+    const email = "test@gmail.com"
+    const password = "TEST_test_123"
     const axios_response = await mockAxios.post(SERVER_URL + '/signup', {email, password}) 
 
     //Assertions

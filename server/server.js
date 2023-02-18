@@ -59,7 +59,7 @@ function authenticateToken(req, res, next){
 // **************************************** Home **************************************** //
 
 app.post('/home', authenticateToken, (req, res) => {
-  if(res.isLoggedIn == true){
+  if(res.isLoggedIn){
     res.send({
       "isLoggedIn": res.isLoggedIn, 
       "user": res.user
@@ -76,13 +76,12 @@ app.post('/login', async(req, res) => {
   // The response generated from this function consists of 
   // a boolean stating if there is an error as well as an error message
   // in case of an error
-  var anyError = false
-  var erorrMessage = 'No errors detected'
+  const anyError = false
+  const erorrMessage = 'No errors detected'
 
   // Get the username and password from the request body
-  const { email, password } = req.body;
-  login_email = req.body.email
-  login_password = req.body.password
+  const login_email = req.body.email
+  const login_password = req.body.password
  
   //Connecting to the specific database and collection
   const database_name = "Accounts"
@@ -92,9 +91,9 @@ app.post('/login', async(req, res) => {
   const dbo = db_client.db(database_name)
   
   //In order to succesfully sign in, the following checks must be validated:
-  var filledFields = false    //Both fields need to have values
-  var email_valid = false     //Email must exist in database
-  var password_match = false  //password must match given email
+  const filledFields = false    //Both fields need to have values
+  const email_valid = false     //Email must exist in database
+  const password_match = false  //password must match given email
 
 
   //Function that compares user password with database password
@@ -111,11 +110,11 @@ app.post('/login', async(req, res) => {
   }
 
   //Check if email exists in database
-  var databasePassword = ""
-  var user_id = -1
-  var user_userName = ""
-  var user_email = ""
-  var user_password = ""
+  const databasePassword = ""
+  const user_id = -1
+  const user_userName = ""
+  const user_email = ""
+  const user_password = ""
   await dbo.collection(collection_name).findOne( { email: login_email })
   .then(result => {
     //If email doesn't exist
@@ -226,9 +225,8 @@ app.post('/signup', async(req, res) => {
 
 
   //Check if password match confirmPassword
-  var passwordMatch = false
+  const passwordMatch = false
   if (input_password == input_confirm_password){
-    passMatch = true
     passwordMatch = true
   }
   else{
@@ -250,7 +248,7 @@ app.post('/signup', async(req, res) => {
 
 
   //Hashing the password before storing it in database
-  var hashedPassword = ''
+  const hashedPassword = ''
   bcrypt.hash(req.body.password, 10, (err, hp) => {
     if (err) {
       mongoose.connection.close();
@@ -261,7 +259,7 @@ app.post('/signup', async(req, res) => {
 
 
   // New user that will be added to database
-  var signedUpUser = new User({
+  const signedUpUser = new User({
     name: input_name,
     email: input_email,
     password: hashedPassword
@@ -269,13 +267,13 @@ app.post('/signup', async(req, res) => {
             
 
   //Storing the new registered user if all checks are completed
-  if(passwordMatch == false){
+  if(!passwordMatch){
     console.log("Error! Passwords don't match")
   }
-  if (duplicatedEmail == true){
+  if (duplicatedEmail){
     console.log("Error! Email already exists in database, Please try again!\n")
   }
-  if (passwordMatch == true &&  duplicatedEmail == false){
+  if (passwordMatch &&  !duplicatedEmail){
     dbo.collection(collection_name).insertOne(signedUpUser, function(err, res) {
       if (err) throw err; 
       console.log("-> 1 New User succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");

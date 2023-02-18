@@ -7,7 +7,6 @@ import '../Styles/log-in.scss';
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
     const [loginStatus_success, setLoginStatus_success] = useState('');
     const [loginStatus_err, setLoginStatus_err] = useState('');
 
@@ -47,7 +46,6 @@ function Login() {
         <NavBar></NavBar>
         <div className="login-form">
 
-        {error && <div className="error">{error}</div>}
         <div className="login-container">
             <h2 id='login_title'>Log In</h2>
             <div>
