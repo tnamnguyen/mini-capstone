@@ -6,6 +6,7 @@ const bodyParser = require("express")
 const bcrypt = require('bcrypt')
 const mongoose = require("mongoose")
 const User = require("./model.js")
+const Job = require("./jobmodel.js")
 
 
 
@@ -193,6 +194,84 @@ app.post('/signup', async(req, res) => {
 
 
 });
+
+
+
+
+// ************************ Job posting ************************ //
+
+app.post('/createJobs', async(req, res) => {
+  console.log(`route is running`)
+  console.log(req.body.title)
+  console.log(req.body.experience)
+  console.log(req.body.location)
+  console.log(req.body.description)
+
+  // Storing the username, password, and email from the request body
+  const input_title = req.body.title
+  const input_experience = req.body.experience
+  const input_location = req.body.location
+  const input_description = req.body.description
+
+  
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "Jobs"
+  mongoose.set("strictQuery", false);
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+
+
+  // New user that will be added to database
+  var newJob = new Job({
+    title: input_title,
+    experience: input_experience,
+    location: input_location,
+    description: input_description,
+  })
+
+  // Adding Job to DB
+  dbo.collection(collection_name).insertOne(newJob, function(err, res) {
+    if (err) throw err; 
+    console.log("-> 1 New Job succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
+    db_client.close();
+  })
+});
+
+
+
+
+// ************************ Job Browsing ************************ //
+app.get('/jobs', async(req, res) => {
+  console.log(`route  for job list is running`)
+
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "Jobs"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+
+  // Query all the jobs
+  try {
+    const jobs = await (await dbo.collection(collection_name).find().toArray())
+    res.json(jobs);
+  } catch (error) {
+    console.log("Error when fetching from database");
+    console.log(error);
+      db_client.close();
+  }
+ 
+  
+  
+  
+  });
+
+
+
+
 
 
 app.listen(port, () => {
