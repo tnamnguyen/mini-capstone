@@ -4,6 +4,7 @@ import axios from "axios";
 import NavBar from './navBar';
 import '../Styles/sign-up.scss';
 
+
 function JobApplicationForm() {
     const [title, setTitle] = useState('');
     const [experience, setExperience] = useState('');
@@ -42,29 +43,45 @@ function JobApplicationForm() {
     };
   
     return (
-      <form onSubmit={handleSubmit}>
-        <label>
-          Title:
-          <input type="text" value={title} onChange={(event) => setTitle(event.target.value)} />
-        </label>
-        <br />
-        <label>
-          Experience:
-          <input type="text" value={experience} onChange={(event) => setExperience(event.target.value)} />
-        </label>
-        <br />
-        <label>
-          Location:
-          <input type="text" value={location} onChange={(event) => setLocation(event.target.value)} />
-        </label>
-        <br />
-        <label>
-          Description:
-          <textarea value={description} onChange={(event) => setDescription(event.target.value)} />
-        </label>
-        <br />
-        <button type="submit">Submit</button>
-      </form>
+    <>
+        <NavBar></NavBar>
+
+        <div className="createjob-form" data-testid="createJob-1">
+            <div className="createjob-container">
+            <h2 id="createjob_title">Create Job</h2>
+            <br />
+            <br />
+            <form onSubmit={handleSubmit}>
+                <label>
+                Title:
+                <input type="text" value={title} onChange={(event) => setTitle(event.target.value)} />
+                </label>
+                <br />
+                <label>
+                Experience:
+                <input type="text" value={experience} onChange={(event) => setExperience(event.target.value)} />
+                </label>
+                <br />
+                <label>
+                Location:
+                <input type="text" value={location} onChange={(event) => setLocation(event.target.value)} />
+                </label>
+                <br />
+                <label>
+                Description:
+                <br />
+                <textarea value={description} onChange={(event) => setDescription(event.target.value)} />
+                </label>
+                <br />
+                <Link to="/jobs">
+                <button type="submit">Submit</button>
+                </Link>
+            </form>
+
+            </div>
+       </div>
+    </>
+    
     );
   }
   

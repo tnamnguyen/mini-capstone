@@ -22,29 +22,46 @@ function JobList() {
     }, []);
   
     return (
-      <div>
-        <h1>All Jobs</h1>
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Experience</th>
-              <th>Location</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            {jobs.map(job => (
-              <tr key={job.id}>
-                <td>{job.title}</td>
-                <td>{job.experience}</td>
-                <td>{job.location}</td>
-                <td>{job.description}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div data-testid="jobs-1">
+    <NavBar></NavBar>
+
+
+        <div>
+        
+            <h1 id="job_title" >All Jobs</h1>
+            <br />
+            <div className="container">
+            <table className="job-table">
+            <thead>
+               
+                <tr>
+                <th>Title</th>
+                <th>Experience</th>
+                <th>Location</th>
+                <th>Description</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+                {jobs.map(job => (
+                <tr key={job.id}>
+                    <td>{job.title}</td>
+                    <td>{job.experience}</td>
+                    <td>{job.location}</td>
+                    <td>{job.description}</td>
+                </tr>
+                ))}
+            </tbody>
+            </table>
+            
+            </div>
+            <Link to="/createJobs" className="myButton">Create A new Job</Link>
+        </div>
+
+
+
+    </div>
+
     );
   }
   
