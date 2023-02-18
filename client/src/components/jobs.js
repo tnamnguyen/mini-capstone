@@ -7,10 +7,12 @@ import '../Styles/sign-up.scss';
 
 function JobList() {
     const [jobs, setJobs] = useState([]);
+
+    const SERVER_URL = "//localhost:3001"
   
     useEffect(() => {
       // Fetch all jobs from the backend API when the component mounts
-      axios.get('/api/jobs')
+      axios.get(SERVER_URL+ '/jobs')
         .then(response => {
           setJobs(response.data);
         })

@@ -161,7 +161,7 @@ app.post('/createJobs', async(req, res) => {
   const input_description = req.body.description
 
   
-  //Connecting to the specific database and collection
+  // Connecting to the specific database and collection
   const database_name = "Accounts"
   const collection_name = "Jobs"
   mongoose.set("strictQuery", false);
@@ -187,29 +187,37 @@ app.post('/createJobs', async(req, res) => {
 });
 
 
+
+
 // ************************ Job Browsing ************************ //
-app.get('/api/jobs', async(req, res) => {
+app.get('/jobs', async(req, res) => {
   console.log(`route  for job list is running`)
 
-  //Connecting to the specific database and collection
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "Jobs"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+
+  // Query all the jobs
+  try {
+    const jobs = await (await dbo.collection(collection_name).find().toArray())
+    res.json(jobs);
+  } catch (error) {
+    console.log("Error when fetching from database");
+    console.log(error);
+      db_client.close();
+  }
+ 
   
-  var testJob = new Job({
-    title: "input_title",
-    experience: "experience",
-    location: "location",
-    description: "test"
-  })
-
-  res = testJob;
-    
-
-
-/*
-      const jobs = await dbo.collection(collection_name).find().toArray();
-      console.log(jobs)
-      res.json(jobs);
-      */
+  
+  
   });
+
+
+
 
 
 
