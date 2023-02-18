@@ -18,7 +18,7 @@ function Signup() {
 
     const handleSignup = async () => {
         // Send a request to the server to sign the user up
-        // If the signup is successful, redirect the user to the home page
+        // If the signup is successful, redirect the user to the login page
         // If the signup fails, update the error state with the error message
 
         // Code Example:
@@ -37,7 +37,7 @@ function Signup() {
                     setSignUpStatus_success(response.data.message)
 
                     setTimeout(()=>{
-                        window.location.href = "http://localhost:3000/"
+                        window.location.href = "http://localhost:3000/login"
                     }, 4000)
                 }
                 

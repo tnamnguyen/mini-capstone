@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import Login from "./components/login";
+import Logout from "./components/logout"
 import Signup from "./components/signup";
 import Home from "./components/home";
 import Profile from "./components/profile";
@@ -15,6 +16,7 @@ ReactDOM.render(
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/login" element={<Login/>}/>
+                <Route path="/logout" element={<Logout/>}/>
                 <Route path="/signup" element={<Signup/>}/>
                 <Route path="/profile" element={<Profile/>}/>
                 <Route path="/editProfile" element={<EditProfile/>}/>

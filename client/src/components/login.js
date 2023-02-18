@@ -27,11 +27,18 @@ function Login() {
                 }
                 //If backend returns success
                 if(response.data.isError == "False"){
+                    //Store token locally to be accessed across pages
                     localStorage.setItem("token", response.data.token)
+
+                    //Print success message 
                     setLoginStatus_err('')
                     setLoginStatus_success(response.data.message)
+
+                    //Redirect to main page
+                    setTimeout(()=>{
+                        window.location.href = "http://localhost:3000/"
+                    }, 4000)
                 }
-                
             })
     };
 

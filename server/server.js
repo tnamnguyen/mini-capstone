@@ -27,26 +27,44 @@ connectToMongooseDB();
 
 
 
-// **************************************** Setting Up Sessions & JWT **************************************** //
-app.use(
-  session({
-    secret: "jwtsecret",
-    saveUninitialized: true,
-    user: {},
-    token: null,
-    resave: false,
-    cookie:{
-      httpOnly: true,
-      maxAge: 36000 
-    }
-  })
-);
+// **************************************** Setting Up JWT **************************************** //
+
+//Function taking a token as input and checking if a user is signed-in
+function authenticateToken(req, res, next){
+  const token = req.body.accessToken
+  if(token == null){ 
+    res.isLoggedIn = false
+    next()
+  }
+  else{
+    jwt.verify(token, "jwtsecret", (err, user) => {
+      if (err) {
+        res.isLoggedIn = false 
+        console.log("Error! Given JWT secret might not be matching!")
+        res.isLoggedIn = false
+        next()
+      }
+      else{
+        res.user = user
+        res.isLoggedIn = true
+        next()
+      }
+    })
+  }
+}
+
+
 
 
 // **************************************** Home **************************************** //
 
-app.get('/', (req, res) => {
-  res.send('Server is running')
+app.post('/home', authenticateToken, (req, res) => {
+  if(res.isLoggedIn == true){
+    res.send({
+      "isLoggedIn": res.isLoggedIn, 
+      "user": res.user
+    })
+  }
 })
 
 
@@ -55,7 +73,6 @@ app.get('/', (req, res) => {
 // **************************************** Login **************************************** //
 
 app.post('/login', async(req, res) => {
-
   // The response generated from this function consists of 
   // a boolean stating if there is an error as well as an error message
   // in case of an error
@@ -66,6 +83,8 @@ app.post('/login', async(req, res) => {
   const { email, password } = req.body;
   login_email = req.body.email
   login_password = req.body.password
+
+  console.log(req.body)
  
   //Connecting to the specific database and collection
   const database_name = "Accounts"
@@ -85,9 +104,9 @@ app.post('/login', async(req, res) => {
     return new Promise(function(resolve, reject) {
         bcrypt.compare(param1, param2, function(err, res) {
             if (err) {
-                 reject(err);
+                reject(err);
             } else {
-                 resolve(res);
+                resolve(res);
             }
         });
     });
@@ -148,35 +167,29 @@ app.post('/login', async(req, res) => {
   if (anyError){
     res.json({
       isError: "True", 
-      message: erorrMessage,
-      auth: true
+      message: erorrMessage
     })
   }
   else{
     //User info
-    user_info = {
-      user_id,
-      user_userName, 
-      user_email, 
-      user_password
+    const user_info = {
+      id: user_id,
+      name: user_userName, 
+      email: user_email, 
+      password: user_password
     }
 
-    
-    const token = jwt.sign({user_id, user_userName, user_email, user_password}, "jwtsecret", {
-      expiresIn: 300
+    //Creating a JWT token with user information
+    const token = jwt.sign(user_info, "jwtsecret", {
+      expiresIn: 300000
     })
-    req.session.token = token
 
+    //Sending success message to front end as well as token to be stored locally
     res.json({
       isError: "False", 
-      message: "User successfully logged-in!",
-      auth: true,
+      message: "Successfully Signed-in! Redirecting to main page...",
       token: token, 
-      result: user_info,
     })
-    
-
-    //return res.send({isError: "False", message: "User successfully logged-in!"})
   }
 });
 
@@ -278,7 +291,7 @@ app.post('/signup', async(req, res) => {
     return res.send({isError: "True", message: erorrMessage})
   }
   else{
-    return res.send({isError: "False", message: "User succesfully added to database, Redirecting to main page..."})
+    return res.send({isError: "False", message: "User succesfully added to database, Redirecting to login page..."})
   }
 
 
