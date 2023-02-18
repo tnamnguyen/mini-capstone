@@ -73,9 +73,9 @@ function JobApplicationForm() {
                 <textarea value={description} onChange={(event) => setDescription(event.target.value)} />
                 </label>
                 <br />
-                <Link to="/jobs">
+                
                 <button type="submit">Submit</button>
-                </Link>
+               
             </form>
 
             </div>
