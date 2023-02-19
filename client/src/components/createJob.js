@@ -54,23 +54,23 @@ function JobApplicationForm() {
             <form onSubmit={handleSubmit}>
                 <label>
                 Title:
-                <input type="text" value={title} onChange={(event) => setTitle(event.target.value)} />
+                <input required type="text" value={title} onChange={(event) => setTitle(event.target.value)} />
                 </label>
                 <br />
                 <label>
                 Experience:
-                <input type="text" value={experience} onChange={(event) => setExperience(event.target.value)} />
+                <input required type="text" value={experience} onChange={(event) => setExperience(event.target.value)} />
                 </label>
                 <br />
                 <label>
                 Location:
-                <input type="text" value={location} onChange={(event) => setLocation(event.target.value)} />
+                <input required type="text" value={location} onChange={(event) => setLocation(event.target.value)} />
                 </label>
                 <br />
                 <label>
                 Description:
                 <br />
-                <textarea value={description} onChange={(event) => setDescription(event.target.value)} />
+                <textarea required value={description} onChange={(event) => setDescription(event.target.value)} />
                 </label>
                 <br />
                 
