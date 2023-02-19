@@ -5,12 +5,15 @@ const cors = require('cors')
 const bodyParser = require("express")
 const bcrypt = require('bcrypt')
 const mongoose = require("mongoose")
+const session = require("express-session")
 const User = require("./model.js")
+const jwt = require('jsonwebtoken')
 const Job = require("./jobmodel.js")
 
 
 
-// ************************ Connecting to Mongoose DB ************************ //
+
+// **************************************** Connecting to Mongoose DB **************************************** //
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
@@ -26,37 +29,182 @@ connectToMongooseDB();
 
 
 
-app.get('/', (req, res) => {
-  res.send('Server is running')
+// **************************************** Setting Up JWT **************************************** //
+
+//Function taking a token as input and checking if a user is signed-in
+function authenticateToken(req, res, next){
+  const token = req.body.accessToken
+  if(token == null){ 
+    res.isLoggedIn = false
+    next()
+  }
+  else{
+    jwt.verify(token, "jwtsecret", (err, user) => {
+      if (err) {
+        res.isLoggedIn = false 
+        console.log("Error! Given JWT secret might not be matching!")
+        res.isLoggedIn = false
+        next()
+      }
+      else{
+        res.user = user
+        res.isLoggedIn = true
+        next()
+      }
+    })
+  }
+}
+
+
+
+
+// **************************************** Home **************************************** //
+
+app.post('/home', authenticateToken, (req, res) => {
+  if(res.isLoggedIn){
+    res.send({
+      "isLoggedIn": res.isLoggedIn, 
+      "user": res.user
+    })
+  }
 })
 
-app.post('/login', (req, res) => {
-  // Get the username and password from the request body
-  const { username, password } = req.body;
-  console.log(req.body.username)
-  console.log(req.body.password)
- 
-  // Perform validation and authentication
-  // ...
 
-  // Send a response to the client
-  res.json({
-    success: true,
-    message: 'Successfully logged in'
-  });
+
+
+// **************************************** Login **************************************** //
+
+app.post('/login', async(req, res) => {
+  // The response generated from this function consists of 
+  // a boolean stating if there is an error as well as an error message
+  // in case of an error
+  let anyError = false
+  let erorrMessage = 'No errors detected'
+
+  // Get the username and password from the request body
+  const login_email = req.body.email
+  const login_password = req.body.password
+ 
+  //Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  mongoose.set("strictQuery", false);
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+  
+  //In order to succesfully sign in, the following checks must be validated:
+                              //Both fields need to have values
+                              //Email must exist in database
+  let password_match = false  //password must match given email
+
+
+  //Function that compares user password with database password
+  function authenticatePassword(param1, param2) {
+    return new Promise(function(resolve, reject) {
+        bcrypt.compare(param1, param2, function(err, res) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(res);
+            }
+        });
+    });
+  }
+
+  //Check if email exists in database
+  let databasePassword = ""
+  let user_id = -1
+  let user_userName = ""
+  let user_email = ""
+  let user_password = ""
+  await dbo.collection(collection_name).findOne( { email: login_email })
+  .then(result => {
+    //If email doesn't exist
+    if (!result){
+      anyError = true
+      erorrMessage = "Invalid email, we don't have this email in our database!"
+    }
+    //If email exists 
+    else{
+      user_id = result._id
+      user_userName = result.name
+      user_email = result.email
+      user_password = result.password
+      databasePassword = result.password
+    }
+  })
+  .catch(err => {
+    console.log("Error:" + err)
+  })
+  
+
+  //Check if password corresponds to given email
+  password_match =  await authenticatePassword(login_password, databasePassword)
+  if(!password_match)
+  {
+    anyError = true
+    if (erorrMessage == 'No errors detected')
+    {
+      erorrMessage = "Invalid password, please try again!"
+    }
+  }
+
+
+  //Check if both fields were filled
+  if(login_email == "" || login_password == ""){
+    anyError = true
+    erorrMessage = "Some fields are missing, please fill all fields!"
+  }
+
+  //Sending back response to front end
+  if (anyError){
+    res.json({
+      isError: "True", 
+      message: erorrMessage
+    })
+  }
+  else{
+    //User info
+    const user_info = {
+      id: user_id,
+      name: user_userName, 
+      email: user_email, 
+      password: user_password
+    }
+
+    //Creating a JWT token with user information
+    const token = jwt.sign(user_info, "jwtsecret", {
+      expiresIn: 300000
+    })
+
+    //Sending success message to front end as well as token to be stored locally
+    res.json({
+      isError: "False", 
+      message: "Successfully Signed-in! Redirecting to main page...",
+      token: token, 
+    })
+  }
 });
 
 
 
-// ************************ Signup ************************ //
+
+
+
+
+
+
+
+
+// **************************************** Signup **************************************** //
 
 app.post('/signup', async(req, res) => {
 
   // The response generated from this function consists of 
   // a boolean stating if there is an error as well as an error message
   // in case of an error
-  var anyError = false
-  var erorrMessage = 'No errors detected'
+  let anyError = false
+  let erorrMessage = 'No errors detected'
 
   // Storing the username, password, and email from the request body
   const input_name = req.body.username
@@ -81,6 +229,7 @@ app.post('/signup', async(req, res) => {
 
 
   //Check if password match confirmPassword
+  passwordMatch = false
   if (input_password == input_confirm_password){
     passwordMatch = true
   }
@@ -158,6 +307,7 @@ app.post('/signup', async(req, res) => {
 
 
   //Hashing the password before storing it in database
+  let hashedPassword = ''
   hashedPassword = bcrypt.hashSync(input_password, 10, (err, hp) => {
     if (err) {
       mongoose.connection.close();
@@ -167,7 +317,7 @@ app.post('/signup', async(req, res) => {
   })
 
   // New user that will be added to database
-  var signedUpUser = new User({
+  const signedUpUser = new User({
     name: input_name,
     email: input_email,
     password: hashedPassword
@@ -189,7 +339,7 @@ app.post('/signup', async(req, res) => {
     return res.send({isError: "True", message: erorrMessage})
   }
   else{
-    return res.send({isError: "False", message: "User succesfully added to database, Redirecting to main page..."})
+    return res.send({isError: "False", message: "User succesfully added to database, Redirecting to login page..."})
   }
 
 
