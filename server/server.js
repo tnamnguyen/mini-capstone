@@ -6,7 +6,7 @@ const bodyParser = require("express")
 const bcrypt = require('bcrypt')
 const mongoose = require("mongoose")
 const session = require("express-session")
-const User = require("./model.js")
+const User = require("./userModel.js")
 const jwt = require('jsonwebtoken')
 const Job = require("./jobmodel.js")
 
@@ -325,7 +325,7 @@ app.post('/signup', async(req, res) => {
             
 
   //Storing the new registered user if all checks are completed
-  if (passwordMatch == true && validPassword == true && validEmail == true && duplicatedEmail == false && allFieldsFilled == false){
+  if (passwordMatch && validPassword && validEmail && !duplicatedEmail && allFieldsFilled){
     dbo.collection(collection_name).insertOne(signedUpUser, function(err, res) {
       if (err) throw err; 
       console.log("-> 1 New User succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
