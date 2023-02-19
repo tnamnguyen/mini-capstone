@@ -218,16 +218,65 @@ app.post('/signup', async(req, res) => {
   const dbo = db_client.db(database_name)
 
 
+  //In order to succesfully sign up, the following checks must be validated:
+  var allFieldsFilled = false  //All fields must be filled
+  var passwordMatch = false    //password must match confirmPassword
+  var validPassword = false    //password must be at least 8 characters long, contain a capital letter, a digit and a special character (! @ # $ % ^ & * - _ . ,)
+  var validEmail = false       //email must be of the following format email@something.com
+  var duplicatedEmail = true   //email must not already exist in database
+
+
   //Check if password match confirmPassword
-  let passwordMatch = false
+  passwordMatch = false
   if (input_password == input_confirm_password){
     passwordMatch = true
   }
   else{
     anyError = true
     erorrMessage = "Error! Passwords don't match, Please try again!"
+    console.log(erorrMessage)
   }
 
+
+  //Check if password is valid 
+  var pass_regex = {
+    'capital' : /[A-Z]/,
+    'digit'   : /[0-9]/,
+    'special_char'  : /[! @ # $ % ^ & * - _ . ,]/,
+    'full'    : /.{8,}$/
+  };
+  validPassword = pass_regex.capital.test(input_password) && 
+                  pass_regex.digit.test(input_password) && 
+                  pass_regex.special_char.test(input_password) && 
+                  pass_regex.full.test(input_password);
+
+  if (!validPassword){
+    anyError = true
+    erorrMessage = "Error! Password is not valid, password must be at least 8 characters long," + 
+                "contain a capital letter, a digit and a special character (! @ # $ % ^ & * - _ . ,)"
+    console.log(erorrMessage)
+  }
+
+
+
+  //Check if email is valid 
+  var email_regex = {
+    'special_char'  : /[@ .]/,
+    'com'    : /.com/,
+    'ca'     : /.ca/,
+    'full'    : /.{7,}$/
+  };
+  validEmail = email_regex.special_char.test(input_email) && 
+               ( (email_regex.com.test(input_email)) || (email_regex.ca.test(input_email)) ) && 
+               email_regex.full.test(input_email);
+
+  if (!validEmail){
+    anyError = true
+    erorrMessage = "Error! Invalid email, email must be of the following format: email@something.com/ca"
+    console.log(erorrMessage)
+  }
+
+  
 
   //Check if email is already stored in the database
   const match_user = await dbo.collection(collection_name).findOne( { email: input_email })
@@ -235,22 +284,35 @@ app.post('/signup', async(req, res) => {
     duplicatedEmail = true
     anyError = true
     erorrMessage = "Error! email already registered in database, Please try again!"
+    console.log(erorrMessage)
   }
   else{
     duplicatedEmail = false
   }
 
 
+  //Check if all fields are filled
+  if(input_name == "" || input_email == "" || input_password == "" || input_confirm_password == "")
+  {
+    allFieldsFilled = false
+    anyError = true
+    erorrMessage = "Please fill all fields!"
+    console.log(erorrMessage)
+  }
+  else{
+    allFieldsFilled = true
+  }
+
+
   //Hashing the password before storing it in database
   let hashedPassword = ''
-  bcrypt.hash(req.body.password, 10, (err, hp) => {
+  hashedPassword = bcrypt.hashSync(input_password, 10, (err, hp) => {
     if (err) {
       mongoose.connection.close();
       res.status(500).json({ error: err });
     }
     hashedPassword = hp
   })
-
 
   // New user that will be added to database
   const signedUpUser = new User({
@@ -261,13 +323,7 @@ app.post('/signup', async(req, res) => {
             
 
   //Storing the new registered user if all checks are completed
-  if(!passwordMatch){
-    console.log("Error! Passwords don't match")
-  }
-  if (duplicatedEmail){
-    console.log("Error! Email already exists in database, Please try again!\n")
-  }
-  if (passwordMatch &&  !duplicatedEmail){
+  if (passwordMatch == true && validPassword == true && validEmail == true && duplicatedEmail == false && allFieldsFilled == false){
     dbo.collection(collection_name).insertOne(signedUpUser, function(err, res) {
       if (err) throw err; 
       console.log("-> 1 New User succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
