@@ -6,7 +6,7 @@ const bodyParser = require("express")
 const bcrypt = require('bcrypt')
 const mongoose = require("mongoose")
 const session = require("express-session")
-const User = require("./model.js")
+const User = require("./userModel.js")
 const jwt = require('jsonwebtoken')
 const Job = require("./jobmodel.js")
 
