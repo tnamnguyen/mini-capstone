@@ -121,10 +121,10 @@ button {
 .createjob-form {
 input {
   padding: 10px;
-  width: 90%;
+  width: 100%;
   margin: 10px 0;
   border: 1px solid gray;
-  border-radius: 20px;
+  border-radius: 4px;
   background-color: white;
 }
 
@@ -135,15 +135,6 @@ input {
   border: none;
   border-radius: 25px;
   cursor: pointer;
-}
-}
-
-.createjob-form {
-input {
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid gray;
-  border-radius: 4px;
 }
 
 .job-table {
@@ -160,6 +151,7 @@ button {
   border-radius: 4px;
   cursor: pointer;
 }
+
 }
 
 ///////////////////////////////////
