@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs')
 const mongoose = require("mongoose")
 const User = require("./userModel.js")
 const jwt = require('jsonwebtoken')
-const Job = require("./jobmodel.js")
+const Job = require("./jobModel.js")
 
 
 
