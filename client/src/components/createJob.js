@@ -11,7 +11,7 @@ function JobApplicationForm() {
     const [location, setLocation] = useState('');
     const [description, setDescription] = useState('');
   
-    const SERVER_URL = "//localhost:3001"
+    const SERVER_URL = "https://jobilee-server.vercel.app"
 
     const handleSubmit = async () => {
       
