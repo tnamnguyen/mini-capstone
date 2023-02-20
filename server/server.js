@@ -3,12 +3,11 @@ const app = express()
 const port = 3001
 const cors = require('cors')
 const bodyParser = require("express")
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const mongoose = require("mongoose")
-const session = require("express-session")
 const User = require("./userModel.js")
 const jwt = require('jsonwebtoken')
-const Job = require("./jobmodel.js")
+const Job = require("./jobModel.js")
 
 
 

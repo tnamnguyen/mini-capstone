@@ -9,7 +9,7 @@ function Logout(){
 
     //Redirect to main page
     setTimeout(()=>{
-        window.location.href = "http://localhost:3000/"
+        window.location.href = "/"
     }, 3000)
 
 
