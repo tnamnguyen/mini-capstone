@@ -37,7 +37,7 @@ function Signup() {
                     setSignUpStatus_success(response.data.message)
 
                     setTimeout(()=>{
-                        window.location.href = "http://localhost:3000/login"
+                        window.location.href = "/login"
                     }, 4000)
                 }
                 
