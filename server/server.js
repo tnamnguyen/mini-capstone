@@ -182,6 +182,7 @@ app.post('/login', async(req, res) => {
       isError: "False", 
       message: "Successfully Signed-in! Redirecting to main page...",
       token: token, 
+      id: id,
     })
   }
 });
@@ -436,6 +437,47 @@ app.get('/jobs', async(req, res) => {
   
   });
 
+// ************************ Profile ************************ //
+app.post('/profile', async(req, res) => {
+  let anyError = false
+  let errorMessage = 'No errors detected'
+  
+  const token = req.body.accessToken
+  const id = new ObjectId(params.req.body.id)
+
+  const database_name = "tnEditProfile"
+  const collection_name = "profile"
+  mongoose.set("StrictQuery", false)
+  const db_client = await MongoClient.connect(url)
+  const dbo=db_client.db(database_name)
+
+  let user_education = ""
+  let user_pastJob = ""
+  let user_currentJob = ""
+  let user_languages = ""
+  let user_bio = ""
+
+  await dbo.collection(collection_name).findOne( {_id: id})
+  .then(result => {
+    if(!result){
+      anyError = true
+      errorMessage = "invalid id"
+    }
+    else{
+      user_education = result.education
+      user_pastJob = result.pastJob
+      user_currentJob = result.currentJob
+      user_languages = result.languages
+      user_bio = result.bio
+      db_client.close();
+    }
+  })
+  .catch(err => {
+    console.log("Error:" + err)
+  })
+
+})
+
 
 // ************************ Edit Profile ************************ //
 app.post('/editProfile', async(req, res) =>{
@@ -453,6 +495,8 @@ app.post('/editProfile', async(req, res) =>{
   mongoose.set("strictQuery", false);
   const db_client = await MongoClient.connect(url)
   const dbo = db_client.db(database_name)
+
+  await dbo.collection(collection_name).findOne( {} )
 
 });
 

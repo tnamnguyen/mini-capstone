@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import NavBar from './navBar';
 import {Link} from "react-router-dom";
 import '../Styles/profile.scss';
+import axios from "axios"
 
 //Function returning the proper greeting depending on time of day
 function getGreeting(){
@@ -19,6 +20,16 @@ function getGreeting(){
 }
 
 function Profile() {
+    const SERVER_URL = "http://localhost:3001/"
+    const accessToken = localStorage.getItem("token")
+    const isTokenAvailable = (localStorage.getItem("token" != null))
+    if(isTokenAvailable) {
+        axios.post(SERVER_URL + '/profile', {accessToken, id})
+        .then(response=> {
+            
+        })
+    }
+
     const [profilePic, setProfilePic] = useState('../assets/images/profile.png');
     const [userName, setUserName] = useState('UserName');
     const [education, setEducation] = useState('Education');
@@ -27,6 +38,20 @@ function Profile() {
     const [languages, setLanguages] = useState('Languages');
     const [bio, setBio] = useState('Bio');
     const [resume, setResume] = useState('');
+
+    const handleProfile = async () => {
+        
+        await axios.post(SERVER_URL + 'profile', {education, pastJob, currentJob, languages, bio})
+        if(Response.data.isError == "True"){
+
+        }
+
+        if(response.data.isError == "False"){
+
+
+        }
+    
+    }
 
     return ( 
         <>

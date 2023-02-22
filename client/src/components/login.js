@@ -28,6 +28,7 @@ function Login() {
                 if(response.data.isError == "False"){
                     //Store token locally to be accessed across pages
                     localStorage.setItem("token", response.data.token)
+                    localStorage.setItem("id", response.data.id)
 
                     //Print success message 
                     setLoginStatus_err('')
