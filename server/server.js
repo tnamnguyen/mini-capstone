@@ -85,7 +85,8 @@ app.post('/login', async(req, res) => {
   const login_password = req.body.password
  
   //Connecting to the specific database and collection
-  const database_name = "Accounts"
+  //const database_name = "Accounts"
+  const database_name = "tnEditProfile"
   const collection_name = "users"
   mongoose.set("strictQuery", false);
   const db_client =  await MongoClient.connect(url) 
@@ -212,7 +213,8 @@ app.post('/signup', async(req, res) => {
   const input_confirm_password = req.body.passwordConfirm
 
   //Connecting to the specific database and collection
-  const database_name = "Accounts"
+  // const database_name = "Accounts"
+  const database_name = "tnEditProfile"
   const collection_name = "users"
   mongoose.set("strictQuery", false);
   const db_client =  await MongoClient.connect(url) 
@@ -328,7 +330,23 @@ app.post('/signup', async(req, res) => {
     dbo.collection(collection_name).insertOne(signedUpUser, function(err, res) {
       if (err) throw err; 
       console.log("-> 1 New User succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
+      const id = signedUpUser._id
       db_client.close();
+
+      collection_name = "profile"
+
+      dbo.collection(collection_name).insertOne({
+        _id: id,
+        education: 'None',
+        pastJob: 'None',
+        currentJob: 'None',
+        languages: 'English',
+        bio: ''
+      }, function(err, res) {
+        if (err) throw err;
+        console.log("-> Profile template created for the new user on " + database_name +" database inside the " + collection_name + "collection!");
+        db_client.close();
+      })
     })
   }
   
@@ -419,8 +437,24 @@ app.get('/jobs', async(req, res) => {
   });
 
 
+// ************************ Edit Profile ************************ //
+app.post('/editProfile', async(req, res) =>{
+  let anyError = false
+  let errorMessage = 'No errors detected'
 
+  const input_education = req.body.education
+  const input_pastJob = req.body.pastJob
+  const input_currentJob = req.body.currentJob
+  const input_languages = req.body.languages
+  const input_bio = req.body.bio
 
+  const database_name = "tnEditProfile"
+  const collection_name = "profile"
+  mongoose.set("strictQuery", false);
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+});
 
 
 app.listen(port, () => {
