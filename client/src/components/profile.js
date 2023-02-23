@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {  useEffect  } from 'react';
 import NavBar from './navBar';
 import {Link} from "react-router-dom";
 import '../Styles/profile.scss';
@@ -20,15 +21,11 @@ function getGreeting(){
 }
 
 function Profile() {
-    const SERVER_URL = "http://localhost:3001/"
-    const accessToken = localStorage.getItem("token")
-    const isTokenAvailable = (localStorage.getItem("token" != null))
-    if(isTokenAvailable) {
-        axios.post(SERVER_URL + '/profile', {accessToken, id})
-        .then(response=> {
-            
-        })
-    }
+    const SERVER_URL = "http://localhost:3001"
+
+    //TODO Check for token and/or id
+    const accessToken = localStorage.getItem("token")   //does not work
+    const id = localStorage.getItem("id")               //does not work
 
     const [profilePic, setProfilePic] = useState('../assets/images/profile.png');
     const [userName, setUserName] = useState('UserName');
@@ -39,19 +36,19 @@ function Profile() {
     const [bio, setBio] = useState('Bio');
     const [resume, setResume] = useState('');
 
-    const handleProfile = async () => {
-        
-        await axios.post(SERVER_URL + 'profile', {education, pastJob, currentJob, languages, bio})
-        if(Response.data.isError == "True"){
+    useEffect(() => { const isTokenAvailable = (localStorage.getItem("token" != null))
 
-        }
-
-        if(response.data.isError == "False"){
-
-
-        }
-    
-    }
+        axios.get(SERVER_URL + '/profile')
+        .then(response => {
+            setUserName(response.data.userName)
+            setEducation(response.data.education)
+            setCurrentJob(response.data.currentJob)
+            setPastJob(response.data.pastJob)
+            setLanguages(response.data.languages)
+            setBio(response.data.bio)
+        })
+    })
+   
 
     return ( 
         <>

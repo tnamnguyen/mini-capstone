@@ -182,7 +182,7 @@ app.post('/login', async(req, res) => {
       isError: "False", 
       message: "Successfully Signed-in! Redirecting to main page...",
       token: token, 
-      id: id,
+      id: user_id,
     })
   }
 });
@@ -217,6 +217,7 @@ app.post('/signup', async(req, res) => {
   // const database_name = "Accounts"
   const database_name = "tnEditProfile"
   const collection_name = "users"
+  const profile_collection_name = "profile"
   mongoose.set("strictQuery", false);
   const db_client =  await MongoClient.connect(url) 
   const dbo = db_client.db(database_name)
@@ -331,26 +332,26 @@ app.post('/signup', async(req, res) => {
     dbo.collection(collection_name).insertOne(signedUpUser, function(err, res) {
       if (err) throw err; 
       console.log("-> 1 New User succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
-      const id = signedUpUser._id
       db_client.close();
 
-      collection_name = "profile"
-
-      dbo.collection(collection_name).insertOne({
-        _id: id,
-        education: 'None',
-        pastJob: 'None',
-        currentJob: 'None',
-        languages: 'English',
-        bio: ''
-      }, function(err, res) {
-        if (err) throw err;
-        console.log("-> Profile template created for the new user on " + database_name +" database inside the " + collection_name + "collection!");
-        db_client.close();
-      })
+      createProfile(signedUpUser._id)
     })
   }
   
+  function createProfile(id) {
+    dbo.collection(profile_collection_name).insertOne({
+      _id: signedUpUser._id,
+      education: 'None',
+      pastJob: 'None',
+      currentJob: 'None',
+      languages: 'English',
+      bio: ''
+    }, function(err, res) {
+      if (err) throw err;
+      console.log("-> Profile template created for the new user on " + database_name +" database inside the " + collection_name + "collection!");
+      db_client.close();
+    })
+  }
 
   //Sending back response to front end
   if (anyError){
@@ -438,16 +439,15 @@ app.get('/jobs', async(req, res) => {
   });
 
 // ************************ Profile ************************ //
-app.post('/profile', async(req, res) => {
-  let anyError = false
-  let errorMessage = 'No errors detected'
+app.get('/profile', async(req, res) => {
+  console.log(`route for profile is running`)
   
-  const token = req.body.accessToken
-  const id = new ObjectId(params.req.body.id)
+  // find a way to get the token / id
+  const token = req.body.accessToken  //currently does not work
+  const id = req.body.id              //currently does not work
 
   const database_name = "tnEditProfile"
   const collection_name = "profile"
-  mongoose.set("StrictQuery", false)
   const db_client = await MongoClient.connect(url)
   const dbo=db_client.db(database_name)
 
@@ -469,6 +469,14 @@ app.post('/profile', async(req, res) => {
       user_currentJob = result.currentJob
       user_languages = result.languages
       user_bio = result.bio
+      console.log(user_languages)
+      res.json({
+        education: result.education,
+        pastJob: result.pastJob,
+        currentJob: result.currentJob,
+        languages: result.languages,
+        bio: result.bio
+      })
       db_client.close();
     }
   })
@@ -481,6 +489,7 @@ app.post('/profile', async(req, res) => {
 
 // ************************ Edit Profile ************************ //
 app.post('/editProfile', async(req, res) =>{
+  console.log('route for edit profile')
   let anyError = false
   let errorMessage = 'No errors detected'
 

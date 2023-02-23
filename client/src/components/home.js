@@ -6,7 +6,7 @@ import '../Styles/home.scss';
 function Home() {
 
     //Check if User is logged-in
-    const SERVER_URL = "http://localhost:3000/"
+    const SERVER_URL = "http://localhost:3001"
     const accessToken = localStorage.getItem("token")
     axios.post(SERVER_URL + '/home', {accessToken})
     .then(response => {

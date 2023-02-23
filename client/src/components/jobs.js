@@ -8,7 +8,7 @@ import '../Styles/sign-up.scss';
 function JobList() {
     const [jobs, setJobs] = useState([]);
 
-    const SERVER_URL = "https://jobilee-server.vercel.app"
+    const SERVER_URL = "http://localhost:3001"
   
     useEffect(() => {
       // Fetch all jobs from the backend API when the component mounts
