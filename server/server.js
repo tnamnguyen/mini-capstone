@@ -5,6 +5,7 @@ const cors = require('cors')
 const bodyParser = require("express")
 const bcrypt = require('bcryptjs')
 const mongoose = require("mongoose")
+const ObjectId = require('mongodb').ObjectID;
 const User = require("./userModel.js")
 const jwt = require('jsonwebtoken')
 const Job = require("./jobModel.js")
@@ -439,39 +440,31 @@ app.get('/jobs', async(req, res) => {
   });
 
 // ************************ Profile ************************ //
-app.get('/profile', async(req, res) => {
+app.post('/profile', authenticateToken, async(req, res) => {
   console.log(`route for profile is running`)
-  
   // find a way to get the token / id
-  const token = req.body.accessToken  //currently does not work
-  const id = req.body.id              //currently does not work
+  const token = req.body.accessToken  
+  const id = req.body.id              
+  console.log(token);
+  console.log(id)
 
   const database_name = "tnEditProfile"
   const collection_name = "profile"
   const db_client = await MongoClient.connect(url)
   const dbo=db_client.db(database_name)
 
-  let user_education = ""
-  let user_pastJob = ""
-  let user_currentJob = ""
-  let user_languages = ""
-  let user_bio = ""
-
-  await dbo.collection(collection_name).findOne( {_id: id})
+  await dbo.collection(collection_name).findOne( {_id: new ObjectId(id)})
   .then(result => {
     if(!result){
       anyError = true
       errorMessage = "invalid id"
+      console.log("invalid result")
     }
     else{
-      user_education = result.education
-      user_pastJob = result.pastJob
-      user_currentJob = result.currentJob
-      user_languages = result.languages
-      user_bio = result.bio
-      console.log(user_languages)
-      res.json({
-        education: result.education,
+      // TODO: Find a way to display username
+      console.log(result.languages)
+      res.send({
+        education: result.education,  
         pastJob: result.pastJob,
         currentJob: result.currentJob,
         languages: result.languages,

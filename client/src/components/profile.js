@@ -23,9 +23,20 @@ function getGreeting(){
 function Profile() {
     const SERVER_URL = "http://localhost:3001"
 
-    //TODO Check for token and/or id
-    const accessToken = localStorage.getItem("token")   //does not work
-    const id = localStorage.getItem("id")               //does not work
+    const accessToken = localStorage.getItem("token")  
+    const id = localStorage.getItem("id")               
+
+    const isTokenAvailable = (localStorage.getItem("token" != null))
+
+    axios.post(SERVER_URL + '/profile', {accessToken, id})
+    .then(response => {
+        // setUserName(response.data.user.name) //Currently this does not display username
+        setEducation(response.data.education)
+        setCurrentJob(response.data.currentJob)
+        setPastJob(response.data.pastJob)
+        setLanguages(response.data.languages)
+        setBio(response.data.bio)
+    })
 
     const [profilePic, setProfilePic] = useState('../assets/images/profile.png');
     const [userName, setUserName] = useState('UserName');
@@ -36,18 +47,7 @@ function Profile() {
     const [bio, setBio] = useState('Bio');
     const [resume, setResume] = useState('');
 
-    useEffect(() => { const isTokenAvailable = (localStorage.getItem("token" != null))
-
-        axios.get(SERVER_URL + '/profile')
-        .then(response => {
-            setUserName(response.data.userName)
-            setEducation(response.data.education)
-            setCurrentJob(response.data.currentJob)
-            setPastJob(response.data.pastJob)
-            setLanguages(response.data.languages)
-            setBio(response.data.bio)
-        })
-    })
+    
    
 
     return ( 
