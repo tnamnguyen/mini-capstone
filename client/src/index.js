@@ -9,6 +9,7 @@ import Profile from "./components/profile";
 import EditProfile from './components/editProfile.js';
 import JobApplicationForm from './components/createJob.js';
 import JobList from './components/jobs.js';
+import Chat from './components/chat.js';
 import "bootstrap/dist/css/bootstrap.css";
 
 
@@ -24,6 +25,7 @@ ReactDOM.render(
                 <Route path="/editProfile" element={<EditProfile/>}/>
                 <Route path="/createJobs" element={<JobApplicationForm/>}/>
                 <Route path="/jobs" element={<JobList/>}/>
+                <Route path="/chat" element={<Chat/>}/>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>,
