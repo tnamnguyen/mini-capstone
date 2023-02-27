@@ -6,8 +6,8 @@ const bodyParser = require("express")
 const bcrypt = require('bcryptjs')
 const mongoose = require("mongoose")
 const User = require("./userModel.js")
-const jwt = require('jsonwebtoken')
 const Job = require("./jobModel.js")
+const jwt = require('jsonwebtoken')
 
 
 
@@ -319,7 +319,8 @@ app.post('/signup', async(req, res) => {
   const signedUpUser = new User({
     name: input_name,
     email: input_email,
-    password: hashedPassword
+    password: hashedPassword,
+    type: "regular_user"
   })
             
 

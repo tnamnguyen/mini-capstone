@@ -30,7 +30,7 @@ function JobApplicationForm() {
               
 
               setTimeout(()=>{
-                  window.location.href = "/jobs"
+                  window.location.href = "http://localhost:3000/"
               }, 4000)
           }
           
