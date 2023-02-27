@@ -1,8 +1,23 @@
 import React, { useState } from 'react';
 import NavBar from './navBar';
 import '../Styles/editProfile.scss';
+import axios from "axios"
 
 function EditProfile() {
+    // const SERVER_URL = "http://localhost:3001"
+    
+    // const accessToken = localStorage.getItem("token")
+    // const id = localStorage.getItem("id")
+
+    // axios.post(SERVER_URL, '/editprofile', {accessToken, id})
+    // .then(response => {
+    //     setUserName(response.data.user.name)
+    //     setEducation(response.data.education)
+    //     setCurrentJob(response.data.currentJob)
+    //     setPastJob(response.data.pastJob)
+    //     setLanguages(response.data.languages)
+    //     setBio(response.data.bio)
+    // })
 
     //HTML Forms that appear under each field when the "Edit" button is pressed
     const [editProfilePic, setEditProfilePic] = useState(false);

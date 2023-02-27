@@ -26,25 +26,27 @@ function Profile() {
     const accessToken = localStorage.getItem("token")  
     const id = localStorage.getItem("id")               
 
-    const isTokenAvailable = (localStorage.getItem("token" != null))
+    const isTokenAvailable = (accessToken != null)
 
-    axios.post(SERVER_URL + '/profile', {accessToken, id})
-    .then(response => {
-        // setUserName(response.data.user.name) //Currently this does not display username
-        setEducation(response.data.education)
-        setCurrentJob(response.data.currentJob)
-        setPastJob(response.data.pastJob)
-        setLanguages(response.data.languages)
-        setBio(response.data.bio)
-    })
+    if (isTokenAvailable){
+        axios.post(SERVER_URL + '/profile', {accessToken, id})
+        .then(response => {
+            setUserName(response.data.user.name)
+            setEducation(response.data.education)
+            setCurrentJob(response.data.currentJob)
+            setPastJob(response.data.pastJob)
+            setLanguages(response.data.languages)
+            setBio(response.data.bio)
+        })
+    }
 
     const [profilePic, setProfilePic] = useState('../assets/images/profile.png');
-    const [userName, setUserName] = useState('UserName');
-    const [education, setEducation] = useState('Education');
-    const [currentJob, setCurrentJob] = useState('Current Job');
-    const [pastJob, setPastJob] = useState('Past Job');
-    const [languages, setLanguages] = useState('Languages');
-    const [bio, setBio] = useState('Bio');
+    const [userName, setUserName] = useState('');
+    const [education, setEducation] = useState('');
+    const [currentJob, setCurrentJob] = useState('');
+    const [pastJob, setPastJob] = useState('');
+    const [languages, setLanguages] = useState('');
+    const [bio, setBio] = useState('');
     const [resume, setResume] = useState('');
 
     

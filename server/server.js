@@ -443,40 +443,41 @@ app.get('/jobs', async(req, res) => {
 app.post('/profile', authenticateToken, async(req, res) => {
   console.log(`route for profile is running`)
   // find a way to get the token / id
-  const token = req.body.accessToken  
-  const id = req.body.id              
-  console.log(token);
-  console.log(id)
+  if(res.isLoggedIn) {
+    const id = req.body.id              
+    console.log(id)
 
-  const database_name = "tnEditProfile"
-  const collection_name = "profile"
-  const db_client = await MongoClient.connect(url)
-  const dbo=db_client.db(database_name)
+    const database_name = "tnEditProfile"
+    const collection_name = "profile"
+    const db_client = await MongoClient.connect(url)
+    const dbo=db_client.db(database_name)
 
-  await dbo.collection(collection_name).findOne( {_id: new ObjectId(id)})
-  .then(result => {
-    if(!result){
-      anyError = true
-      errorMessage = "invalid id"
-      console.log("invalid result")
-    }
-    else{
-      // TODO: Find a way to display username
-      console.log(result.languages)
-      res.send({
-        education: result.education,  
-        pastJob: result.pastJob,
-        currentJob: result.currentJob,
-        languages: result.languages,
-        bio: result.bio
-      })
-      db_client.close();
-    }
-  })
-  .catch(err => {
-    console.log("Error:" + err)
-  })
-
+    await dbo.collection(collection_name).findOne( {_id: new ObjectId(id)})
+    .then(result => {
+      if(!result){
+        anyError = true
+        errorMessage = "invalid id"
+        console.log("invalid result")
+      }
+      else{
+        // TODO: Find a way to display username
+        console.log(result.languages)
+        res.send({
+          "isLoggedIn": res.isLoggedIn,
+          "user": res.user,
+          education: result.education,  
+          pastJob: result.pastJob,
+          currentJob: result.currentJob,
+          languages: result.languages,
+          bio: result.bio
+        })
+        db_client.close();
+      }
+    })
+    .catch(err => {
+      console.log("Error:" + err)
+    })
+  }
 })
 
 
