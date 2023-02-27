@@ -11,7 +11,7 @@ function JobApplicationForm() {
     const [location, setLocation] = useState('');
     const [description, setDescription] = useState('');
   
-    const SERVER_URL = "https://jobilee-server.vercel.app"
+    const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
     const handleSubmit = async () => {
       
@@ -30,7 +30,7 @@ function JobApplicationForm() {
               
 
               setTimeout(()=>{
-                  window.location.href = "http://localhost:3000/"
+                  window.location.href = "/jobs"
               }, 4000)
           }
           
