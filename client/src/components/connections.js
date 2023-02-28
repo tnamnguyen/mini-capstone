@@ -6,6 +6,7 @@ import NavBar from './navBar';
 import '../Styles/sign-up.scss';
    
 
+
 function Connections () {
     const [users, displayUser] = useState([]);
     
