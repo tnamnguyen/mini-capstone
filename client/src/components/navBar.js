@@ -9,7 +9,8 @@ function NavBar() {
     const [userName, setUserName] = useState('')
 
     //If User is logged-in -> add his name to navBar & remove login button
-    const SERVER_URL = "https://jobilee-server.vercel.app"
+    const SERVER_URL = "http://localhost:3001"
+    // const SERVER_URL = "https://jobilee-server.vercel.app"
     const accessToken = localStorage.getItem("token")
     const isTokenAvailable = (localStorage.getItem("token") != null)
     if(isTokenAvailable){
@@ -63,7 +64,7 @@ function NavBar() {
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Connections</a>
+                        <a class="nav-link" href="/Connections">Connections</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/jobs">Jobs</a>

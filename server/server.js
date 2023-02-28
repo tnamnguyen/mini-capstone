@@ -420,7 +420,52 @@ app.get('/jobs', async(req, res) => {
 
 
 
+// ************************ Connections ************************ //
+app.get('/connections', async(req, res) => {
+  console.log(`route  for connections is running`)
 
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+
+  // Query all the users
+  try {
+    const users = await (await dbo.collection(collection_name).find().toArray())
+    res.json(users);
+    res.send({status:'ok', data: users});
+  } catch (error) {
+    console.log("Error when fetching from database");
+    console.log(error);
+      db_client.close();
+  }
+ 
+  
+  
+  
+  });
+
+// ************************ Adding Connections ************************ //
+app.get('/connections', async(req, res) => {
+  console.log(`route  for connections is running`)
+
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+
+  // Query specified user
+  
+  
+  
+  
+  });
 
 
 app.listen(port, () => {

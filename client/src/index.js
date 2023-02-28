@@ -9,6 +9,8 @@ import Profile from "./components/profile";
 import EditProfile from './components/editProfile.js';
 import JobApplicationForm from './components/createJob.js';
 import JobList from './components/jobs.js';
+import Connections from './components/connections.js';
+import AddConnections from './components/addConnections.js';
 import "bootstrap/dist/css/bootstrap.css";
 
 
@@ -24,6 +26,8 @@ ReactDOM.render(
                 <Route path="/editProfile" element={<EditProfile/>}/>
                 <Route path="/createJobs" element={<JobApplicationForm/>}/>
                 <Route path="/jobs" element={<JobList/>}/>
+                <Route path="/connections" element={<Connections/>}/>
+                <Route path="/addConnections" element={<AddConnections/>}/>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>,
