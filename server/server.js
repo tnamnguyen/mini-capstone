@@ -442,11 +442,8 @@ app.get('/jobs', async(req, res) => {
 // ************************ Profile ************************ //
 app.post('/profile', authenticateToken, async(req, res) => {
   console.log(`route for profile is running`)
-  // find a way to get the token / id
   if(res.isLoggedIn) {
     const id = req.body.id              
-    console.log(id)
-
     const database_name = "tnEditProfile"
     const collection_name = "profile"
     const db_client = await MongoClient.connect(url)
@@ -460,8 +457,6 @@ app.post('/profile', authenticateToken, async(req, res) => {
         console.log("invalid result")
       }
       else{
-        // TODO: Find a way to display username
-        console.log(result.languages)
         res.send({
           "isLoggedIn": res.isLoggedIn,
           "user": res.user,
@@ -482,24 +477,41 @@ app.post('/profile', authenticateToken, async(req, res) => {
 
 
 // ************************ Edit Profile ************************ //
-app.post('/editProfile', async(req, res) =>{
-  console.log('route for edit profile')
-  let anyError = false
-  let errorMessage = 'No errors detected'
+app.post('/editProfile', authenticateToken, async(req, res) =>{
+  
+  // Copied over from Profile, currently does not work
+  console.log('route for edit profile is running')
+  if(res.isLoggedIn) {
+    const id = req.body.id              
+    const database_name = "tnEditProfile"
+    const collection_name = "profile"
+    const db_client = await MongoClient.connect(url)
+    const dbo=db_client.db(database_name)
 
-  const input_education = req.body.education
-  const input_pastJob = req.body.pastJob
-  const input_currentJob = req.body.currentJob
-  const input_languages = req.body.languages
-  const input_bio = req.body.bio
-
-  const database_name = "tnEditProfile"
-  const collection_name = "profile"
-  mongoose.set("strictQuery", false);
-  const db_client = await MongoClient.connect(url)
-  const dbo = db_client.db(database_name)
-
-  await dbo.collection(collection_name).findOne( {} )
+    await dbo.collection(collection_name).findOne( {_id: new ObjectId(id)})
+    .then(result => {
+      if(!result){
+        anyError = true
+        errorMessage = "invalid id"
+        console.log("invalid result")
+      }
+      else{
+        res.send({
+          "isLoggedIn": res.isLoggedIn,
+          "user": res.user,
+          education: result.education,  
+          pastJob: result.pastJob,
+          currentJob: result.currentJob,
+          languages: result.languages,
+          bio: result.bio
+        })
+        db_client.close();
+      }
+    })
+    .catch(err => {
+      console.log("Error:" + err)
+    })
+  }
 
 });
 
