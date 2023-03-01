@@ -1,0 +1,12 @@
+//This file contains all the CSS styling of the login page
+@import "./variables/variables.scss";
+
+.admin_listUsers_goBack_button{
+    background-color: $blue_Color;
+    color: white;
+}
+
+.admin_listUsers_goBack_button:hover{
+    background-color: lightblue;
+    color: black;
+}

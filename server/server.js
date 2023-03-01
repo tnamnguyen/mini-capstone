@@ -46,6 +46,14 @@ function authenticateToken(req, res, next){
         next()
       }
       else{
+        //check if user is admin
+        if(user.type == 'admin'){
+          res.isAdmin = true
+        }
+        else{
+          res.isAdmin = false
+        }
+
         res.user = user
         res.isLoggedIn = true
         next()
@@ -61,8 +69,10 @@ function authenticateToken(req, res, next){
 
 app.post('/home', authenticateToken, (req, res) => {
   if(res.isLoggedIn){
+    console.log(res.isAdmin)
     res.send({
-      "isLoggedIn": res.isLoggedIn, 
+      "isLoggedIn": res.isLoggedIn,
+      "isAdmin": res.isAdmin,
       "user": res.user
     })
   }
@@ -116,6 +126,7 @@ app.post('/login', async(req, res) => {
   let user_userName = ""
   let user_email = ""
   let user_password = ""
+  let user_type = ""
   await dbo.collection(collection_name).findOne( { email: login_email })
   .then(result => {
     //If email doesn't exist
@@ -130,6 +141,7 @@ app.post('/login', async(req, res) => {
       user_email = result.email
       user_password = result.password
       databasePassword = result.password
+      user_type = result.type
     }
   })
   .catch(err => {
@@ -168,7 +180,8 @@ app.post('/login', async(req, res) => {
       id: user_id,
       name: user_userName, 
       email: user_email, 
-      password: user_password
+      password: user_password,
+      type: user_type
     }
 
     //Creating a JWT token with user information
@@ -419,6 +432,74 @@ app.get('/jobs', async(req, res) => {
   
   });
 
+
+
+
+
+
+// ************************ Admin/ List of users ************************ //
+app.get('/adminListUsers', async(req, res) => {
+  console.log(`route  for admin list users is running`)
+
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+
+  // Query all the jobs
+  try {
+    const users = await (await dbo.collection(collection_name).find().toArray())
+    res.json(users);
+  } catch (error) {
+    console.log("Error when fetching from database");
+    console.log(error);
+      db_client.close();
+  }
+
+  });
+
+
+
+
+
+
+// ************************ Admin/ assign Admin ************************ //
+app.post('/makeAdmin', async(req, res) => {
+  console.log(`route  for admin list users is runninnnnng`)
+
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+
+  // update user type to admin
+  const update = await (await dbo.collection(collection_name).updateOne({email: req.body.email}, {$set :{type :"admin"}}))
+  console.log(update)
+
+});
+
+
+
+
+// ************************ Admin/ assign regular user ************************ //
+app.post('/makeRegularUser', async(req, res) => {
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // update user type to regular_user
+  const update = await (await dbo.collection(collection_name).updateOne({email: req.body.email}, {$set :{type :"regular_user"}}))
+
+});
 
 
 
