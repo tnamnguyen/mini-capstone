@@ -27,7 +27,7 @@ function SavedJobList() {
       <NavBar></NavBar>
 
       <div>
-        <h1 id="job_title">All Jobs</h1>
+        <h1 id="job_title">Saved Jobs</h1>
         <br />
         <div className="container">
           <table className="job-table">
@@ -37,6 +37,7 @@ function SavedJobList() {
                 <th>Experience</th>
                 <th>Location</th>
                 <th>Description</th>
+                <th>remove Button</th>
               </tr>
             </thead>
             <tbody>
@@ -46,6 +47,9 @@ function SavedJobList() {
                   <td>{job.experience}</td>
                   <td>{job.location}</td>
                   <td>{job.description}</td>
+                  <td>
+                    <button>Remove From Saved</button>
+                  </td>
                 </tr>
               ))}
             </tbody>
