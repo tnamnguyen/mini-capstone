@@ -468,6 +468,92 @@ app.get('/connections', async(req, res) => {
   });
 
 
+app.post('/createconnection', async (req, res) => {
+  // Extract the usernames of the users from the request body
+  const { user1, user2 } = req.body;
+
+  // Create a new connection document
+  const connection = {
+    user1,
+    user2,
+    status: 'pending',
+    createdAt: new Date()
+  };
+
+  // Insert the new connection document into the Connections collection
+  const database_name = "Accounts"
+  const collection_name = "Connections"
+  const db_client = await MongoClient.connect(url);
+  const dbo = db_client.db(database_name);
+  const result = await dbo.collection(collection_name).insertOne(connection);
+
+  // Return a response indicating that the connection was created
+  res.json({
+    success: true,
+    message: `Connection created between ${user1} and ${user2}`
+  });
+});
+
+
+app.put('/connections/:id/accept', async (req, res) => {
+  // Extract the connection ID from the request parameters
+  const connectionId = req.params.id;
+
+  // Find the connection document in the Connections collection
+  const database_name = "Accounts"
+  const collection_name = "Connections"
+  const db_client = await MongoClient.connect(url);
+  const dbo = db_client.db(database_name);
+  const connection = await dbo.collection(collection_name).findOne({ _id: ObjectId(connectionId) });
+
+  // If the connection doesn't exist, return a 404 error
+  if (!connection) {
+    return res.status(404).json({ success: false, message: `Connection with ID ${connectionId} not found` });
+  }
+
+  // If the connection is already accepted, return a 400 error
+  if (connection.status === 'accepted') {
+    return res.status(400).json({ success: false, message: `Connection with ID ${connectionId} is already accepted` });
+  }
+
+  // Update the connection status to 'accepted'
+  await dbo.collection(collection_name).updateOne({ _id: ObjectId(connectionId) }, { $set: { status: 'accepted' } });
+
+  // Return a success response
+  res.json({ success: true, message: `Connection with ID ${connectionId} accepted` });
+});
+
+
+app.put('/connections/:id/reject', async (req, res) => {
+  // Extract the connection ID from the request parameters
+  const connectionId = req.params.id;
+
+  // Find the connection document in the Connections collection
+  const database_name = "Accounts"
+  const collection_name = "Connections"
+  const db_client = await MongoClient.connect(url);
+  const dbo = db_client.db(database_name);
+  const connection = await dbo.collection(collection_name).findOne({ _id: ObjectId(connectionId) });
+
+  // If the connection doesn't exist, return a 404 error
+  if (!connection) {
+    return res.status(404).json({ success: false, message: `Connection with ID ${connectionId} not found` });
+  }
+
+  // If the connection is already accepted, return a 400 error
+  if (connection.status === 'accepted') {
+    return res.status(400).json({ success: false, message: `Connection with ID ${connectionId} is already accepted` });
+  }
+
+  // Update the connection status to 'rejected'
+  await dbo.collection(collection_name).updateOne({ _id: ObjectId(connectionId) }, { $set: { status: 'rejected' } });
+
+  // Return a success response
+  res.json({ success: true, message: `Connection with ID ${connectionId} rejected` });
+});
+
+
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
