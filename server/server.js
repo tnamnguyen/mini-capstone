@@ -6,9 +6,13 @@ const bodyParser = require("express")
 const bcrypt = require('bcryptjs')
 const mongoose = require("mongoose")
 const User = require("./userModel.js")
+const Message = require('./message.js');
 const jwt = require('jsonwebtoken')
 const Job = require("./jobModel.js")
-
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() });
+const router = express.Router();
+const ObjectId = require('mongodb').ObjectId;
 
 
 
@@ -557,3 +561,86 @@ app.put('/connections/:id/reject', async (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+// Endpoint for sending a message with an optional document
+router.post('/messages', upload.single('document'), async (req, res) => {
+  try {
+    // Parse the recipient ID from the request body
+    const recipientId = req.body.recipientId;
+
+    // Check that the recipient ID is valid
+    const recipient = await User.findById(recipientId);
+    if (!recipient) {
+      return res.status(400).json({ error: 'Invalid recipient ID' });
+    }
+
+    // Parse the message content from the request body
+    const content = req.body.content;
+
+    // Check that the message content is not empty
+    if (!content) {
+      return res.status(400).json({ error: 'Message content is required' });
+    }
+
+    // Create a new message object
+    const message = new Message({
+      sender: req.user._id, // Assumes that the authenticated user is the sender
+      recipient: recipientId,
+      content: content,
+      timestamp: new Date(),
+      isDocument: Boolean(req.file),
+      documentName: req.file ? req.file.originalname : undefined,
+      documentData: req.file ? req.file.buffer : undefined,
+      isEncrypted: false, // Assumes that documents are not encrypted by default
+      encryptionKey: undefined
+    });
+
+    // Save the message to the database
+    await message.save();
+
+    // Return the saved message object
+    return res.status(200).json({ message: message });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Endpoint for retrieving a specific message with its document (if any)
+router.get('/messages/:messageId', async (req, res) => {
+  try {
+    // Parse the message ID from the request parameters
+    const messageId = req.params.messageId;
+
+    // Check that the message ID is valid
+    if (!ObjectId.isValid(messageId)) {
+      return res.status(400).json({error: 'Invalid message ID'});
+    }
+
+    // Retrieve the message with the specified ID
+    const message = await Message.findById(messageId);
+
+    // Check that the message exists
+    if (!message) {
+      return res.status(404).json({error: 'Message not found'});
+    }
+
+    // Check that the authenticated user is either the sender or recipient of the message
+    if (!message.sender.equals(req.user._id) && !message.recipient.equals(req.user._id)) {
+      return res.status(403).json({error: 'Unauthorized'});
+    }
+
+    // If the message includes a document, send the document data in the response as an attachment.
+    if (message.isDocument && message.documentData) {
+      res.setHeader('Content-Disposition', `attachment; filename="${message.documentName}"`);
+      res.setHeader('Content-Type', 'application/octet-stream');
+      res.send(message.documentData);
+    } else {
+      // Otherwise, return the message object as JSON.
+      return res.status(200).json({message: message});
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
