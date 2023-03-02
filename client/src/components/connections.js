@@ -24,7 +24,25 @@ function Connections () {
           console.error('Error fetching users:', error);
         });
     }, []);
-
+     
+    const handleConnection = async (username) => {
+    const url = SERVER_URL+'/createconnection'
+    
+    const requestBody = {
+        targetUsername: username
+      };
+      
+      // Send the POST request to create the connection request
+      axios.post(url, requestBody)
+        .then(response => {
+          // Handle the successful response
+          console.log(response.data.message);
+        })
+        .catch(error => {
+          // Handle the error
+          console.error(error.response.data.message);
+        });
+    }
     return (
         <>
         <NavBar></NavBar>
@@ -55,7 +73,7 @@ function Connections () {
             </table>
             
             </div>
-            <Link to="/addConnections" className="myButton">add a connection</Link>
+            <Link to="/addConnections" className="myButton" onClick={() => handleConnection('eyad') }>add a connection</Link>
         </div>
 
 
