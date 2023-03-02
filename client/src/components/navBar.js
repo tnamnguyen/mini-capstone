@@ -9,31 +9,27 @@ function NavBar() {
     const [adminElement, setAdminElement] = useState(false)
     const [userName, setUserName] = useState('')
 
-    //If User is logged-in -> add his name to navBar & remove login button
+    //Check if user is logged in & if user is admin to change navBar accordingly
     const SERVER_URL = process.env.REACT_APP_SERVER_URL
     const accessToken = localStorage.getItem("token")
     const isTokenAvailable = (localStorage.getItem("token") != null)
     if(isTokenAvailable){
         axios.post(SERVER_URL + '/home', {accessToken})
         .then(response => {
+            //If user is logged in
             if(response.data.isLoggedIn){
                 setLoginElement(false)
                 setUserName(response.data.user.name)
             }
 
+            //If user is an admin
             if(response.data.isAdmin){
                 setAdminElement(true)
             }
-            
-           
         })
     }
 
 
-    
-
-    
-    
 
     //Dynamic HTML elements
     function addLogInElement(){
