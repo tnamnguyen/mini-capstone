@@ -1,6 +1,5 @@
 import React, { useState , } from 'react';
 import {  useEffect  } from 'react';
-import { Link } from 'react-router-dom';
 import axios from "axios";
 import NavBar from './navBar';
 import '../Styles/admin.scss';
@@ -8,43 +7,37 @@ import '../Styles/admin.scss';
 
 function AdminListUsers(){
 
-    let countUsers = 1;
+    //To count how many users
+    let countUsers = 1
+
     const [users, setUsers] = useState([]);
 
     const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
+
+    //To go bak to admin page when button is pressed
     function backToAdmin(){
         window.location.href = "/admin"
     }
 
 
-
+    //To assign User as an admin
     function assignAdmin(email){
-        axios.post(SERVER_URL+ '/makeAdmin', {email})
-        .then(response => {
-            //setUsers(response.data);
-        })
-        .catch(error => {
-            //console.error('Error fetching jobs:', error);
-        });
- 
+        axios.post(SERVER_URL+ '/admin_makeAdmin', {email})
+        window.location.href = "/adminListUsers"
     }
+
+    //To assign User as a regular user
     function assignRegularUser(email){
-        axios.post(SERVER_URL+ '/makeRegularUser', {email})
-        .then(response => {
-            //setUsers(response.data);
-        })
-        .catch(error => {
-            //console.error('Error fetching jobs:', error);
-        });
- 
+        axios.post(SERVER_URL+ '/admin_makeRegularUser', {email})
+        window.location.href = "/adminListUsers"
     }
 
     
   
     useEffect(() => {
       // Fetch all users from the backend API when the component mounts
-      axios.get(SERVER_URL + '/adminListUsers')
+      axios.get(SERVER_URL + '/admin_listUsers')
         .then(response => {
             setUsers(response.data);
         })
@@ -58,9 +51,9 @@ function AdminListUsers(){
     
     return(
         <>
-       
-           
-            <table className="job-table">
+            <NavBar></NavBar>
+            <h1 className='admin_listUsers_title'>List Of Registered Users</h1>
+            <table className="admin_listUsers_table">
             <thead>
             
                 <tr>
@@ -82,14 +75,14 @@ function AdminListUsers(){
                     <td>{user.password}</td>
                     <td>{user.type}</td>
                     <td>
-                        <button onClick={() => assignAdmin(user.email)}>Make Admin</button>
-                        <button onClick={() => assignRegularUser(user.email)}>Make Regular User</button>
+                        <button onClick={() => assignAdmin(user.email)} className='admin_listUsers_makeAdmin_button'>Make Admin</button>
+                        <button onClick={() => assignRegularUser(user.email)} className='admin_listUsers_makeRegular_button'>Make Regular</button>
                     </td>
                 </tr>
                 ))}
             </tbody>
             </table>
-            <div>Total number of users: {countUsers-1}</div>
+            <div className='admin_listUsers_totalNumOfUsers'>Total number of users: {countUsers-1}</div>
 
             <br></br>
             <button className='admin_listUsers_goBack_button' onClick={backToAdmin}>Go Back</button>

@@ -69,7 +69,6 @@ function authenticateToken(req, res, next){
 
 app.post('/home', authenticateToken, (req, res) => {
   if(res.isLoggedIn){
-    console.log(res.isAdmin)
     res.send({
       "isLoggedIn": res.isLoggedIn,
       "isAdmin": res.isAdmin,
@@ -427,10 +426,38 @@ app.get('/jobs', async(req, res) => {
       db_client.close();
   }
  
+});
+
+
+
+
+
+
+
+
+
+// ************************ Admin ************************ //
+app.get('/admin', async(req, res) => {
   
-  
-  
-  });
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  //Getting total numbers of registered users
+  let numOfUsers = await dbo.collection("users").countDocuments()
+
+  //Getting total numbers of jobs available
+  const numOfJobs = await dbo.collection("Jobs").countDocuments()
+
+  //Seding response back to front-end
+  res.send({numOfUsers: numOfUsers, numOfJobs: numOfJobs})
+
+});
+
+
+
+
 
 
 
@@ -438,9 +465,7 @@ app.get('/jobs', async(req, res) => {
 
 
 // ************************ Admin/ List of users ************************ //
-app.get('/adminListUsers', async(req, res) => {
-  console.log(`route  for admin list users is running`)
-
+app.get('/admin_listUsers', async(req, res) => {
 
   // Connecting to the specific database and collection
   const database_name = "Accounts"
@@ -449,17 +474,17 @@ app.get('/adminListUsers', async(req, res) => {
   const dbo = db_client.db(database_name)
 
 
-  // Query all the jobs
+  // Query all users from database
   try {
     const users = await (await dbo.collection(collection_name).find().toArray())
     res.json(users);
   } catch (error) {
     console.log("Error when fetching from database");
     console.log(error);
-      db_client.close();
+    db_client.close();
   }
 
-  });
+});
 
 
 
@@ -467,28 +492,25 @@ app.get('/adminListUsers', async(req, res) => {
 
 
 // ************************ Admin/ assign Admin ************************ //
-app.post('/makeAdmin', async(req, res) => {
-  console.log(`route  for admin list users is runninnnnng`)
-
-
+app.post('/admin_makeAdmin', async(req, res) => {
+  
   // Connecting to the specific database and collection
   const database_name = "Accounts"
   const collection_name = "users"
   const db_client =  await MongoClient.connect(url) 
   const dbo = db_client.db(database_name)
 
-
   // update user type to admin
   const update = await (await dbo.collection(collection_name).updateOne({email: req.body.email}, {$set :{type :"admin"}}))
-  console.log(update)
 
 });
 
 
 
 
+
 // ************************ Admin/ assign regular user ************************ //
-app.post('/makeRegularUser', async(req, res) => {
+app.post('/admin_makeRegularUser', async(req, res) => {
 
   // Connecting to the specific database and collection
   const database_name = "Accounts"

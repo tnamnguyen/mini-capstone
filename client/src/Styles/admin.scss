@@ -1,7 +1,129 @@
 //This file contains all the CSS styling of the login page
 @import "./variables/variables.scss";
 
+
+
+// *********************************** Admin Page *********************************** //
+
+.admin_title{
+    color: $blue_Color;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+
+
+.admin_stats{
+    background-color: $light_blue_Color;
+    margin: 30px;
+    padding: 25px;
+}
+.admin_stats_main_title{
+    text-align: center;
+    color: black;
+    font-weight: bold;
+}
+
+
+
+
+.admin_functionalities{
+    background-color: $light_blue_Color;
+    margin: 30px;
+    padding: 25px;
+}
+.admin_functionalities_main_title{
+    text-align: center;
+    color: black;
+    font-weight: bold;
+}
+.admin_functionalities_sub_title{
+    color: black;
+}
+.admin_functionalities_button{
+    background-color: rgb(212, 167, 233);
+    border-width: 3px;
+}
+.admin_functionalities_button:hover{
+    background-color: rgb(190, 105, 230);
+    color: white;
+    border-width: 3px;
+}
+
+
+
+
+
+// *********************************** admin / List of Users Page *********************************** //
+
+.admin_listUsers_title{
+    color: $blue_Color;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.admin_listUsers_table {
+    margin: 30px;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 800px;
+}
+
+.admin_listUsers_table th,
+.admin_listUsers_table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+}
+
+.admin_listUsers_table th {
+    text-align: center;
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.admin_listUsers_table td {
+    text-align: center;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background-color: #fff;
+}
+
+.admin_listUsers_makeAdmin_button{
+    margin: 2px;
+    background-color: $light_blue_Color;
+}
+.admin_listUsers_makeAdmin_button:hover{
+    margin: 2px;
+    background-color: $blue_Color;
+    color: white;
+}
+
+.admin_listUsers_makeRegular_button{
+    margin: 2px;
+    background-color: rgb(81, 182, 170);
+}
+.admin_listUsers_makeRegular_button:hover{
+    margin: 2px;
+    background-color: rgb(47, 107, 100);
+    color: white;
+}
+
+
+.admin_listUsers_totalNumOfUsers{
+    font-weight: bold;
+    margin-left: 30px;
+    font-size: large;
+}
+
+
 .admin_listUsers_goBack_button{
+    margin-left: 30px;
+    margin-bottom: 20px;
     background-color: $blue_Color;
     color: white;
 }
@@ -10,3 +132,4 @@
     background-color: lightblue;
     color: black;
 }
+
