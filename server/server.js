@@ -6,8 +6,8 @@ const bodyParser = require("express")
 const bcrypt = require('bcryptjs')
 const mongoose = require("mongoose")
 const User = require("./userModel.js")
-const jwt = require('jsonwebtoken')
 const Job = require("./jobModel.js")
+const jwt = require('jsonwebtoken')
 
 
 
@@ -46,6 +46,14 @@ function authenticateToken(req, res, next){
         next()
       }
       else{
+        //check if user is admin
+        if(user.type == 'admin'){
+          res.isAdmin = true
+        }
+        else{
+          res.isAdmin = false
+        }
+
         res.user = user
         res.isLoggedIn = true
         next()
@@ -62,7 +70,8 @@ function authenticateToken(req, res, next){
 app.post('/home', authenticateToken, (req, res) => {
   if(res.isLoggedIn){
     res.send({
-      "isLoggedIn": res.isLoggedIn, 
+      "isLoggedIn": res.isLoggedIn,
+      "isAdmin": res.isAdmin,
       "user": res.user
     })
   }
@@ -116,6 +125,7 @@ app.post('/login', async(req, res) => {
   let user_userName = ""
   let user_email = ""
   let user_password = ""
+  let user_type = ""
   await dbo.collection(collection_name).findOne( { email: login_email })
   .then(result => {
     //If email doesn't exist
@@ -130,6 +140,7 @@ app.post('/login', async(req, res) => {
       user_email = result.email
       user_password = result.password
       databasePassword = result.password
+      user_type = result.type
     }
   })
   .catch(err => {
@@ -168,7 +179,8 @@ app.post('/login', async(req, res) => {
       id: user_id,
       name: user_userName, 
       email: user_email, 
-      password: user_password
+      password: user_password,
+      type: user_type
     }
 
     //Creating a JWT token with user information
@@ -319,7 +331,8 @@ app.post('/signup', async(req, res) => {
   const signedUpUser = new User({
     name: input_name,
     email: input_email,
-    password: hashedPassword
+    password: hashedPassword,
+    type: "regular_user"
   })
             
 
@@ -413,11 +426,102 @@ app.get('/jobs', async(req, res) => {
       db_client.close();
   }
  
-  
-  
-  
-  });
+});
 
+
+
+
+
+
+
+
+
+// ************************ Admin ************************ //
+app.get('/admin', async(req, res) => {
+  
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  //Getting total numbers of registered users
+  let numOfUsers = await dbo.collection("users").countDocuments()
+
+  //Getting total numbers of jobs available
+  const numOfJobs = await dbo.collection("Jobs").countDocuments()
+
+  //Seding response back to front-end
+  res.send({numOfUsers: numOfUsers, numOfJobs: numOfJobs})
+
+});
+
+
+
+
+
+
+
+
+
+
+// ************************ Admin/ List of users ************************ //
+app.get('/admin_listUsers', async(req, res) => {
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+
+  // Query all users from database
+  try {
+    const users = await (await dbo.collection(collection_name).find().toArray())
+    res.json(users);
+  } catch (error) {
+    console.log("Error when fetching from database");
+    console.log(error);
+    db_client.close();
+  }
+
+});
+
+
+
+
+
+
+// ************************ Admin/ assign Admin ************************ //
+app.post('/admin_makeAdmin', async(req, res) => {
+  
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // update user type to admin
+  const update = await (await dbo.collection(collection_name).updateOne({email: req.body.email}, {$set :{type :"admin"}}))
+
+});
+
+
+
+
+
+// ************************ Admin/ assign regular user ************************ //
+app.post('/admin_makeRegularUser', async(req, res) => {
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // update user type to regular_user
+  const update = await (await dbo.collection(collection_name).updateOne({email: req.body.email}, {$set :{type :"regular_user"}}))
+
+});
 
 
 

@@ -5,28 +5,44 @@ import axios from "axios"
 function NavBar() {
 
     //Use states holding user info
-    const [login, setLogin] = useState(true)
+    const [loginElement, setLoginElement] = useState(true)
+    const [adminElement, setAdminElement] = useState(false)
     const [userName, setUserName] = useState('')
 
-    //If User is logged-in -> add his name to navBar & remove login button
-    const SERVER_URL = "https://jobilee-server.vercel.app"
+    //Check if user is logged in & if user is admin to change navBar accordingly
+    const SERVER_URL = process.env.REACT_APP_SERVER_URL
     const accessToken = localStorage.getItem("token")
     const isTokenAvailable = (localStorage.getItem("token") != null)
     if(isTokenAvailable){
         axios.post(SERVER_URL + '/home', {accessToken})
         .then(response => {
-            setLogin(false)
-            setUserName(response.data.user.name)
+            //If user is logged in
+            if(response.data.isLoggedIn){
+                setLoginElement(false)
+                setUserName(response.data.user.name)
+            }
+
+            //If user is an admin
+            if(response.data.isAdmin){
+                setAdminElement(true)
+            }
         })
     }
-    
 
-    
-    
+
 
     //Dynamic HTML elements
-    function addLogIn(){
-        if(login){
+    function addLogInElement(){
+        if(adminElement){
+            return(
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin">Admin</a>
+                </li>
+            )
+        }
+    }
+    function addAdminElement(){
+        if(loginElement){
             return(
                 <li class="nav-item">
                     <a class="nav-link" href="/login">Log In</a>
@@ -43,7 +59,7 @@ function NavBar() {
         }
     }
     function addUserGreeting(){
-        if(!login){
+        if(!loginElement){
             return(
                 <li class="nav_item_1">
                     <a class="nav-link" href="#">Hello, {userName}</a>
@@ -77,8 +93,9 @@ function NavBar() {
                     <li class="nav-item">
                         <a class="nav-link" href="/profile">Profile</a>
                     </li>
-                    {addLogIn()}
+                    {addLogInElement()}
                     {addUserGreeting()}
+                    {addAdminElement()}
                 </ul>
             </div>
         </nav>
