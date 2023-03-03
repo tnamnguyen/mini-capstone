@@ -52,6 +52,15 @@ function NavBar() {
             )
         }
     }
+    function addNotifications(){
+        if(!login){
+            return(
+                <li class="nav_item_1">
+                    <a class="nav-link" href="/notifications">Notifications</a>
+                </li>
+            )
+        }
+    }
 
   return (
     <>
@@ -72,9 +81,7 @@ function NavBar() {
                     <li class="nav-item">
                         <a class="nav-link" href="#">Chat</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/notifications">Notifications</a>
-                    </li>
+                    {addNotifications()}
                     <li class="nav-item">
                         <a class="nav-link" href="/profile">Profile</a>
                     </li>

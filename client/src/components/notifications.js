@@ -12,9 +12,14 @@ function Notifications () {
     const SERVER_URL = "http://localhost:3001"
     // const SERVER_URL = "https://jobilee-server.vercel.app"
 
+    //Creste a new notification (for testing purposes)
+    const accessToken = localStorage.getItem("token")
+    axios.post(SERVER_URL + '/createNotification', {accessToken, referenceID:"test", type:"requst"})
+
     useEffect(() => {
       // Fetch all jobs from the backend API when the component mounts
-      axios.get(SERVER_URL+ '/notifications')
+      
+      axios.post(SERVER_URL+ '/notifications', {accessToken})
         .then(response => {
             displayNotifications(response.data);
         })
@@ -36,16 +41,20 @@ function Notifications () {
             <thead>
                
                 <tr>
-                <th>Name</th>
-            {/* <th>Email</th> */}
+                <th>user</th>
+                <th>id</th>
+                <th>message</th>
+                <th>status</th>
                 </tr>
                 
             </thead>
             <tbody>
                 {notifications.map(notif => (
                 <tr key={notif.id}>
-                    <td>{notif.name}</td>
-                    {/* <td>{user.email}</td> */}
+                    <td>{notif.userID}</td>
+                    <td>{notif.id}</td>
+                    <td>{notif.message}</td>
+                    <td>{notif.status}</td>
                 </tr>
                 ))}
             </tbody>

@@ -35,7 +35,7 @@ connectToMongooseDB();
 // **************************************** Setting Up JWT **************************************** //
 
 //Function taking a token as input and checking if a user is signed-in
-function authenticateToken(req, res, next){
+async function authenticateToken(req, res, next){
   const token = req.body.accessToken
   if(token == null){ 
     res.isLoggedIn = false
@@ -657,9 +657,12 @@ router.get('/messages/:messageId', async (req, res) => {
 
 
 // ************************ Notifications ************************ //
-app.get('/notifications', async(req, res) => {
+app.post('/notifications', authenticateToken, async(req, res) => {
   console.log(`route  for notificiations is running`)
 
+  //Retrieve user from token
+  const user = res.user
+  const user_email = res.user.email
 
   // Connecting to the specific database and collection
   const database_name = "Accounts"
@@ -670,8 +673,8 @@ app.get('/notifications', async(req, res) => {
 
   // Query all notifications
   try {
-    const notifications = await (await dbo.collection(collection_name).find().toArray())
-    res.json(jobnotificationss);
+    const notifications = await (await dbo.collection(collection_name).find({userID: user_email}).toArray())
+    res.json(notifications);
   } catch (error) {
     console.log("Error when fetching from database");
     console.log(error);
@@ -682,7 +685,11 @@ app.get('/notifications', async(req, res) => {
 
 
 // ************************ Create new Notification ************************ //
-app.post('/createNotification', async (req, res) => {
+app.post('/createNotification',authenticateToken, async (req, res) => {
+
+  //Retrieve user from token
+  const user = res.user
+  const user_email = res.user.email
 
   //Connecting to database
   const database_name = "Accounts"
@@ -691,7 +698,7 @@ app.post('/createNotification', async (req, res) => {
   
 
   // Extract the referenceID & type of notification
-  const { referenceID, type } = req.body;
+  const {accessToken, referenceID, type } = req.body;
 
   // ---- Creating the notification message ---- //
   const message = " N/A"
@@ -720,8 +727,9 @@ app.post('/createNotification', async (req, res) => {
 
   // Create a new notification document
   const notification = {
+    userID: user_email,
     type,
-    isRead: false,
+    status: "Not Read",
     referenceID,
     message: message
   };
