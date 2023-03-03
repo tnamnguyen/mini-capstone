@@ -37,7 +37,7 @@ function SavedJobList() {
                 <th>Experience</th>
                 <th>Location</th>
                 <th>Description</th>
-                <th>remove Button</th>
+                <th>Remove Button</th>
               </tr>
             </thead>
             <tbody>

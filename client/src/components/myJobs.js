@@ -5,7 +5,7 @@ import axios from "axios";
 import NavBar from "./navBar";
 import "../Styles/sign-up.scss";
 
-function JobList() {
+function MyJobList() {
   const [jobs, setJobs] = useState([]);
 
   const SERVER_URL = "https://jobilee-server.vercel.app";
@@ -37,6 +37,7 @@ function JobList() {
                 <th>Experience</th>
                 <th>Location</th>
                 <th>Description</th>
+                <th>Edit Button</th>
               </tr>
             </thead>
             <tbody>
@@ -46,6 +47,12 @@ function JobList() {
                   <td>{job.experience}</td>
                   <td>{job.location}</td>
                   <td>{job.description}</td>
+                  <td>
+                    <Link to="/editJob">
+                      {" "}
+                      <button>Edit Job</button>
+                    </Link>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -57,12 +64,12 @@ function JobList() {
         <Link to="/savedJobs" className="myButton">
           View Saved Jobs
         </Link>
-        <Link to="/myJobs" className="myButton">
-          View Created Jobs
+        <Link to="/jobs" className="myButton">
+          Back
         </Link>
       </div>
     </div>
   );
 }
 
-export default JobList;
+export default MyJobList;

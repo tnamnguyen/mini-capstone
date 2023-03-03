@@ -11,6 +11,8 @@ import JobApplicationForm from "./components/createJob.js";
 import JobList from "./components/jobs.js";
 import SavedJobList from "./components/savedJobs";
 import "bootstrap/dist/css/bootstrap.css";
+import MyJobList from "./components/myJobs";
+import JobEditForm from "./components/editJob";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -25,6 +27,8 @@ ReactDOM.render(
         <Route path="/createJobs" element={<JobApplicationForm />} />
         <Route path="/jobs" element={<JobList />} />
         <Route path="/savedJobs" element={<SavedJobList />} />
+        <Route path="/myJobs" element={<MyJobList />} />
+        <Route path="/editJob" element={<JobEditForm />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
