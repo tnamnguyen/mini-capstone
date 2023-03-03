@@ -12,6 +12,8 @@ import JobList from './components/jobs.js';
 import Admin from './components/admin'
 import AdminListUsers from './components/adminListUsers';
 import "bootstrap/dist/css/bootstrap.css";
+import Connections from './components/connections.js';
+import AddConnection from './components/addConnection.js';
 
 
 ReactDOM.render(
@@ -28,6 +30,8 @@ ReactDOM.render(
                 <Route path="/jobs" element={<JobList/>}/>
                 <Route path="/admin" element={<Admin/>}/>
                 <Route path="/adminListUsers" element={<AdminListUsers/>}/>
+                <Route path="/connections" element={<Connections/>}/>
+                <Route path="/addConnection" element={<AddConnection/>}/>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>,
