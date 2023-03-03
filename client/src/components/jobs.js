@@ -37,6 +37,7 @@ function JobList() {
                 <th>Experience</th>
                 <th>Location</th>
                 <th>Description</th>
+                <th>Apply</th>
               </tr>
             </thead>
             <tbody>
@@ -46,6 +47,9 @@ function JobList() {
                   <td>{job.experience}</td>
                   <td>{job.location}</td>
                   <td>{job.description}</td>
+                  <td>
+                    <button>Edit Job</button>
+                  </td>
                 </tr>
               ))}
             </tbody>
