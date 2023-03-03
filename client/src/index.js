@@ -11,6 +11,7 @@ import JobApplicationForm from './components/createJob.js';
 import JobList from './components/jobs.js';
 import Connections from './components/connections.js';
 import AddConnections from './components/addConnections.js';
+import Notifications from './components/notifications';
 import "bootstrap/dist/css/bootstrap.css";
 
 
@@ -28,6 +29,7 @@ ReactDOM.render(
                 <Route path="/jobs" element={<JobList/>}/>
                 <Route path="/connections" element={<Connections/>}/>
                 <Route path="/addConnections" element={<AddConnections/>}/>
+                <Route path="/notifications" element={<Notifications/>}/>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>,

@@ -6,7 +6,7 @@ const bodyParser = require("express")
 const bcrypt = require('bcryptjs')
 const mongoose = require("mongoose")
 const User = require("./userModel.js")
-const Message = require('./message.js');
+const Message = require('./messageModel.js');
 const jwt = require('jsonwebtoken')
 const Job = require("./jobModel.js")
 const multer = require('multer');
@@ -643,4 +643,94 @@ router.get('/messages/:messageId', async (req, res) => {
     console.error(error);
     return res.status(500).json({ error: 'Server error' });
   }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+// ************************ Notifications ************************ //
+app.get('/notifications', async(req, res) => {
+  console.log(`route  for notificiations is running`)
+
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "notifications"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+
+  // Query all notifications
+  try {
+    const notifications = await (await dbo.collection(collection_name).find().toArray())
+    res.json(jobnotificationss);
+  } catch (error) {
+    console.log("Error when fetching from database");
+    console.log(error);
+      db_client.close();
+  }
+});
+
+
+
+// ************************ Create new Notification ************************ //
+app.post('/createNotification', async (req, res) => {
+
+  //Connecting to database
+  const database_name = "Accounts"
+  const db_client = await MongoClient.connect(url);
+  const dbo = db_client.db(database_name)
+  
+
+  // Extract the referenceID & type of notification
+  const { referenceID, type } = req.body;
+
+  // ---- Creating the notification message ---- //
+  const message = " N/A"
+  //If notification is for an incoming message
+  if(type == "message_incomming"){
+    const dbo = db_client.db("messages");
+    const query = await dbo.collection("messages").find({_id: referenceID});
+    message = query.sender + " sent you a message on " + query.sentAt + " saying: " + query.content
+  }
+  //If notification is for a connection invite
+  if(type == "connection_invite"){
+
+  }
+  //If notification is for a connection acceptance
+  if(type == "connection_acceptance"){
+
+  }
+  //If notification is for a new posted job
+  if(type == "job_newPosting"){
+
+  }
+  //If notification is for an alert from platform admin
+  if(type == "admin_alert"){
+
+  }
+
+  // Create a new notification document
+  const notification = {
+    type,
+    isRead: false,
+    referenceID,
+    message: message
+  };
+
+  const result = await dbo.collection("notifications").insertOne(notification);
+
+  // Return a response indicating that the connection was created
+  res.json({
+    success: true,
+    message: "Notification was successfully created!"
+  });
 });

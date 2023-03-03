@@ -73,7 +73,7 @@ function NavBar() {
                         <a class="nav-link" href="#">Chat</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Notifications</a>
+                        <a class="nav-link" href="/notifications">Notifications</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/profile">Profile</a>
