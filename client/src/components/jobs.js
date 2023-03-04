@@ -48,7 +48,7 @@ function JobList() {
                   <td>{job.location}</td>
                   <td>{job.description}</td>
                   <td>
-                    <button>Edit Job</button>
+                    <button>Apply</button>
                   </td>
                 </tr>
               ))}
