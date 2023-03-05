@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import NavBar from "./navBar";
-import "../Styles/sign-up.scss";
+import "../Styles/job.scss";
 
 function JobList() {
   const [jobs, setJobs] = useState([]);

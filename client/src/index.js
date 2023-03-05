@@ -13,6 +13,7 @@ import SavedJobList from "./components/savedJobs";
 import "bootstrap/dist/css/bootstrap.css";
 import MyJobList from "./components/myJobs";
 import JobEditForm from "./components/editJob";
+import ForgotPassword from "./components/forgotPassword";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -29,6 +30,7 @@ ReactDOM.render(
         <Route path="/savedJobs" element={<SavedJobList />} />
         <Route path="/myJobs" element={<MyJobList />} />
         <Route path="/editJob" element={<JobEditForm />} />
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
