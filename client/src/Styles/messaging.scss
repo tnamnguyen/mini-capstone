@@ -1,0 +1,56 @@
+//This file contains all the CSS styling of the edit profile page
+@import "./variables/variables.scss";
+
+.messaging-container{
+    margin: auto;
+  border: solid 1px $blue_Color;
+  border-width: 0.5ch;
+  border-radius: 30px;
+  padding: 8em;
+  input{
+    width: 80%;
+    margin-bottom: 10px;
+    border: 1px solid gray;
+    border-radius: 20px;
+  }
+}
+
+.inner-messaging-container{
+    margin: auto;
+  border: solid 1px $blue_Color;
+  border-width: 0.5ch;
+  border-radius: 30px;
+  padding: 10px;
+  
+}
+
+.message-userSide{
+    text-align: right;
+    padding: 10px;
+    float: right;
+    width: 100%;
+    margin: 10px 0;
+    border: 1px solid gray;
+    border-radius: 20px;
+    background-color: #7DEFFF;
+}
+
+.message-otherSide{
+    
+    padding: 10px;
+    float: left;
+    width: 100%;
+    margin: 10px 0;
+    border: 1px solid gray;
+    border-radius: 20px;
+    background-color: white;
+    
+}
+
+.button{
+    width: 10%;
+}
+
+.title{
+    text-align: center;
+}
