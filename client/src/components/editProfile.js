@@ -25,9 +25,10 @@ function EditProfile() {
 
     function handleChanges() {
         console.log('submit changes button was clicked')
-        axios.post(SERVER_URL + '/submiteditprofile', {accessToken})
+        axios.post(SERVER_URL + '/submiteditprofile', {
+            accessToken, userName, education, pastJob, currentJob, languages, bio})
         .then(response => {
-            
+            // Display Success Message
         })
     }
 
@@ -220,7 +221,7 @@ function EditProfile() {
 
                         {/* ********** Submit Button ********** */}
                         <div class="edit_profile_submit">
-                            <button id='edit_profile_submit_button'>Submit Changes!</button>
+                            <button id='edit_profile_submit_button' onClick={() => handleChanges()}>Submit Changes!</button>
                         </div>
                     </div>
                 </div>

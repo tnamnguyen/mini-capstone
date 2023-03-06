@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import NavBar from './navBar';
 import {Link} from "react-router-dom";
 import '../Styles/profile.scss';
@@ -25,18 +26,20 @@ function Profile() {
     const accessToken = localStorage.getItem("token")                
 
     const isTokenAvailable = (accessToken != null)
+    useEffect(() => {
+        if (isTokenAvailable){
+            axios.post(SERVER_URL + '/profile', {accessToken})
+            .then(response => {
+                setUserName(response.data.user.name)
+                setEducation(response.data.education)
+                setCurrentJob(response.data.currentJob)
+                setPastJob(response.data.pastJob)
+                setLanguages(response.data.languages)
+                setBio(response.data.bio)
+            })
+        }
+    }, []);
 
-    if (isTokenAvailable){
-        axios.post(SERVER_URL + '/profile', {accessToken})
-        .then(response => {
-            setUserName(response.data.user.name)
-            setEducation(response.data.education)
-            setCurrentJob(response.data.currentJob)
-            setPastJob(response.data.pastJob)
-            setLanguages(response.data.languages)
-            setBio(response.data.bio)
-        })
-    }
 
     const [profilePic, setProfilePic] = useState('../assets/images/profile.png');
     const [userName, setUserName] = useState('');

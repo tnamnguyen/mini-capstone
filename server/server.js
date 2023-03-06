@@ -445,7 +445,7 @@ app.post('/profile', authenticateToken, async(req, res) => {
     const collection_name = "profile"
     const db_client = await MongoClient.connect(url)
     const dbo=db_client.db(database_name)
-    await dbo.collection(collection_name).findOne( {_id: new ObjectId(id)})
+    await dbo.collection(collection_name).findOne( {user_id: id})
     .then(result => {
       if(!result){
         anyError = true
@@ -483,7 +483,7 @@ app.post('/editprofile', authenticateToken, async(req, res) =>{
     const db_client = await MongoClient.connect(url)
     const dbo=db_client.db(database_name)
 
-    await dbo.collection(collection_name).findOne( {_id: new ObjectId(id)})
+    await dbo.collection(collection_name).findOne( {user_id: id})
     .then(result => {
       if(!result){
         anyError = true
@@ -510,6 +510,57 @@ app.post('/editprofile', authenticateToken, async(req, res) =>{
 
 });
 
+// Submit Changes
+app.post('/submiteditprofile', authenticateToken, async(req, res) => {
+  console.log(`route submitting profile changes is running`)
+  const id = res.user.id
+  
+  // Associate the info from the edit page
+  const input_userName = req.body.userName
+  const input_education = req.body.education
+  const input_pastJob = req.body.pastJob
+  const input_currentJob = req.body.currentJob
+  const input_languages = req.body.languages
+  const input_bio = req.body.bio
+
+  // Loading database
+  const database_name = "tnEditProfile"
+  const collection_name = "profile"
+  const collection_users = "users"
+  mongoose.set("strictQuery", false);
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  // Find a profile corresponding to user_id
+  const userProfile = await dbo.collection(collection_name).findOne({user_id: id})
+  if (userProfile){
+    userProfile.education = input_education
+    userProfile.pastJob = input_pastJob
+    userProfile.currentJob = input_currentJob
+    userProfile.languages = input_languages
+    userProfile.bio = input_bio
+  
+    // Update userProfile
+    await dbo.collection(collection_name).updateOne({ user_id: id }, { $set: userProfile });
+    
+    // Find from users collection matching id
+    const user = await dbo.collection(collection_users).findOne({_id: new ObjectId(id)})
+      // If user is not found
+      if(!user){
+        anyError = true
+        errorMessage = "invalid id"
+        console.log("invalid result")
+      }
+      // Modify userName
+      else{
+        user.name = input_userName
+        await dbo.collection(collection_users).updateOne({ _id: new ObjectId(id) }, { $set: user });
+      }
+    console.log("Profile Saved")
+  }
+  else{console.log("User Profile not found")}
+
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
