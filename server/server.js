@@ -8,6 +8,9 @@ const mongoose = require("mongoose")
 const User = require("./userModel.js")
 const jwt = require('jsonwebtoken')
 const Job = require("./jobModel.js")
+const { db } = require('./userModel.js')
+const SavedJob = require("./savedJobModel.js")
+const ObjectId = require('mongodb').ObjectId
 
 
 
@@ -419,9 +422,77 @@ app.get('/jobs', async(req, res) => {
   });
 
 
+  app.post('/savejob', authenticateToken, async(req, res) => {
+    console.log (`route for saving job is running`)
+
+    // Connecting to the specific database and collection
+    const database_name = "Accounts"
+    const collection_name = "savedjobs"
+    const db_client = await MongoClient.connect(url)
+    const dbo = db_client.db(database_name)
+
+    // New saved job that will be added to the database
+    var newSavedJob = new SavedJob({
+      user_id: res.user.id,
+      job_id: req.body.job_id
+    })
+    dbo.collection(collection_name).findOne({user_id: res.user.id, job_id: req.body.job_id},
+      function(err, result){
+      // If entry exists in database
+      if (result != null) {
+        console.log('Job Exists')
+      }
+      // Else, inserting new saved job
+      else{
+        dbo.collection(collection_name).insertOne(newSavedJob, function(err, res) {
+          if(err) throw err;
+          console.log("-> 1 new Job was saved for user on " + database_name + " database inside the " + collection_name + " collection!")
+          db.client.close();
+        })
+    }
+      })
+
+  })
 
 
 
+// ************************ Saved Job Browsing ************************ //
+app.post('/savedjobs', authenticateToken, async(req, res) => {
+  console.log(`route for saved jobs is running`)
+
+  const database_name = "Accounts"
+  const collection_name = "savedjobs"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // Find all job_ids that are associated with the user
+  try {
+    const job_ids = await dbo
+    .collection(collection_name)
+    .find({
+      user_id: res.user.id
+    })
+      .project({job_id: 1, _id: 0}).toArray();
+    
+    const collection_name_Jobs = "Jobs"
+
+    // Removing the field names of the array
+    const filtered_jobids = job_ids.map(job_ids => job_ids.job_id)
+
+    // Associating them as ObjectIds
+    const object_ids = filtered_jobids.map(filtered_jobids => new ObjectId(filtered_jobids));
+
+    // Finding all jobs matching ids from array
+    const jobs = await dbo.collection(collection_name_Jobs).find({_id: {$in: object_ids}}).toArray();
+    res.json(jobs)
+
+  } catch(error) {
+    console.log("Error when fetching from database");
+    console.log(error);
+    db_client.close();
+  }
+  // console.log(jobs)
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

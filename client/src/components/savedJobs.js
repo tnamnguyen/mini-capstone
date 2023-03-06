@@ -6,14 +6,25 @@ import NavBar from "./navBar";
 import "../Styles/sign-up.scss";
 
 function SavedJobList() {
+  const [login, setLogin] = useState(true)
   const [jobs, setJobs] = useState([]);
 
-  const SERVER_URL = "https://jobilee-server.vercel.app";
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL
+
+  const accessToken = localStorage.getItem("token")
+  const isTokenAvailable = (localStorage.getItem("token") != null)
+  if(isTokenAvailable) {
+    axios.post(SERVER_URL + '/home', {accessToken})
+    .then(response => {
+      setLogin(false)
+    })
+  }
+
 
   useEffect(() => {
     // Fetch all jobs from the backend API when the component mounts
     axios
-      .get(SERVER_URL + "/jobs")
+      .post(SERVER_URL + "/savedjobs", {accessToken})
       .then((response) => {
         setJobs(response.data);
       })

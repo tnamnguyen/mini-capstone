@@ -6,9 +6,20 @@ import NavBar from "./navBar";
 import "../Styles/job.scss";
 
 function JobList() {
+  const [login, setLogin] = useState(true)
   const [jobs, setJobs] = useState([]);
 
-  const SERVER_URL = "https://jobilee-server.vercel.app";
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL
+
+  const accessToken = localStorage.getItem("token")
+  const isTokenAvailable = (localStorage.getItem("token") != null)
+  if(isTokenAvailable){
+    axios.post(SERVER_URL + '/home', {accessToken})
+    .then(response => {
+      setLogin(false)
+    })
+
+  }
 
   useEffect(() => {
     // Fetch all jobs from the backend API when the component mounts
@@ -21,6 +32,24 @@ function JobList() {
         console.error("Error fetching jobs:", error);
       });
   }, []);
+
+  // Call to save the job to database
+  function saveJob(job_id){
+    console.log('save button was clicked')
+    axios.post(SERVER_URL + '/savejob', {job_id, accessToken})
+    .then(response => {
+      //Display success message
+    })
+  }
+
+  // Add the save button if the user is logged in
+  function addSave(job_id){
+    if(!login){
+      return(
+      <td><button onClick={() => saveJob(job_id)} className = 'jobs_saveJob_button'>Save Job</button></td>
+    )
+    }
+  }
 
   return (
     <div data-testid="jobs-1">
@@ -50,6 +79,7 @@ function JobList() {
                   <td>
                     <button>Apply</button>
                   </td>
+                  {addSave(job._id)}
                 </tr>
               ))}
             </tbody>
