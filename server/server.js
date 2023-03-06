@@ -183,7 +183,6 @@ app.post('/login', async(req, res) => {
       isError: "False", 
       message: "Successfully Signed-in! Redirecting to main page...",
       token: token, 
-      id: user_id,
     })
   }
 });
@@ -443,12 +442,13 @@ app.get('/jobs', async(req, res) => {
 app.post('/profile', authenticateToken, async(req, res) => {
   console.log(`route for profile is running`)
   if(res.isLoggedIn) {
-    const id = req.body.id              
+    const id = res.user.id
     const database_name = "tnEditProfile"
     const collection_name = "profile"
     const db_client = await MongoClient.connect(url)
     const dbo=db_client.db(database_name)
 
+    console.log(id)
     await dbo.collection(collection_name).findOne( {_id: new ObjectId(id)})
     .then(result => {
       if(!result){

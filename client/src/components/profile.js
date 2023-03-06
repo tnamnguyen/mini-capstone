@@ -20,15 +20,14 @@ function getGreeting(){
 }
 
 function Profile() {
-    const SERVER_URL = "http://localhost:3001"
+    const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
-    const accessToken = localStorage.getItem("token")  
-    const id = localStorage.getItem("id")               
+    const accessToken = localStorage.getItem("token")                
 
     const isTokenAvailable = (accessToken != null)
 
     if (isTokenAvailable){
-        axios.post(SERVER_URL + '/profile', {accessToken, id})
+        axios.post(SERVER_URL + '/profile', {accessToken})
         .then(response => {
             setUserName(response.data.user.name)
             setEducation(response.data.education)
