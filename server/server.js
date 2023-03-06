@@ -9,6 +9,7 @@ const ObjectId = require('mongodb').ObjectID;
 const User = require("./userModel.js")
 const jwt = require('jsonwebtoken')
 const Job = require("./jobModel.js")
+const Profile = require('./profileModel.js')
 
 
 
@@ -332,24 +333,21 @@ app.post('/signup', async(req, res) => {
     dbo.collection(collection_name).insertOne(signedUpUser, function(err, res) {
       if (err) throw err; 
       console.log("-> 1 New User succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
-      db_client.close();
 
-      createProfile(signedUpUser._id)
-    })
-  }
-  
-  function createProfile(id) {
-    dbo.collection(profile_collection_name).insertOne({
-      _id: signedUpUser._id,
-      education: 'None',
-      pastJob: 'None',
-      currentJob: 'None',
-      languages: 'English',
-      bio: ''
-    }, function(err, res) {
-      if (err) throw err;
-      console.log("-> Profile template created for the new user on " + database_name +" database inside the " + collection_name + "collection!");
-      db_client.close();
+      var newProfile = new Profile({
+        user_id: signedUpUser.id,
+        education: 'None',
+        pastJob: 'None',
+        currentJob: 'None',
+        languages: 'English',
+        bio: ''
+      })
+
+      dbo.collection(profile_collection_name).insertOne(newProfile, function(err, res) {
+        if(err) throw err;
+        console.log("-> Profile template created for the new user on " + database_name +" database inside the " + collection_name + "collection!");
+        db_client.close();
+      })
     })
   }
 
@@ -476,8 +474,6 @@ app.post('/profile', authenticateToken, async(req, res) => {
 
 // ************************ Edit Profile ************************ //
 app.post('/editprofile', authenticateToken, async(req, res) =>{
-  
-  // Copied over from Profile, currently does not work
   console.log('route for edit profile is running')
 
   if(res.isLoggedIn) {

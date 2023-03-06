@@ -23,6 +23,14 @@ function EditProfile() {
         });
     }, []);
 
+    function handleChanges() {
+        console.log('submit changes button was clicked')
+        axios.post(SERVER_URL + '/submiteditprofile', {accessToken})
+        .then(response => {
+            
+        })
+    }
+
 
     //HTML Forms that appear under each field when the "Edit" button is pressed
     const [editProfilePic, setEditProfilePic] = useState(false);
