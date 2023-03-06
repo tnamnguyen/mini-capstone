@@ -447,8 +447,6 @@ app.post('/profile', authenticateToken, async(req, res) => {
     const collection_name = "profile"
     const db_client = await MongoClient.connect(url)
     const dbo=db_client.db(database_name)
-
-    console.log(id)
     await dbo.collection(collection_name).findOne( {_id: new ObjectId(id)})
     .then(result => {
       if(!result){
@@ -477,12 +475,13 @@ app.post('/profile', authenticateToken, async(req, res) => {
 
 
 // ************************ Edit Profile ************************ //
-app.post('/editProfile', authenticateToken, async(req, res) =>{
+app.post('/editprofile', authenticateToken, async(req, res) =>{
   
   // Copied over from Profile, currently does not work
   console.log('route for edit profile is running')
+
   if(res.isLoggedIn) {
-    const id = req.body.id              
+    const id = res.user.id
     const database_name = "tnEditProfile"
     const collection_name = "profile"
     const db_client = await MongoClient.connect(url)

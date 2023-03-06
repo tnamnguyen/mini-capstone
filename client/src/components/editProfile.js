@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
+import {    useEffect   } from 'react';
 import NavBar from './navBar';
 import '../Styles/editProfile.scss';
 import axios from "axios"
 
 function EditProfile() {
     const SERVER_URL = process.env.REACT_APP_SERVER_URL
-    
     const accessToken = localStorage.getItem("token")
-    const id = localStorage.getItem("id")
-    const isTokenAvailable = (accessToken != null)
-    
-    if (isTokenAvailable) {
-        axios.post(SERVER_URL, '/editProfile', {accessToken, id})
+
+    useEffect(() => {
+        axios.post(SERVER_URL + '/editprofile', {accessToken})
         .then(response => {
             setUserName(response.data.user.name)
             setEducation(response.data.education)
@@ -20,7 +18,11 @@ function EditProfile() {
             setLanguages(response.data.languages)
             setBio(response.data.bio)
         })
-    }
+        .catch(error => {
+            console.log(error)
+        });
+    }, []);
+
 
     //HTML Forms that appear under each field when the "Edit" button is pressed
     const [editProfilePic, setEditProfilePic] = useState(false);
@@ -34,12 +36,12 @@ function EditProfile() {
 
     //Variables holding the values of different fields
     const [profilePic, setProfilePic] = useState('../assets/images/profile.png');
-    const [userName, setUserName] = useState('UserName');
-    const [education, setEducation] = useState('Education');
-    const [currentJob, setCurrentJob] = useState('Current Job');
-    const [pastJob, setPastJob] = useState('Past Job');
-    const [languages, setLanguages] = useState('Languages');
-    const [bio, setBio] = useState('Bio');
+    const [userName, setUserName] = useState('');
+    const [education, setEducation] = useState('');
+    const [currentJob, setCurrentJob] = useState('');
+    const [pastJob, setPastJob] = useState('');
+    const [languages, setLanguages] = useState('');
+    const [bio, setBio] = useState('');
     const [resume, setResume] = useState('');
     
     return ( 
