@@ -562,8 +562,6 @@ app.post('/submiteditprofile', authenticateToken, async(req, res) => {
         user.name = input_userName
         await dbo.collection(collection_users).updateOne({ _id: new ObjectId(id) }, { $set: user });
       
-
-        console.log("creating new user info...");
         const user_info = {
           id: id,
           name: input_userName,
@@ -571,12 +569,10 @@ app.post('/submiteditprofile', authenticateToken, async(req, res) => {
           password: token_pw
         }
 
-        console.log("creating new token...")
         const newToken = jwt.sign(user_info, "jwtsecret", {
           expiresIn: 300000
         })
         
-        console.log("new token " + newToken)
         console.log("sending response...")
         res.json({
           isError: "False",
@@ -590,6 +586,8 @@ app.post('/submiteditprofile', authenticateToken, async(req, res) => {
     console.log("User Profile not found")
     anyError = true
     errorMessage = "invalid id"
+
+    console.log("sending error response...");
     res.json({
       isError: "True",
       message: errorMessage

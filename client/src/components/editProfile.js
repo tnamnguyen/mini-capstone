@@ -31,15 +31,15 @@ function EditProfile() {
         .then(response => {
             if(response.data.isError == "True"){
                 console.log("An error has occured")
-                // setEditStatus_err(response.data.message)
-                // setEditStatus_success('')
+                setEditStatus_err(response.data.message)
+                setEditStatus_success('')
                 
             }
             if(response.data.isError == "False"){
                 localStorage.removeItem("token")
                 localStorage.setItem("token", response.data.token)
-                // SetEditStatus_err('')
-                // SetEditStatus_success(response.data.message)
+                setEditStatus_err('')
+                setEditStatus_success(response.data.message)
 
                 // Redirect to profile page
                 console.log("Redirecting to profile page")
@@ -70,6 +70,10 @@ function EditProfile() {
     const [languages, setLanguages] = useState('');
     const [bio, setBio] = useState('');
     const [resume, setResume] = useState('');
+
+    //Variables for the feedback
+    const [editStatus_success, setEditStatus_success] = useState('');
+    const [editStatus_err, setEditStatus_err] = useState('');
     
     return ( 
         <>
