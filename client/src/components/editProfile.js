@@ -17,6 +17,7 @@ function EditProfile() {
             setPastJob(response.data.pastJob)
             setLanguages(response.data.languages)
             setBio(response.data.bio)
+
         })
         .catch(error => {
             console.log(error)
@@ -28,7 +29,24 @@ function EditProfile() {
         axios.post(SERVER_URL + '/submiteditprofile', {
             accessToken, userName, education, pastJob, currentJob, languages, bio})
         .then(response => {
-            // Display Success Message
+            if(response.data.isError == "True"){
+                console.log("An error has occured")
+                // setEditStatus_err(response.data.message)
+                // setEditStatus_success('')
+                
+            }
+            if(response.data.isError == "False"){
+                localStorage.removeItem("token")
+                localStorage.setItem("token", response.data.token)
+                // SetEditStatus_err('')
+                // SetEditStatus_success(response.data.message)
+
+                // Redirect to profile page
+                console.log("Redirecting to profile page")
+                setTimeout(()=>{
+                    window.location.href = "/profile"
+                }, 4000)
+            }
         })
     }
 

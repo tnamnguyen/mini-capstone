@@ -514,6 +514,8 @@ app.post('/editprofile', authenticateToken, async(req, res) =>{
 app.post('/submiteditprofile', authenticateToken, async(req, res) => {
   console.log(`route submitting profile changes is running`)
   const id = res.user.id
+  const token_email = res.user.email
+  const token_pw = res.user.pw
   
   // Associate the info from the edit page
   const input_userName = req.body.userName
@@ -543,23 +545,56 @@ app.post('/submiteditprofile', authenticateToken, async(req, res) => {
     // Update userProfile
     await dbo.collection(collection_name).updateOne({ user_id: id }, { $set: userProfile });
     
-    // Find from users collection matching id
+    // Find from users collection matching id to modify the userName
     const user = await dbo.collection(collection_users).findOne({_id: new ObjectId(id)})
       // If user is not found
       if(!user){
         anyError = true
         errorMessage = "invalid id"
         console.log("invalid result")
+        res.json({
+          isError: "True",
+          message: errorMessage
+        })
       }
       // Modify userName
       else{
         user.name = input_userName
         await dbo.collection(collection_users).updateOne({ _id: new ObjectId(id) }, { $set: user });
+      
+
+        console.log("creating new user info...");
+        const user_info = {
+          id: id,
+          name: input_userName,
+          email: token_email,
+          password: token_pw
+        }
+
+        console.log("creating new token...")
+        const newToken = jwt.sign(user_info, "jwtsecret", {
+          expiresIn: 300000
+        })
+        
+        console.log("new token " + newToken)
+        console.log("sending response...")
+        res.json({
+          isError: "False",
+          message: "Successfully edited profile!",
+          token: newToken,
+        })
       }
     console.log("Profile Saved")
   }
-  else{console.log("User Profile not found")}
-
+  else {  
+    console.log("User Profile not found")
+    anyError = true
+    errorMessage = "invalid id"
+    res.json({
+      isError: "True",
+      message: errorMessage
+    })
+  }
 })
 
 app.listen(port, () => {
