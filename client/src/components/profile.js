@@ -30,12 +30,21 @@ function Profile() {
         if (isTokenAvailable){
             axios.post(SERVER_URL + '/profile', {accessToken})
             .then(response => {
-                setUserName(response.data.user.name)
-                setEducation(response.data.education)
-                setCurrentJob(response.data.currentJob)
-                setPastJob(response.data.pastJob)
-                setLanguages(response.data.languages)
-                setBio(response.data.bio)
+                console.log(response.data.profileExists)
+                if(response.data.profileExists == "True"){
+                    setUserName(response.data.user.name)
+                    setEducation(response.data.education)
+                    setCurrentJob(response.data.currentJob)
+                    setPastJob(response.data.pastJob)
+                    setLanguages(response.data.languages)
+                    setBio(response.data.bio)
+                }
+                
+                else if(response.data.profileExists == "False"){
+                    console.log("Reloading the page to load profile generated")
+                        window.location.reload(true)
+
+                }
             })
         }
     }, []);

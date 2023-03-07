@@ -244,6 +244,8 @@ function EditProfile() {
                         {/* ********** Submit Button ********** */}
                         <div class="edit_profile_submit">
                             <button id='edit_profile_submit_button' onClick={() => handleChanges()}>Submit Changes!</button>
+                            <div className='editStatus_err'>{editStatus_err}</div>
+                            <div className='editStatus_success'>{editStatus_success}</div>
                         </div>
                     </div>
                 </div>

@@ -88,7 +88,7 @@ app.post('/login', async(req, res) => {
  
   //Connecting to the specific database and collection
   //const database_name = "Accounts"
-  const database_name = "tnEditProfile"
+  const database_name = "Accounts"
   const collection_name = "users"
   mongoose.set("strictQuery", false);
   const db_client =  await MongoClient.connect(url) 
@@ -216,9 +216,8 @@ app.post('/signup', async(req, res) => {
 
   //Connecting to the specific database and collection
   // const database_name = "Accounts"
-  const database_name = "tnEditProfile"
+  const database_name = "Accounts"
   const collection_name = "users"
-  const profile_collection_name = "profile"
   mongoose.set("strictQuery", false);
   const db_client =  await MongoClient.connect(url) 
   const dbo = db_client.db(database_name)
@@ -334,20 +333,6 @@ app.post('/signup', async(req, res) => {
       if (err) throw err; 
       console.log("-> 1 New User succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
 
-      var newProfile = new Profile({
-        user_id: signedUpUser.id,
-        education: 'None',
-        pastJob: 'None',
-        currentJob: 'None',
-        languages: 'English',
-        bio: ''
-      })
-
-      dbo.collection(profile_collection_name).insertOne(newProfile, function(err, res) {
-        if(err) throw err;
-        console.log("-> Profile template created for the new user on " + database_name +" database inside the " + collection_name + "collection!");
-        db_client.close();
-      })
     })
   }
 
@@ -441,19 +426,44 @@ app.post('/profile', authenticateToken, async(req, res) => {
   console.log(`route for profile is running`)
   if(res.isLoggedIn) {
     const id = res.user.id
-    const database_name = "tnEditProfile"
+    const database_name = "Accounts"
     const collection_name = "profile"
     const db_client = await MongoClient.connect(url)
     const dbo=db_client.db(database_name)
     await dbo.collection(collection_name).findOne( {user_id: id})
     .then(result => {
+
+      // Create a new profile in the database if the user is not found
       if(!result){
         anyError = true
-        errorMessage = "invalid id"
-        console.log("invalid result")
+        errorMessage = "No profile was found for this user"
+        console.log(errorMessage);
+
+        res.send({
+          profileExists: "False",
+          message: errorMessage
+        })
+
+        console.log("Creating a new profile for user")
+        var newProfile = new Profile({
+          user_id: id,
+          education: 'None',
+          pastJob: 'None',
+          currentJob: 'None',
+          languages: 'English',
+          bio: ''
+        })
+  
+        dbo.collection(collection_name).insertOne(newProfile, function(err, res) {
+          if(err) throw err;
+          console.log("-> Profile template created for the new user on " + database_name +" database inside the " + collection_name + "collection!");
+          db_client.close();
+        })
+
       }
       else{
         res.send({
+          profileExists: "True",
           "isLoggedIn": res.isLoggedIn,
           "user": res.user,
           education: result.education,  
@@ -478,7 +488,7 @@ app.post('/editprofile', authenticateToken, async(req, res) =>{
 
   if(res.isLoggedIn) {
     const id = res.user.id
-    const database_name = "tnEditProfile"
+    const database_name = "Accounts"
     const collection_name = "profile"
     const db_client = await MongoClient.connect(url)
     const dbo=db_client.db(database_name)
@@ -526,7 +536,7 @@ app.post('/submiteditprofile', authenticateToken, async(req, res) => {
   const input_bio = req.body.bio
 
   // Loading database
-  const database_name = "tnEditProfile"
+  const database_name = "Accounts"
   const collection_name = "profile"
   const collection_users = "users"
   mongoose.set("strictQuery", false);
@@ -550,8 +560,8 @@ app.post('/submiteditprofile', authenticateToken, async(req, res) => {
       // If user is not found
       if(!user){
         anyError = true
-        errorMessage = "invalid id"
-        console.log("invalid result")
+        errorMessage = "An error has occured"
+        console.log("invalid id")
         res.json({
           isError: "True",
           message: errorMessage
@@ -585,7 +595,7 @@ app.post('/submiteditprofile', authenticateToken, async(req, res) => {
   else {  
     console.log("User Profile not found")
     anyError = true
-    errorMessage = "invalid id"
+    errorMessage = "An error has occured"
 
     console.log("sending error response...");
     res.json({
