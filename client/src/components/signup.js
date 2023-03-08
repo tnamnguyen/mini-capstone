@@ -14,7 +14,7 @@ function Signup() {
     const [signUpStatus_success, setSignUpStatus_success] = useState('');
     const [signUpStatus_err, setSignUpStatus_err] = useState('');
 
-    const SERVER_URL = process.env.REACT_APP_SERVER_URL
+    const SERVER_URL = 'http://localhost:3001'
 
     const handleSignup = async () => {
         // Send a request to the server to sign the user up

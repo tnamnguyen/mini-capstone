@@ -9,7 +9,7 @@ function NavBar() {
     const [userName, setUserName] = useState('')
 
     //If User is logged-in -> add his name to navBar & remove login button
-    const SERVER_URL = process.env.REACT_APP_SERVER_URL
+    const SERVER_URL = 'http://localhost:3001'
     const accessToken = localStorage.getItem("token")
     const isTokenAvailable = (localStorage.getItem("token") != null)
     if(isTokenAvailable){
@@ -52,6 +52,16 @@ function NavBar() {
         }
     }
 
+    function addProfile(){
+        if(!login){
+            return(
+                <li class="nav-item">
+                <a class="nav-link" href="/profile">Profile</a>
+            </li>
+            )
+        }
+    }
+
   return (
     <>
         <nav class="navbar navbar-expand-lg navbar-light bg-light" data-testid="navBar">
@@ -74,9 +84,7 @@ function NavBar() {
                     <li class="nav-item">
                         <a class="nav-link" href="#">Notifications</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/profile">Profile</a>
-                    </li>
+                    {addProfile()}
                     {addLogIn()}
                     {addUserGreeting()}
                 </ul>

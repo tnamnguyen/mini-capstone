@@ -5,7 +5,7 @@ import '../Styles/editProfile.scss';
 import axios from "axios"
 
 function EditProfile() {
-    const SERVER_URL = process.env.REACT_APP_SERVER_URL
+    const SERVER_URL = 'http://localhost:3001'
     const accessToken = localStorage.getItem("token")
 
     useEffect(() => {
@@ -45,7 +45,7 @@ function EditProfile() {
                 console.log("Redirecting to profile page")
                 setTimeout(()=>{
                     window.location.href = "/profile"
-                }, 4000)
+                }, 3000)
             }
         })
     }
