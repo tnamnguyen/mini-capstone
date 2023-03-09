@@ -8,7 +8,7 @@ import "../Styles/sign-up.scss";
 function MyJobList() {
   const [jobs, setJobs] = useState([]);
 
-  const SERVER_URL = process.env.REACT_APP_SERVER_URL
+  const SERVER_URL = 'http://localhost:3001'
 
   useEffect(() => {
     // Fetch all jobs from the backend API when the component mounts

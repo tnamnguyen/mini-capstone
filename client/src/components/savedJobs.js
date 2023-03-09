@@ -8,8 +8,10 @@ import "../Styles/sign-up.scss";
 function SavedJobList() {
   const [login, setLogin] = useState(true)
   const [jobs, setJobs] = useState([]);
+  const [removeSuccess, setRemoveSuccess] = useState('')
+  const [buttonClicked, setButtonClicked] = useState(false)
 
-  const SERVER_URL = process.env.REACT_APP_SERVER_URL
+  const SERVER_URL = 'http://localhost:3001'
 
   const accessToken = localStorage.getItem("token")
   const isTokenAvailable = (localStorage.getItem("token") != null)
@@ -31,7 +33,27 @@ function SavedJobList() {
       .catch((error) => {
         console.error("Error fetching jobs:", error);
       });
-  }, []);
+  }, [buttonClicked]);
+
+  // Call to remove saved job
+  function removeJob(job_id){
+    console.log('remove button was clicked')
+    axios.post(SERVER_URL + '/removejob', {job_id, accessToken})
+    .then(response => {
+      setRemoveSuccess(response.data.message)
+      console.log(removeSuccess);
+    })
+    setButtonClicked(!buttonClicked)
+  };
+
+    // Add remove button if user is logged in
+    function removeButton(job_id){
+      if(!login){
+        return(
+          <button onClick={() => removeJob(job_id)} className = 'jobs_removeJob_button'>Remove from Saved</button>
+        )
+      }
+    }
 
   return (
     <div data-testid="jobs-1">
@@ -59,7 +81,7 @@ function SavedJobList() {
                   <td>{job.location}</td>
                   <td>{job.description}</td>
                   <td>
-                    <button>Remove From Saved</button>
+                    {removeButton(job._id)}
                   </td>
                 </tr>
               ))}

@@ -422,6 +422,8 @@ app.get('/jobs', async(req, res) => {
   });
 
 
+
+  // ************************ Saving Job to Saved Job List ************************ //
   app.post('/savejob', authenticateToken, async(req, res) => {
     console.log (`route for saving job is running`)
 
@@ -441,12 +443,18 @@ app.get('/jobs', async(req, res) => {
       // If entry exists in database
       if (result != null) {
         console.log('Job Exists')
+        res.json({
+          message: 'Job already saved'
+        })
       }
       // Else, inserting new saved job
       else{
-        dbo.collection(collection_name).insertOne(newSavedJob, function(err, res) {
+        dbo.collection(collection_name).insertOne(newSavedJob, function(err, result) {
           if(err) throw err;
           console.log("-> 1 new Job was saved for user on " + database_name + " database inside the " + collection_name + " collection!")
+          res.json({
+            message: 'Job saved successfully'
+          })
           db.client.close();
         })
     }
@@ -460,6 +468,7 @@ app.get('/jobs', async(req, res) => {
 app.post('/savedjobs', authenticateToken, async(req, res) => {
   console.log(`route for saved jobs is running`)
 
+  // Connecting to the specific database and collection
   const database_name = "Accounts"
   const collection_name = "savedjobs"
   const db_client =  await MongoClient.connect(url) 
@@ -491,7 +500,36 @@ app.post('/savedjobs', authenticateToken, async(req, res) => {
     console.log(error);
     db_client.close();
   }
-  // console.log(jobs)
+})
+
+
+// ************************ Removing Job from Saved List ************************ //
+app.post('/removejob', authenticateToken, async(req, res) => {
+  console.log(`remove job route is running`)
+
+  userId = res.user.id
+  jobId = req.body.job_id
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "savedjobs"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // Delete document containing user id and job id
+  dbo.collection(collection_name).deleteOne({user_id: userId, job_id: jobId}),
+  function(err, result){
+    if(err){
+      console.log(err)
+    }
+    else {
+      console.log("Saved job was deleted successfully");
+      res.json({
+        message: "Job removed successfully"
+      })
+    }
+  }
+
 })
 
 app.listen(port, () => {
