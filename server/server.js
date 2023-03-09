@@ -557,10 +557,7 @@ app.put('/connections/:id/reject', async (req, res) => {
 });
 
 
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+//messages
 
 // Endpoint for sending a message with an optional document
 router.post('/messages', upload.single('document'), async (req, res) => {
@@ -639,6 +636,39 @@ router.get('/messages/:messageId', async (req, res) => {
       // Otherwise, return the message object as JSON.
       return res.status(200).json({message: message});
     }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Endpoint for retrieving all messages between the authenticated user and a specific user
+router.get('/messages/:userId', async (req, res) => {
+  try {
+    // Parse the user ID from the request parameters
+    const userId = req.params.userId;
+
+    // Check that the user ID is valid
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).json({error: 'Invalid user ID'});
+    }
+
+    // Retrieve all messages between the authenticated user and the specified user
+    const messages = await Message.find({
+      $or: [
+        {sender: req.user._id, recipient: userId},
+        {sender: userId, recipient: req.user._id}
+      ]
+    }).sort({sentAt: 1});
+
+    // Check that at least one message was found
+    if (!messages || messages.length === 0) {
+      return res.status(404).json({error: 'No messages found'});
+    }
+
+    // Return the messages array as JSON
+    return res.status(200).json({ messages: messages });
+
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Server error' });
