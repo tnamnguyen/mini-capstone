@@ -9,7 +9,8 @@ function NavBar() {
     const [adminElement, setAdminElement] = useState(false)
     const [userName, setUserName] = useState('')
 
-    //Check if user is logged in & if user is admin to change navBar accordingly
+
+    //If User is logged-in -> add his name to navBar & remove login button
     const SERVER_URL = process.env.REACT_APP_SERVER_URL
     const accessToken = localStorage.getItem("token")
     const isTokenAvailable = (localStorage.getItem("token") != null)
@@ -32,7 +33,7 @@ function NavBar() {
 
 
     //Dynamic HTML elements
-    function addLogInElement(){
+    function addAdminElement(){
         if(adminElement){
             return(
                 <li class="nav-item">
@@ -41,7 +42,7 @@ function NavBar() {
             )
         }
     }
-    function addAdminElement(){
+    function addLoginElement(){
         if(loginElement){
             return(
                 <li class="nav-item">
@@ -68,6 +69,16 @@ function NavBar() {
         }
     }
 
+    function addProfile(){
+        if(!login){
+            return(
+                <li class="nav-item">
+                <a class="nav-link" href="/profile">Profile</a>
+            </li>
+            )
+        }
+    }
+
   return (
     <>
         <nav class="navbar navbar-expand-lg navbar-light bg-light" data-testid="navBar">
@@ -90,12 +101,11 @@ function NavBar() {
                     <li class="nav-item">
                         <a class="nav-link" href="#">Notifications</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/profile">Profile</a>
-                    </li>
-                    {addLogInElement()}
-                    {addUserGreeting()}
+
+                    {addProfile()}
                     {addAdminElement()}
+                    {addUserGreeting()}
+                    {addLogInElement()}
                 </ul>
             </div>
         </nav>

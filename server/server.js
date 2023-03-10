@@ -5,9 +5,12 @@ const cors = require('cors')
 const bodyParser = require("express")
 const bcrypt = require('bcryptjs')
 const mongoose = require("mongoose")
+const ObjectId = require('mongodb').ObjectID;
 const User = require("./userModel.js")
 const Job = require("./jobModel.js")
+const Profile = require('./profileModel.js')
 const jwt = require('jsonwebtoken')
+
 
 
 
@@ -94,6 +97,7 @@ app.post('/login', async(req, res) => {
   const login_password = req.body.password
  
   //Connecting to the specific database and collection
+  //const database_name = "Accounts"
   const database_name = "Accounts"
   const collection_name = "users"
   mongoose.set("strictQuery", false);
@@ -224,6 +228,7 @@ app.post('/signup', async(req, res) => {
   const input_confirm_password = req.body.passwordConfirm
 
   //Connecting to the specific database and collection
+  // const database_name = "Accounts"
   const database_name = "Accounts"
   const collection_name = "users"
   mongoose.set("strictQuery", false);
@@ -341,10 +346,9 @@ app.post('/signup', async(req, res) => {
     dbo.collection(collection_name).insertOne(signedUpUser, function(err, res) {
       if (err) throw err; 
       console.log("-> 1 New User succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
-      db_client.close();
+
     })
   }
-  
 
   //Sending back response to front end
   if (anyError){
@@ -527,6 +531,190 @@ app.post('/admin_makeRegularUser', async(req, res) => {
 
 
 
+
+// ************************ Profile ************************ //
+app.post('/profile', authenticateToken, async(req, res) => {
+  console.log(`route for profile is running`)
+  if(res.isLoggedIn) {
+    const id = res.user.id
+    const database_name = "Accounts"
+    const collection_name = "profile"
+    const db_client = await MongoClient.connect(url)
+    const dbo=db_client.db(database_name)
+    await dbo.collection(collection_name).findOne( {user_id: id})
+    .then(result => {
+
+      // Create a new profile in the database if the user is not found
+      if(!result){
+        anyError = true
+        errorMessage = "No profile was found for this user"
+        console.log(errorMessage);
+
+        res.send({
+          profileExists: "False",
+          message: errorMessage
+        })
+
+        console.log("Creating a new profile for user")
+        var newProfile = new Profile({
+          user_id: id,
+          education: 'None',
+          pastJob: 'None',
+          currentJob: 'None',
+          languages: 'English',
+          bio: ''
+        })
+  
+        dbo.collection(collection_name).insertOne(newProfile, function(err, res) {
+          if(err) throw err;
+          console.log("-> Profile template created for the new user on " + database_name +" database inside the " + collection_name + "collection!");
+          db_client.close();
+        })
+      }
+      else{
+        res.send({
+          profileExists: "True",
+          "isLoggedIn": res.isLoggedIn,
+          "user": res.user,
+          education: result.education,  
+          pastJob: result.pastJob,
+          currentJob: result.currentJob,
+          languages: result.languages,
+          bio: result.bio
+        })
+        db_client.close();
+      }
+    })
+    .catch(err => {
+      console.log("Error:" + err)
+    })
+  }
+});
+
+
+// ************************ Edit Profile ************************ //
+app.post('/editprofile', authenticateToken, async(req, res) =>{
+  console.log('route for edit profile is running')
+
+  if(res.isLoggedIn) {
+    const id = res.user.id
+    const database_name = "Accounts"
+    const collection_name = "profile"
+    const db_client = await MongoClient.connect(url)
+    const dbo=db_client.db(database_name)
+
+    await dbo.collection(collection_name).findOne( {user_id: id})
+    .then(result => {
+      if(!result){
+        anyError = true
+        errorMessage = "invalid id"
+        console.log("invalid result")
+      }
+      else{
+        res.send({
+          "isLoggedIn": res.isLoggedIn,
+          "user": res.user,
+          education: result.education,  
+          pastJob: result.pastJob,
+          currentJob: result.currentJob,
+          languages: result.languages,
+          bio: result.bio
+        })
+        db_client.close();
+      }
+    })
+    .catch(err => {
+      console.log("Error:" + err)
+    })
+  }
+
+});
+
+// Submit Changes
+app.post('/submiteditprofile', authenticateToken, async(req, res) => {
+  console.log(`route submitting profile changes is running`)
+  const id = res.user.id
+  const token_email = res.user.email
+  const token_pw = res.user.pw
+  
+  // Associate the info from the edit page
+  const input_userName = req.body.userName
+  const input_education = req.body.education
+  const input_pastJob = req.body.pastJob
+  const input_currentJob = req.body.currentJob
+  const input_languages = req.body.languages
+  const input_bio = req.body.bio
+
+  // Loading database
+  const database_name = "Accounts"
+  const collection_name = "profile"
+  const collection_users = "users"
+  mongoose.set("strictQuery", false);
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  // Find a profile corresponding to user_id
+  const userProfile = await dbo.collection(collection_name).findOne({user_id: id})
+  if (userProfile){
+    userProfile.education = input_education
+    userProfile.pastJob = input_pastJob
+    userProfile.currentJob = input_currentJob
+    userProfile.languages = input_languages
+    userProfile.bio = input_bio
+  
+    // Update userProfile
+    await dbo.collection(collection_name).updateOne({ user_id: id }, { $set: userProfile });
+    
+    // Find from users collection matching id to modify the userName
+    const user = await dbo.collection(collection_users).findOne({_id: new ObjectId(id)})
+      // If user is not found
+      if(!user){
+        anyError = true
+        errorMessage = "An error has occured"
+        console.log("invalid id")
+        res.json({
+          isError: "True",
+          message: errorMessage
+        })
+      }
+      // Modify userName
+      else{
+        user.name = input_userName
+        await dbo.collection(collection_users).updateOne({ _id: new ObjectId(id) }, { $set: user });
+      
+        const user_info = {
+          id: id,
+          name: input_userName,
+          email: token_email,
+          password: token_pw
+        }
+
+        const newToken = jwt.sign(user_info, "jwtsecret", {
+          expiresIn: 300000
+        })
+        
+        console.log("sending response...")
+        res.json({
+          isError: "False",
+          message: "Successfully edited profile!",
+          token: newToken,
+        })
+      }
+    console.log("Profile Saved")
+  }
+  else {  
+    console.log("User Profile not found")
+    anyError = true
+    errorMessage = "An error has occured"
+
+    console.log("sending error response...");
+    res.json({
+      isError: "True",
+      message: errorMessage
+    })
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
-})
+});
