@@ -70,7 +70,7 @@ function NavBar() {
     }
 
     function addProfile(){
-        if(!login){
+        if(!loginElement){
             return(
                 <li class="nav-item">
                 <a class="nav-link" href="/profile">Profile</a>
@@ -105,7 +105,7 @@ function NavBar() {
                     {addProfile()}
                     {addAdminElement()}
                     {addUserGreeting()}
-                    {addLogInElement()}
+                    {addLoginElement()}
                 </ul>
             </div>
         </nav>
