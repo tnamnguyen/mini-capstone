@@ -128,7 +128,7 @@ function NavBar() {
                     {addChat()}
                     {addNotifications()}
                     {addProfile()}
-                    {addLogIn()}
+                    {addAdminElement()}
                     {addUserGreeting()}
                     {addLoginElement()}
                 </ul>
