@@ -16,7 +16,7 @@ const Profile = require('./profileModel.js')
 const jwt = require('jsonwebtoken')
 
 
-const allowCors = fn => async (req, res) => {
+/*const allowCors = fn => async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', true)
   res.setHeader('Access-Control-Allow-Origin', '*')
   // another common pattern
@@ -39,7 +39,7 @@ const handler = (req, res) => {
 }
 
 module.exports = allowCors(handler)
-
+*/
 
 
 
@@ -49,7 +49,11 @@ module.exports = allowCors(handler)
 
 
 // **************************************** Connecting to Mongoose DB **************************************** //
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 const MongoClient = require('mongodb').MongoClient;
@@ -838,7 +842,7 @@ app.listen(port, () => {
 
 
 // Sending the email
-app.post("/send_recovery_email", allowCors(req, res) => { //small change added here to allow CORS
+app.post("/send_recovery_email", (req, res) => { //small change added here to allow CORS
   console.log (`route for forgot password is running`)
   sendEmail(req.body)
     .then((response) => res.send(response.message))
