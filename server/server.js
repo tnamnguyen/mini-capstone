@@ -8,8 +8,13 @@ const mongoose = require("mongoose")
 const ObjectId = require('mongodb').ObjectID;
 const User = require("./userModel.js")
 const Job = require("./jobModel.js")
+const { db } = require('./userModel.js')
+const SavedJob = require("./savedJobModel.js")
+const ObjectId = require('mongodb').ObjectId
+const nodemailer = require("nodemailer");
 const Profile = require('./profileModel.js')
 const jwt = require('jsonwebtoken')
+
 
 
 
@@ -642,7 +647,41 @@ app.post('/editprofile', authenticateToken, async(req, res) =>{
     })
   }
 
+
+  app.post('/savejob', authenticateToken, async(req, res) => {
+    console.log (`route for saving job is running`)
+
+    // Connecting to the specific database and collection
+    const database_name = "Accounts"
+    const collection_name = "savedjobs"
+    const db_client = await MongoClient.connect(url)
+    const dbo = db_client.db(database_name)
+
+    // New saved job that will be added to the database
+    var newSavedJob = new SavedJob({
+      user_id: res.user.id,
+      job_id: req.body.job_id
+    })
+    dbo.collection(collection_name).findOne({user_id: res.user.id, job_id: req.body.job_id},
+      function(err, result){
+      // If entry exists in database
+      if (result != null) {
+        console.log('Job Exists')
+      }
+      // Else, inserting new saved job
+      else{
+        dbo.collection(collection_name).insertOne(newSavedJob, function(err, res) {
+          if(err) throw err;
+          console.log("-> 1 new Job was saved for user on " + database_name + " database inside the " + collection_name + " collection!")
+          db.client.close();
+        })
+    }
+      })
+
+  })
+
 });
+
 
 // Submit Changes
 app.post('/submiteditprofile', authenticateToken, async(req, res) => {
@@ -721,6 +760,218 @@ app.post('/submiteditprofile', authenticateToken, async(req, res) => {
     anyError = true
     errorMessage = "An error has occured"
 
+
+// ************************ Saved Job Browsing ************************ //
+app.post('/savedjobs', authenticateToken, async(req, res) => {
+  console.log(`route for saved jobs is running`)
+
+  const database_name = "Accounts"
+  const collection_name = "savedjobs"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // Find all job_ids that are associated with the user
+  try {
+    const job_ids = await dbo
+    .collection(collection_name)
+    .find({
+      user_id: res.user.id
+    })
+      .project({job_id: 1, _id: 0}).toArray();
+    
+    const collection_name_Jobs = "Jobs"
+
+    // Removing the field names of the array
+    const filtered_jobids = job_ids.map(job_ids => job_ids.job_id)
+
+    // Associating them as ObjectIds
+    const object_ids = filtered_jobids.map(filtered_jobids => new ObjectId(filtered_jobids));
+
+    // Finding all jobs matching ids from array
+    const jobs = await dbo.collection(collection_name_Jobs).find({_id: {$in: object_ids}}).toArray();
+    res.json(jobs)
+
+  } catch(error) {
+    console.log("Error when fetching from database");
+    console.log(error);
+    db_client.close();
+  }
+  // console.log(jobs)
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+
+
+
+
+// ************************************* Forgot password*************************************** //
+
+
+// Sending the email
+app.post("/send_recovery_email", (req, res) => {
+  console.log (`route for forgot password is running`)
+  sendEmail(req.body)
+    .then((response) => res.send(response.message))
+    .catch((error) => res.status(500).send(error.message));
+});
+
+// Generating the email
+function sendEmail({ recipient_email, OTP }) {
+  return new Promise((resolve, reject) => {
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "jobileeproject@gmail.com",
+        pass: "dnydyxuhnfluimqg",
+      },
+    });
+
+    const mail_configs = {
+      from: "jobileeproject@gmail.com",
+      to: recipient_email,
+      subject: "Reset Password",
+      html: `<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Password Recovery Email Template</title>
+  
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
+  <div style="margin:50px auto;width:70%;padding:20px 0">
+    <div style="border-bottom:1px solid #eee">
+      <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">Jobilee Inc</a>
+    </div>
+    <p style="font-size:1.1em">Hi,</p>
+    <p>An attempt has been made to change your password. Use the following OTP to complete your Password Recovery Procedure. OTP is valid for 5 minutes</p>
+    <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;"><a href=${`https://jobilee-server.vercel.app/reset?email=${recipient_email}`}  >"Reset password"</a></h2>
+    <p style="font-size:0.9em;">Regards,<br />Jobilee Project</p>
+    <hr style="border:none;border-top:1px solid #eee" />
+    <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
+      <p>JobileeInc</p>
+      <p>Montreal Canada</p>
+      <p>Canada</p>
+    </div>
+  </div>
+</div>
+<!-- partial -->
+  
+</body>
+</html>`,
+    };
+    transporter.sendMail(mail_configs, function (error, info) {
+      if (error) {
+        console.log(error);
+        return reject({ message: `An error has occured` });
+      }
+      return resolve({ message: "Email sent succesfuly" });
+    });
+  });
+}
+
+
+//****************************************  updating the password ****************************************************//
+
+app.post('/reset', async(req, res) => {
+
+  // The response generated from this function consists of 
+  // a boolean stating if there is an error as well as an error message
+  // in case of an error
+  let anyError = false
+  let erorrMessage = 'No errors detected'
+
+  // Storing the username, password, and email from the request body
+  const input_email = req.body.email
+  const input_password = req.body.password
+  const input_confirm_password = req.body.passwordConfirm
+  //console.log(input_email);
+  //console.log(input_password);
+  //console.log(input_confirm_password);
+  
+
+  //Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  mongoose.set("strictQuery", false);
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+
+  //In order to succesfully sign up, the following checks must be validated:
+  var passwordMatch = false    //password must match confirmPassword
+  var validPassword = false    //password must be at least 8 characters long, contain a capital letter, a digit and a special character (! @ # $ % ^ & * - _ . ,)
+
+//Check if password match confirmPassword
+  passwordMatch = false
+  if (input_password == input_confirm_password){
+    passwordMatch = true
+  }
+  else{
+    anyError = true
+    erorrMessage = "Error! Passwords don't match, Please try again!"
+    console.log(erorrMessage)
+  }
+
+
+  //Check if password is valid 
+  var pass_regex = {
+    'capital' : /[A-Z]/,
+    'digit'   : /[0-9]/,
+    'special_char'  : /[! @ # $ % ^ & * - _ . ,]/,
+    'full'    : /.{8,}$/
+  };
+  validPassword = pass_regex.capital.test(input_password) && 
+                  pass_regex.digit.test(input_password) && 
+                  pass_regex.special_char.test(input_password) && 
+                  pass_regex.full.test(input_password);
+
+  if (!validPassword){
+    anyError = true
+    erorrMessage = "Error! Password is not valid, password must be at least 8 characters long," + 
+                "contain a capital letter, a digit and a special character (! @ # $ % ^ & * - _ . ,)"
+    console.log(erorrMessage)
+  }
+
+
+   //Hashing the password before storing it in database
+   let hashedPassword = ''
+   hashedPassword = bcrypt.hashSync(input_password, 10, (err, hp) => {
+     if (err) {
+       mongoose.connection.close();
+       res.status(500).json({ error: err });
+     }
+     hashedPassword = hp
+   })
+
+
+   // Find the user with the input email and update their password
+    await dbo.collection(collection_name).findOneAndUpdate(
+    { email: input_email },
+    { $set: { password: hashedPassword } }
+    );
+
+    // Close the database connection
+    db_client.close();
+
+
+
+
+   //Sending back response to front end
+  if (anyError){
+    return res.send({isError: "True", message: erorrMessage})
+  }
+  else{
+    return res.send({isError: "False", message: "User password has been modified, Redirecting to login page..."})
+  }
+
+}
+)
+
+
     console.log("sending error response...");
     res.json({
       isError: "True",
@@ -732,3 +983,4 @@ app.post('/submiteditprofile', authenticateToken, async(req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
+
