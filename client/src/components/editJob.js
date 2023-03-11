@@ -28,7 +28,9 @@ function JobEditForm() {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
 
+ // const SERVER_URL = "//localhost:3001"
   const SERVER_URL = process.env.REACT_APP_SERVER_URL
+ 
 
   const handleSubmit = async () => {
     // Do something with the form data, such as send it to a server

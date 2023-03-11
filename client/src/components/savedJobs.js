@@ -9,6 +9,7 @@ function SavedJobList() {
   const [login, setLogin] = useState(true)
   const [jobs, setJobs] = useState([]);
 
+  //const SERVER_URL = "//localhost:3001"
   const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
   const accessToken = localStorage.getItem("token")
