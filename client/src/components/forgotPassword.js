@@ -11,7 +11,7 @@ function ForgotPassword() {
   const [email, setEmail] = useState();
   const [otp, setOTP] = useState()
   //const SERVER_URL = "//localhost:3001"
-  const SERVER_URL = "https://jobilee-server.vercel.app";
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
   function navigateToOtp() {
     //if (email) {
