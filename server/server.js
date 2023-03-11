@@ -838,7 +838,7 @@ app.listen(port, () => {
 
 
 // Sending the email
-app.post("/send_recovery_email", (req, res) => {
+app.post("/send_recovery_email", allowCors(req, res) => { //small change added here to allow CORS
   console.log (`route for forgot password is running`)
   sendEmail(req.body)
     .then((response) => res.send(response.message))
