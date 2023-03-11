@@ -16,7 +16,7 @@ const Profile = require('./profileModel.js')
 const jwt = require('jsonwebtoken')
 const cors = require('cors')
 
-app.user(cors())
+app.use(cors())
 
 
 
