@@ -517,7 +517,7 @@ app.post('/removejob', authenticateToken, async(req, res) => {
   const dbo = db_client.db(database_name)
 
   // Delete document containing user id and job id
-  dbo.collection(collection_name).deleteOne({user_id: userId, job_id: jobId}),
+  dbo.collection(collection_name).deleteOne({user_id: userId, job_id: jobId},
   function(err, result){
     if(err){
       console.log(err)
@@ -529,6 +529,7 @@ app.post('/removejob', authenticateToken, async(req, res) => {
       })
     }
   }
+  )
 
 })
 
