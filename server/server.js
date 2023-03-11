@@ -367,7 +367,7 @@ app.post('/signup', async(req, res) => {
 // ************************ Job posting ************************ //
 
 app.post('/createJobs', async(req, res) => {
-  console.log(`route is running`)
+  console.log(`route for creating job is running`)
   console.log(req.body.title)
   console.log(req.body.experience)
   console.log(req.body.location)
@@ -398,10 +398,27 @@ app.post('/createJobs', async(req, res) => {
   })
 
   // Adding Job to DB
-  dbo.collection(collection_name).insertOne(newJob, function(err, res) {
-    if (err) throw err; 
+  dbo.collection(collection_name).insertOne(newJob, function(err, result) {
+    if (err){
+      errorMessage = "An error has occured"
+      console.log(errorMessage)
+      console.log(err);
+      res.json({
+        isError: "True",
+        message: errorMessage
+      })
+    }
+    else{
+      var successMessage = "Job created successfully!"
+      console.log(successMessage)
+      res.json({
+        isError: "False",
+        message: successMessage
+      })
+    } 
     console.log("-> 1 New Job succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
     db_client.close();
+
   })
 });
 
@@ -431,9 +448,6 @@ app.get('/jobs', async(req, res) => {
   }
  
 });
-
-
-
 
 
 
