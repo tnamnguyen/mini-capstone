@@ -11,7 +11,7 @@ function SavedJobList() {
   const [removeSuccess, setRemoveSuccess] = useState('')
   const [buttonClicked, setButtonClicked] = useState(false)
 
-  const SERVER_URL = process.env.REACT_APP_SERVER_URL
+  const SERVER_URL = 'http://localhost:3001'
 
   const accessToken = localStorage.getItem("token")
   const isTokenAvailable = (localStorage.getItem("token") != null)
