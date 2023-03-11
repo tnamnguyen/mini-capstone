@@ -14,6 +14,10 @@ import "bootstrap/dist/css/bootstrap.css";
 import MyJobList from "./components/myJobs";
 import JobEditForm from "./components/editJob";
 import ForgotPassword from "./components/forgotPassword";
+import ResetPassword from "./components/resetPassword";
+import OTP from "./components/OTP"
+
+
 
 ReactDOM.render(
   <React.StrictMode>
@@ -31,6 +35,9 @@ ReactDOM.render(
         <Route path="/myJobs" element={<MyJobList />} />
         <Route path="/editJob" element={<JobEditForm />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
+        <Route path="/reset" element={<ResetPassword />} />
+        <Route path="/OTP" element={<OTP/>} />
+        
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
