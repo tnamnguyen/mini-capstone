@@ -10,7 +10,6 @@ const User = require("./userModel.js")
 const Job = require("./jobModel.js")
 const { db } = require('./userModel.js')
 const SavedJob = require("./savedJobModel.js")
-const ObjectId = require('mongodb').ObjectId
 const nodemailer = require("nodemailer");
 const Profile = require('./profileModel.js')
 const jwt = require('jsonwebtoken')
