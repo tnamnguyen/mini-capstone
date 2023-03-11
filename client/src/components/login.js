@@ -10,8 +10,12 @@ function Login() {
   const [loginStatus_success, setLoginStatus_success] = useState("");
   const [loginStatus_err, setLoginStatus_err] = useState("");
 
+
   //const SERVER_URL = "//localhost:3001"
-  const SERVER_URL = process.env.REACT_APP_SERVER_URL
+
+
+    const SERVER_URL = process.env.REACT_APP_SERVER_URL
+
 
   const handleLogin = async () => {
     // Send a request to the server to log the user in

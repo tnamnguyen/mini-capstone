@@ -5,13 +5,17 @@ const cors = require('cors')
 const bodyParser = require("express")
 const bcrypt = require('bcryptjs')
 const mongoose = require("mongoose")
+const ObjectId = require('mongodb').ObjectID;
 const User = require("./userModel.js")
-const jwt = require('jsonwebtoken')
 const Job = require("./jobModel.js")
 const { db } = require('./userModel.js')
 const SavedJob = require("./savedJobModel.js")
 const ObjectId = require('mongodb').ObjectId
 const nodemailer = require("nodemailer");
+const Profile = require('./profileModel.js')
+const jwt = require('jsonwebtoken')
+
+
 
 
 
@@ -50,6 +54,14 @@ function authenticateToken(req, res, next){
         next()
       }
       else{
+        //check if user is admin
+        if(user.type == 'admin'){
+          res.isAdmin = true
+        }
+        else{
+          res.isAdmin = false
+        }
+
         res.user = user
         res.isLoggedIn = true
         next()
@@ -66,7 +78,8 @@ function authenticateToken(req, res, next){
 app.post('/home', authenticateToken, (req, res) => {
   if(res.isLoggedIn){
     res.send({
-      "isLoggedIn": res.isLoggedIn, 
+      "isLoggedIn": res.isLoggedIn,
+      "isAdmin": res.isAdmin,
       "user": res.user
     })
   }
@@ -89,6 +102,7 @@ app.post('/login', async(req, res) => {
   const login_password = req.body.password
  
   //Connecting to the specific database and collection
+  //const database_name = "Accounts"
   const database_name = "Accounts"
   const collection_name = "users"
   mongoose.set("strictQuery", false);
@@ -120,6 +134,7 @@ app.post('/login', async(req, res) => {
   let user_userName = ""
   let user_email = ""
   let user_password = ""
+  let user_type = ""
   await dbo.collection(collection_name).findOne( { email: login_email })
   .then(result => {
     //If email doesn't exist
@@ -134,6 +149,7 @@ app.post('/login', async(req, res) => {
       user_email = result.email
       user_password = result.password
       databasePassword = result.password
+      user_type = result.type
     }
   })
   .catch(err => {
@@ -172,7 +188,8 @@ app.post('/login', async(req, res) => {
       id: user_id,
       name: user_userName, 
       email: user_email, 
-      password: user_password
+      password: user_password,
+      type: user_type
     }
 
     //Creating a JWT token with user information
@@ -216,6 +233,7 @@ app.post('/signup', async(req, res) => {
   const input_confirm_password = req.body.passwordConfirm
 
   //Connecting to the specific database and collection
+  // const database_name = "Accounts"
   const database_name = "Accounts"
   const collection_name = "users"
   mongoose.set("strictQuery", false);
@@ -323,7 +341,8 @@ app.post('/signup', async(req, res) => {
   const signedUpUser = new User({
     name: input_name,
     email: input_email,
-    password: hashedPassword
+    password: hashedPassword,
+    type: "regular_user"
   })
             
 
@@ -332,10 +351,9 @@ app.post('/signup', async(req, res) => {
     dbo.collection(collection_name).insertOne(signedUpUser, function(err, res) {
       if (err) throw err; 
       console.log("-> 1 New User succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
-      db_client.close();
+
     })
   }
-  
 
   //Sending back response to front end
   if (anyError){
@@ -354,7 +372,7 @@ app.post('/signup', async(req, res) => {
 // ************************ Job posting ************************ //
 
 app.post('/createJobs', async(req, res) => {
-  console.log(`route is running`)
+  console.log(`route for creating job is running`)
   console.log(req.body.title)
   console.log(req.body.experience)
   console.log(req.body.location)
@@ -385,10 +403,27 @@ app.post('/createJobs', async(req, res) => {
   })
 
   // Adding Job to DB
-  dbo.collection(collection_name).insertOne(newJob, function(err, res) {
-    if (err) throw err; 
+  dbo.collection(collection_name).insertOne(newJob, function(err, result) {
+    if (err){
+      errorMessage = "An error has occured"
+      console.log(errorMessage)
+      console.log(err);
+      res.json({
+        isError: "True",
+        message: errorMessage
+      })
+    }
+    else{
+      var successMessage = "Job created successfully!"
+      console.log(successMessage)
+      res.json({
+        isError: "False",
+        message: successMessage
+      })
+    } 
     console.log("-> 1 New Job succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
     db_client.close();
+
   })
 });
 
@@ -417,10 +452,200 @@ app.get('/jobs', async(req, res) => {
       db_client.close();
   }
  
+});
+
+
+
+
+
+
+// ************************ Admin ************************ //
+app.get('/admin', async(req, res) => {
   
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  //Getting total numbers of registered users
+  let numOfUsers = await dbo.collection("users").countDocuments()
+
+  //Getting total numbers of jobs available
+  const numOfJobs = await dbo.collection("Jobs").countDocuments()
+
+  //Seding response back to front-end
+  res.send({numOfUsers: numOfUsers, numOfJobs: numOfJobs})
+
+});
+
+
+
+
+
+
+
+
+
+
+// ************************ Admin/ List of users ************************ //
+app.get('/admin_listUsers', async(req, res) => {
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+
+  // Query all users from database
+  try {
+    const users = await (await dbo.collection(collection_name).find().toArray())
+    res.json(users);
+  } catch (error) {
+    console.log("Error when fetching from database");
+    console.log(error);
+    db_client.close();
+  }
+
+});
+
+
+
+
+
+
+// ************************ Admin/ assign Admin ************************ //
+app.post('/admin_makeAdmin', async(req, res) => {
   
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // update user type to admin
+  const update = await (await dbo.collection(collection_name).updateOne({email: req.body.email}, {$set :{type :"admin"}}))
+
+});
+
+
+
+
+
+// ************************ Admin/ assign regular user ************************ //
+app.post('/admin_makeRegularUser', async(req, res) => {
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // update user type to regular_user
+  const update = await (await dbo.collection(collection_name).updateOne({email: req.body.email}, {$set :{type :"regular_user"}}))
+
+});
+
+
+
+
+
+
+// ************************ Profile ************************ //
+app.post('/profile', authenticateToken, async(req, res) => {
+  console.log(`route for profile is running`)
+  if(res.isLoggedIn) {
+    const id = res.user.id
+    const database_name = "Accounts"
+    const collection_name = "profile"
+    const db_client = await MongoClient.connect(url)
+    const dbo=db_client.db(database_name)
+    await dbo.collection(collection_name).findOne( {user_id: id})
+    .then(result => {
+
+      // Create a new profile in the database if the user is not found
+      if(!result){
+        anyError = true
+        errorMessage = "No profile was found for this user"
+        console.log(errorMessage);
+
+        res.send({
+          profileExists: "False",
+          message: errorMessage
+        })
+
+        console.log("Creating a new profile for user")
+        var newProfile = new Profile({
+          user_id: id,
+          education: 'None',
+          pastJob: 'None',
+          currentJob: 'None',
+          languages: 'English',
+          bio: ''
+        })
   
-  });
+        dbo.collection(collection_name).insertOne(newProfile, function(err, res) {
+          if(err) throw err;
+          console.log("-> Profile template created for the new user on " + database_name +" database inside the " + collection_name + "collection!");
+          db_client.close();
+        })
+      }
+      else{
+        res.send({
+          profileExists: "True",
+          "isLoggedIn": res.isLoggedIn,
+          "user": res.user,
+          education: result.education,  
+          pastJob: result.pastJob,
+          currentJob: result.currentJob,
+          languages: result.languages,
+          bio: result.bio
+        })
+        db_client.close();
+      }
+    })
+    .catch(err => {
+      console.log("Error:" + err)
+    })
+  }
+});
+
+
+// ************************ Edit Profile ************************ //
+app.post('/editprofile', authenticateToken, async(req, res) =>{
+  console.log('route for edit profile is running')
+
+  if(res.isLoggedIn) {
+    const id = res.user.id
+    const database_name = "Accounts"
+    const collection_name = "profile"
+    const db_client = await MongoClient.connect(url)
+    const dbo=db_client.db(database_name)
+
+    await dbo.collection(collection_name).findOne( {user_id: id})
+    .then(result => {
+      if(!result){
+        anyError = true
+        errorMessage = "invalid id"
+        console.log("invalid result")
+      }
+      else{
+        res.send({
+          "isLoggedIn": res.isLoggedIn,
+          "user": res.user,
+          education: result.education,  
+          pastJob: result.pastJob,
+          currentJob: result.currentJob,
+          languages: result.languages,
+          bio: result.bio
+        })
+        db_client.close();
+      }
+    })
+    .catch(err => {
+      console.log("Error:" + err)
+    })
+  }
 
 
   app.post('/savejob', authenticateToken, async(req, res) => {
@@ -455,6 +680,85 @@ app.get('/jobs', async(req, res) => {
 
   })
 
+});
+
+
+// Submit Changes
+app.post('/submiteditprofile', authenticateToken, async(req, res) => {
+  console.log(`route submitting profile changes is running`)
+  const id = res.user.id
+  const token_email = res.user.email
+  const token_pw = res.user.pw
+  
+  // Associate the info from the edit page
+  const input_userName = req.body.userName
+  const input_education = req.body.education
+  const input_pastJob = req.body.pastJob
+  const input_currentJob = req.body.currentJob
+  const input_languages = req.body.languages
+  const input_bio = req.body.bio
+
+  // Loading database
+  const database_name = "Accounts"
+  const collection_name = "profile"
+  const collection_users = "users"
+  mongoose.set("strictQuery", false);
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  // Find a profile corresponding to user_id
+  const userProfile = await dbo.collection(collection_name).findOne({user_id: id})
+  if (userProfile){
+    userProfile.education = input_education
+    userProfile.pastJob = input_pastJob
+    userProfile.currentJob = input_currentJob
+    userProfile.languages = input_languages
+    userProfile.bio = input_bio
+  
+    // Update userProfile
+    await dbo.collection(collection_name).updateOne({ user_id: id }, { $set: userProfile });
+    
+    // Find from users collection matching id to modify the userName
+    const user = await dbo.collection(collection_users).findOne({_id: new ObjectId(id)})
+      // If user is not found
+      if(!user){
+        anyError = true
+        errorMessage = "An error has occured"
+        console.log("invalid id")
+        res.json({
+          isError: "True",
+          message: errorMessage
+        })
+      }
+      // Modify userName
+      else{
+        user.name = input_userName
+        await dbo.collection(collection_users).updateOne({ _id: new ObjectId(id) }, { $set: user });
+      
+        const user_info = {
+          id: id,
+          name: input_userName,
+          email: token_email,
+          password: token_pw
+        }
+
+        const newToken = jwt.sign(user_info, "jwtsecret", {
+          expiresIn: 300000
+        })
+        
+        console.log("sending response...")
+        res.json({
+          isError: "False",
+          message: "Successfully edited profile!",
+          token: newToken,
+        })
+      }
+    console.log("Profile Saved")
+  }
+  else {  
+    console.log("User Profile not found")
+    anyError = true
+    errorMessage = "An error has occured"
 
 
 // ************************ Saved Job Browsing ************************ //
@@ -666,4 +970,17 @@ app.post('/reset', async(req, res) => {
 
 }
 )
+
+
+    console.log("sending error response...");
+    res.json({
+      isError: "True",
+      message: errorMessage
+    })
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+});
 

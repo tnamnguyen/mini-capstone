@@ -1,8 +1,55 @@
 import React, { useState } from 'react';
+import {    useEffect   } from 'react';
 import NavBar from './navBar';
 import '../Styles/editProfile.scss';
+import axios from "axios"
 
 function EditProfile() {
+    const SERVER_URL = process.env.REACT_APP_SERVER_URL
+    const accessToken = localStorage.getItem("token")
+
+    useEffect(() => {
+        axios.post(SERVER_URL + '/editprofile', {accessToken})
+        .then(response => {
+            setUserName(response.data.user.name)
+            setEducation(response.data.education)
+            setCurrentJob(response.data.currentJob)
+            setPastJob(response.data.pastJob)
+            setLanguages(response.data.languages)
+            setBio(response.data.bio)
+
+        })
+        .catch(error => {
+            console.log(error)
+        });
+    }, []);
+
+    function handleChanges() {
+        console.log('submit changes button was clicked')
+        axios.post(SERVER_URL + '/submiteditprofile', {
+            accessToken, userName, education, pastJob, currentJob, languages, bio})
+        .then(response => {
+            if(response.data.isError == "True"){
+                console.log("An error has occured")
+                setEditStatus_err(response.data.message)
+                setEditStatus_success('')
+                
+            }
+            if(response.data.isError == "False"){
+                localStorage.removeItem("token")
+                localStorage.setItem("token", response.data.token)
+                setEditStatus_err('')
+                setEditStatus_success(response.data.message)
+
+                // Redirect to profile page
+                console.log("Redirecting to profile page")
+                setTimeout(()=>{
+                    window.location.href = "/profile"
+                }, 3000)
+            }
+        })
+    }
+
 
     //HTML Forms that appear under each field when the "Edit" button is pressed
     const [editProfilePic, setEditProfilePic] = useState(false);
@@ -16,13 +63,17 @@ function EditProfile() {
 
     //Variables holding the values of different fields
     const [profilePic, setProfilePic] = useState('../assets/images/profile.png');
-    const [userName, setUserName] = useState('UserName');
-    const [education, setEducation] = useState('Education');
-    const [currentJob, setCurrentJob] = useState('Current Job');
-    const [pastJob, setPastJob] = useState('Past Job');
-    const [languages, setLanguages] = useState('Languages');
-    const [bio, setBio] = useState('Bio');
+    const [userName, setUserName] = useState('');
+    const [education, setEducation] = useState('');
+    const [currentJob, setCurrentJob] = useState('');
+    const [pastJob, setPastJob] = useState('');
+    const [languages, setLanguages] = useState('');
+    const [bio, setBio] = useState('');
     const [resume, setResume] = useState('');
+
+    //Variables for the feedback
+    const [editStatus_success, setEditStatus_success] = useState('');
+    const [editStatus_err, setEditStatus_err] = useState('');
     
     return ( 
         <>
@@ -192,7 +243,9 @@ function EditProfile() {
 
                         {/* ********** Submit Button ********** */}
                         <div class="edit_profile_submit">
-                            <button id='edit_profile_submit_button'>Submit Changes!</button>
+                            <button id='edit_profile_submit_button' onClick={() => handleChanges()}>Submit Changes!</button>
+                            <div className='editStatus_err'>{editStatus_err}</div>
+                            <div className='editStatus_success'>{editStatus_success}</div>
                         </div>
                     </div>
                 </div>
