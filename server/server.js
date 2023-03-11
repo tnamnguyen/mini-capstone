@@ -14,9 +14,9 @@ const ObjectId = require('mongodb').ObjectId
 const nodemailer = require("nodemailer");
 const Profile = require('./profileModel.js')
 const jwt = require('jsonwebtoken')
+const cors = require('cors')
 
-
-
+app.user(cors())
 
 
 
