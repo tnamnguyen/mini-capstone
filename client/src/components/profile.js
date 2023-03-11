@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import NavBar from './navBar';
 import {Link} from "react-router-dom";
 import '../Styles/profile.scss';
+import axios from "axios"
 
 //Function returning the proper greeting depending on time of day
 function getGreeting(){
@@ -19,14 +21,46 @@ function getGreeting(){
 }
 
 function Profile() {
+    const SERVER_URL = process.env.REACT_APP_SERVER_URL
+
+    const accessToken = localStorage.getItem("token")                
+
+    const isTokenAvailable = (accessToken != null)
+    useEffect(() => {
+        if (isTokenAvailable){
+            axios.post(SERVER_URL + '/profile', {accessToken})
+            .then(response => {
+                console.log(response.data.profileExists)
+                if(response.data.profileExists == "True"){
+                    setUserName(response.data.user.name)
+                    setEducation(response.data.education)
+                    setCurrentJob(response.data.currentJob)
+                    setPastJob(response.data.pastJob)
+                    setLanguages(response.data.languages)
+                    setBio(response.data.bio)
+                }
+                
+                else if(response.data.profileExists == "False"){
+                    console.log("Reloading the page to load profile generated")
+                        window.location.reload(true)
+
+                }
+            })
+        }
+    }, []);
+
+
     const [profilePic, setProfilePic] = useState('../assets/images/profile.png');
-    const [userName, setUserName] = useState('UserName');
-    const [education, setEducation] = useState('Education');
-    const [currentJob, setCurrentJob] = useState('Current Job');
-    const [pastJob, setPastJob] = useState('Past Job');
-    const [languages, setLanguages] = useState('Languages');
-    const [bio, setBio] = useState('Bio');
+    const [userName, setUserName] = useState('');
+    const [education, setEducation] = useState('');
+    const [currentJob, setCurrentJob] = useState('');
+    const [pastJob, setPastJob] = useState('');
+    const [languages, setLanguages] = useState('');
+    const [bio, setBio] = useState('');
     const [resume, setResume] = useState('');
+
+    
+   
 
     return ( 
         <>
@@ -49,7 +83,7 @@ function Profile() {
                     </div>
                     <div class='profile_resume'>Resume: {resume}</div>
                     <div class="profile_edit_profile">
-                        <Link to="/editProfile">
+                        <Link to="/editprofile">
                             <button id='profile_edit_profile_button'>Edit Profile</button>
                         </Link>
                     </div>

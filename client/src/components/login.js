@@ -10,7 +10,7 @@ function Login() {
     const [loginStatus_success, setLoginStatus_success] = useState('');
     const [loginStatus_err, setLoginStatus_err] = useState('');
 
-    const SERVER_URL = "https://jobilee-server.vercel.app"
+    const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
     const handleLogin = async () => {
 

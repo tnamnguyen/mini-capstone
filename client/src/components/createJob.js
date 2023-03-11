@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 import NavBar from './navBar';
 import '../Styles/sign-up.scss';
+import '../Styles/createJob.scss';
 
 
 function JobApplicationForm() {
@@ -10,33 +11,39 @@ function JobApplicationForm() {
     const [experience, setExperience] = useState('');
     const [location, setLocation] = useState('');
     const [description, setDescription] = useState('');
+    const [createSuccess, setCreateSuccess] = useState('')
+    const [createErr, setCreateErr] = useState('')
   
-    const SERVER_URL = "https://jobilee-server.vercel.app"
+    const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
-    const handleSubmit = async () => {
-      
+    const handleSubmit = async (event) => {
+      //Prevent the form from it's default behavior, which reloads the page
+      event.preventDefault()
       // Do something with the form data, such as send it to a server
       console.log({ title, experience, location, description });
 
       await axios.post(SERVER_URL + '/createJobs', {title,experience, location, description})
       .then(response => {
+        console.log(response.data.isError);
           //If backend returns an error
           if(response.data.isError == "True"){
-              
+            setCreateErr(response.data.message)
+            setCreateSuccess('')
           }
 
           //If backend returns success
           if(response.data.isError == "False"){
-              
-
-              setTimeout(()=>{
-                  window.location.href = "http://localhost:3000/"
-              }, 4000)
+            setCreateErr('')
+            setCreateSuccess(response.data.message)
+            console.log("Redirecting to jobs page");
+            setTimeout(()=>{
+                window.location.href = "/jobs"
+                }, 3000)
           }
           
       })
       .catch(error => {
-         
+         console.log(error);
       });
 
 
@@ -75,7 +82,8 @@ function JobApplicationForm() {
                 <br />
                 
                 <button type="submit">Submit</button>
-               
+                <div className='createErr'>{createErr}</div>
+                <div className='createSuccess'>{createSuccess}</div>
             </form>
 
             </div>
