@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import NavBar from './navBar';
 import axios from "axios";
 import '../Styles/home.scss';
@@ -13,9 +13,20 @@ function Home() {
         setUserName(response.data.user.name)
     })
 
+    useEffect(() => {
+        // Fetch all jobs from the backend API when the component mounts
+        axios.get(SERVER_URL+ '/jobs')
+            .then(response => {
+                setJobs(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching jobs:', error);
+            });
+    }, []);
+
     //Variable to diplay on page if user is logged-in
     const [userName, setUserName] = useState('UserName');
-   
+    const [jobs, setJobs] = useState([]);
 
     return (
         <>
@@ -30,17 +41,21 @@ function Home() {
                         </div>
                         <div>{userName}</div><br></br>
                         <text>Bio</text><br></br>
+                        <br>{jobs.title}</br>
                         <text>Who viewed your profile: 34</text><br></br>
                         <text>Total Connections: 12</text><br></br>
+                        {jobs.map(job => (
+                                <div>{job.title}</div>
+                        ))}
                     </div>
                 </div>
 
                 {/* Middle element on the page */}
                 <div class='home_posts'>
                     <div>
-                        <text>User Likes this</text><br></br>
-                        <text>User got a new job</text><br></br>
-                        <text>User update</text><br></br>
+                        <text>{userName} Likes this</text><br></br>
+                        <text>{userName} got a new job</text><br></br>
+                        <text>{userName} update</text><br></br>
                     </div>
                 </div>
 
