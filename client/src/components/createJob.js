@@ -67,26 +67,17 @@ function JobApplicationForm() {
       });
 
 
-        //If backend returns success
-        if (response.data.isError == "False") {
-          setTimeout(() => {
-            window.location.href = "http://localhost:3000/";
-          }, 4000);
-        }
-      })
-      .catch((error) => {});
-  };
-
-  return (
+    };
+  
+    return (
     <>
-      <NavBar></NavBar>
+        <NavBar></NavBar>
 
-      <div className="createjob-form" data-testid="createJob-1">
-        <div className="createjob-container">
-          <h2 id="createjob_title">Create Job</h2>
-          <br />
-          <br />
-         
+        <div className="createjob-form" data-testid="createJob-1">
+            <div className="createjob-container">
+            <h2 id="createjob_title">Create Job</h2>
+            <br />
+            <br />
             <form onSubmit={handleSubmit}>
                 <label>
                 Title:
@@ -115,12 +106,11 @@ function JobApplicationForm() {
                 <div className='createSuccess'>{createSuccess}</div>
             </form>
 
-
-           
-        </div>
-      </div>
+            </div>
+       </div>
     </>
-  );
-}
+    
+    );
+  }
 
 export default JobApplicationForm;
