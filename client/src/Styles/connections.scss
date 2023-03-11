@@ -1,87 +1,6 @@
-//This file contains all the CSS styling of the sign up page
 @import "./variables/variables.scss";
 
-.signup-form{
-  display: flex;
-  flex-wrap: wrap;
-  input, button {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-}
-  
-.signup-container {
-  margin: auto;
-  background-color: $grey_Color;
-  border: solid 1px $blue_Color;
-  border-width: 0.5ch;
-  border-radius: 30px;
-  padding: 8em;
-
-  #signup_title{
-    color: $blue_Color;
-    text-align: center;
-    margin:auto;
-    padding: 3;
-    margin-top: 33;
-  }
-
-}
-
-#signup_title{
-  margin:auto;
-  padding: 3;
-  margin-top: 33;
-}
-
-.signup-form {
-input {
-  padding: 10px;
-  width: 90%;
-  margin: 10px 0;
-  border: 1px solid gray;
-  border-radius: 20px;
-  background-color: white;
-}
-
-#signup_button {
-  background-color: $blue_Color;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-}
-}
-
-.signup-form {
-input {
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid gray;
-  border-radius: 4px;
-}
-
-button {
-  background-color: blue;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-}
-
-.signUpStatus_err{
-  color: red;
-  font-size: 19px;
-}
-.signUpStatus_success{
-  color: green;
-  font-size: 23px;
-}
-
-///////////////////////////////////
+//////////////////////////////////
 /// This is the create job scss
 ///////////////////////////////////
 
@@ -153,10 +72,6 @@ button {
 }
 
 }
-
-///////////////////////////////////
-/// This is the see job scss
-///////////////////////////////////
 
 button-job {
   background-color: blue;
@@ -254,3 +169,11 @@ padding-right: 110px;
     top:1px;
   }
  
+
+  // test for add connections
+  #addToConnections{
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 30px;
+    background-color: $light_blue_Color;
+  }

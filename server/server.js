@@ -420,9 +420,9 @@ app.get('/jobs', async(req, res) => {
 
 
 
-// ************************ Connections ************************ //
-app.get('/connections', async(req, res) => {
-  console.log(`route  for connections is running`)
+// ************************ Print all users names ************************ //
+app.get('/addConnections', async(req, res) => {
+  console.log(`route  for printing connections is running`)
 
 
   // Connecting to the specific database and collection
@@ -436,7 +436,6 @@ app.get('/connections', async(req, res) => {
   try {
     const users = await (await dbo.collection(collection_name).find().toArray())
     res.json(users);
-    res.send({status:'ok', data: users});
   } catch (error) {
     console.log("Error when fetching from database");
     console.log(error);
@@ -445,37 +444,45 @@ app.get('/connections', async(req, res) => {
  
   
   
-  
   });
 
-// ************************ Adding Connections ************************ //
-app.get('/connections', async(req, res) => {
-  console.log(`route  for connections is running`)
-
-
-  // Connecting to the specific database and collection
-  const database_name = "Accounts"
-  const collection_name = "users"
-  const db_client =  await MongoClient.connect(url) 
-  const dbo = db_client.db(database_name)
-
-
-  // Query specified user
+  // ************************ User Connections ************************ //
+  app.get('/connections', authenticateToken, async(req, res) => {
+    console.log(`route  for addconnections is running`)
+  
+    if(res.isLoggedIn) {
+    // Connecting to the specific database and collection
+    const database_name = "Accounts"
+    const collection_name = "Connections"
+    const db_client =  await MongoClient.connect(url) 
+    const dbo = db_client.db(database_name)
   
   
-  
-  
-  });
+    // Query all the users
+    try {
+      const user_connections = await (await dbo.collection(collection_name).find().toArray())
+      res.json(user_connections);
+    } catch (error) {
+      console.log("Error when fetching connections from database");
+      console.log(error);
+        db_client.close();
+    } 
+    }});
 
-
-app.post('/createconnection', async (req, res) => {
+    
+// ************************ adding User Connections ************************ //
+app.post('/addConnections',  async (req, res) => {
+  
   // Extract the usernames of the users from the request body
-  const { user1, user2 } = req.body;
-
+  
+  const user1 = req.body.user1
+  const user2 = req.body.user2
+  console.log(user1)
+  //if(res.isLoggedIn) {
   // Create a new connection document
   const connection = {
-    user1,
-    user2,
+    user1 : user1,
+    user2 : user2,
     status: 'pending',
     createdAt: new Date()
   };
