@@ -16,8 +16,6 @@ const Profile = require('./profileModel.js')
 const jwt = require('jsonwebtoken')
 const cors = require('cors')
 
-app.use(cors())
-
 
 
 // **************************************** Connecting to Mongoose DB **************************************** //
