@@ -43,7 +43,12 @@ function SavedJobList() {
       setRemoveSuccess(response.data.message)
       console.log(removeSuccess);
     })
-    setButtonClicked(!buttonClicked)
+    if(jobs.length === 1){
+      setJobs([])
+    }
+    else{
+      setButtonClicked(!buttonClicked)
+    }
   };
 
     // Add remove button if user is logged in
