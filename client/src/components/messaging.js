@@ -7,7 +7,8 @@ import "../Styles/messaging.scss";
 
 function Messaging() {
   const practiceMessage = "Stuff to write about";
-  const SERVER_URL = "https://jobilee-server.vercel.app";
+  //const SERVER_URL = "https://jobilee-server.vercel.app";
+  const SERVER_URL = "http://localhost:3001";
 
   const [content, setContent] = useState("");
   const [document, setDocument] = useState("");
