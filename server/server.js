@@ -49,7 +49,9 @@ module.exports = allowCors(handler)
 
 
 // **************************************** Connecting to Mongoose DB **************************************** //
-app.use(cors());
+app.use(cors({
+  origin: 'https://mini-capstone.vercel.app'
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 const MongoClient = require('mongodb').MongoClient;
@@ -838,12 +840,12 @@ app.listen(port, () => {
 
 
 // Sending the email
-app.post("/send_recovery_email", allowCors(req, res) => { //small change added here to allow CORS
+app.post("/send_recovery_email", allowCors((req, res) => { //small change added here to allow CORS
   console.log (`route for forgot password is running`)
   sendEmail(req.body)
     .then((response) => res.send(response.message))
     .catch((error) => res.status(500).send(error.message));
-});
+}));
 
 // Generating the email
 function sendEmail({ recipient_email, OTP }) {
