@@ -9,14 +9,14 @@ function Home() {
     const [userName, setUserName] = useState('UserName');
     
    
-        //Check if User is logged-in
-        const SERVER_URL = "https://jobilee-server.vercel.app"
-        const accessToken = localStorage.getItem("token")
-        axios.post(SERVER_URL + '/home', {accessToken})
-        .then(response => {
-            setUserName(response.data.user.name)
-            setLogin(false)
-        })
+    //Check if User is logged-in
+    const SERVER_URL = "https://jobilee-server.vercel.app"
+    const accessToken = localStorage.getItem("token")
+    axios.post(SERVER_URL + '/home', {accessToken})
+    .then(response => {
+        setUserName(response.data.user.name)
+        setLogin(false)
+    })
 
     
     function defaultHome() {
