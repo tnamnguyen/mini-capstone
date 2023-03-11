@@ -37,7 +37,7 @@ function ForgotPassword() {
         .catch(console.log);
       return;
     //}
-    return alert("Please enter your email");
+   // return alert("Please enter your email");
   }
 
   return (
