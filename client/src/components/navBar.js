@@ -32,9 +32,7 @@ function NavBar() {
             }
         })
     }
-
-
-
+    
     //Dynamic HTML elements
     function addAdminElement(){
         if(adminElement){
@@ -72,12 +70,46 @@ function NavBar() {
         }
     }
 
+    //TODO: add href to connection page
+    function addConnections(){
+        if(!loginElement){
+            return(
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Connections</a>
+                </li>
+            )
+        }
+    }
+
+    //TODO: add href to chat page
+    function addChat(){
+        if(!loginElement){
+            return(
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Chat</a>
+                </li>
+            )
+        }
+    }
+
+    //TODO: add href to notifications page
+    function addNotifications(){
+        if(!loginElement){
+            return(
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Notifications</a>
+                </li>
+            )
+        }
+    }
+
+    
     function addProfile(){
         if(!loginElement){
             return(
                 <li class="nav-item">
-                <a class="nav-link" href="/profile">Profile</a>
-            </li>
+                    <a class="nav-link" href="/profile">Profile</a>
+                </li>
             )
         }
     }
@@ -92,19 +124,12 @@ function NavBar() {
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Connections</a>
-                    </li>
+                    {addConnections()}
                     <li class="nav-item">
                         <a class="nav-link" href="/jobs">Jobs</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Chat</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Notifications</a>
-                    </li>
-
+                    {addChat()}
+                    {addNotifications()}
                     {addProfile()}
                     {addAdminElement()}
                     {addUserGreeting()}
