@@ -70,7 +70,7 @@ function Messaging() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
-          <button onClick={handleSubmit()}>Submit</button>
+          <button onClick={handleSubmit}>Submit</button>
         </form>
         <div className="messageStatus_err">{messageStatus_err}</div>
         <div className="messageStatus_success">{messageStatus_success}</div>
