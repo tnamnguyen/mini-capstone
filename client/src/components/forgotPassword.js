@@ -10,25 +10,25 @@ function ForgotPassword() {
   const [page, setPage] = useState("login");
   const [email, setEmail] = useState();
   const [otp, setOTP] = useState()
-  //const SERVER_URL = "//localhost:3001"
-  const SERVER_URL = "https://jobilee-server.vercel.app";
+  const SERVER_URL = "http://localhost:3001"
+  // const SERVER_URL = "https://jobilee-server.vercel.app";
 
+  console.log("Loading page");
   function navigateToOtp() {
+    console.log("generating otp");
     //if (email) {
       const OTP = Math.floor(Math.random() * 9000 + 1000);
       console.log(OTP);
       setOTP(OTP);
 
-      axios
-        .post(SERVER_URL + "/send_recovery_email", {
-          OTP,
-          recipient_email: email,
-          
-        })
+      console.log("calling axios post");
+      axios.post(SERVER_URL + "/send_recovery_email", {OTP,recipient_email: email})
         .then((response) => {
+          console.log("calling server");
           alert(
             "A link to reset your password has been sent to your email . If you have not received the email, please wait and try again. Once you receive the email, you can close this window."
           );
+          console.log("timeout");
           setTimeout(()=>{
             window.location.href = "/forgotPassword"
         }, 3000)
