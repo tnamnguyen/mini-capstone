@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
 import NavBar from './navBar';
 import '../Styles/sign-up.scss';
 import '../Styles/createJob.scss';
-
+import "../Styles/create-job.scss";
 
 export const Checkbox = () => {
   const [isChecked, setIsChecked] = useState(true);
@@ -65,11 +64,9 @@ function JobApplicationForm() {
       .catch(error => {
          console.log(error);
       });
+  };
 
-
-    };
-  
-    return (
+  return (
     <>
         <NavBar></NavBar>
 

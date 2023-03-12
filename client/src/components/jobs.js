@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
+import { useRef } from "react"
 import { Link } from "react-router-dom";
 import axios from "axios";
 import NavBar from "./navBar";
@@ -8,11 +9,10 @@ import "../Styles/job.scss";
 function JobList() {
   const [login, setLogin] = useState(true)
   const [jobs, setJobs] = useState([]);
+  const [saveSuccess, setSaveSuccess] = useState('')
+  const [savedJobId, setSavedJobId] = useState(null)
 
-
- // const SERVER_URL = "//localhost:3001"
   const SERVER_URL = process.env.REACT_APP_SERVER_URL
-
   const accessToken = localStorage.getItem("token")
   const isTokenAvailable = (localStorage.getItem("token") != null)
   if(isTokenAvailable){
@@ -22,7 +22,6 @@ function JobList() {
     })
 
   }
-
 
   useEffect(() => {
     // Fetch all jobs from the backend API when the component mounts
@@ -38,10 +37,17 @@ function JobList() {
 
   // Call to save the job to database
   function saveJob(job_id){
+    clearTimer()
     console.log('save button was clicked')
     axios.post(SERVER_URL + '/savejob', {job_id, accessToken})
     .then(response => {
-      //Display success message
+      setSavedJobId(job_id);
+      setSaveSuccess(response.data.message)
+      const timer = setTimeout(() => {
+        setSaveSuccess('')
+        setSavedJobId(null)
+      }, 5000)
+      timerRef.current = timer;
     })
   }
 
@@ -49,9 +55,67 @@ function JobList() {
   function addSave(job_id){
     if(!login){
       return(
-      <td><button onClick={() => saveJob(job_id)} className = 'jobs_saveJob_button'>Save Job</button></td>
-    )
+      <td><button onClick={() => saveJob(job_id)} className = 'jobs_saveJob_button'>Save Job</button>
+      {savedJobId === job_id && <div className="success-message popup">{saveSuccess}</div>}</td>
+      )
     }
+  }
+
+  // Hold a reference to the timer
+  const timerRef = useRef(null);
+
+  // Reset the timer when the button is pressed
+  function clearTimer() {
+    if(timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  }
+
+  //========== Add specific Buttons if signed in ==========//
+  function applyRow(){
+    if(!login){
+      return(
+      <th>Apply</th>
+      )
+    }
+  }
+
+  function applyButton(){
+    if(!login){
+      return(
+        <td><button>Apply</button></td>
+      )
+    }
+  }
+
+  function addCreateJobButton(){
+    if(!login){
+      return(
+        <Link to="/createJobs" className="myButton">
+        Create A new Job
+      </Link>
+      )
+    }
+  }
+
+  function addSavedJobButton(){
+    if(!login){
+      return(<Link to="/savedJobs" className="myButton">
+      View Saved Jobs
+    </Link>)
+
+    }
+  }
+
+  function addCreatedJobButton(){
+    if(!login){
+      return(<Link to="/myJobs" className="myButton">
+      View Created Jobs
+    </Link>)
+      
+    }
+
   }
 
   return (
@@ -69,7 +133,7 @@ function JobList() {
                 <th>Experience</th>
                 <th>Location</th>
                 <th>Description</th>
-                <th>Apply</th>
+                {applyRow()}
               </tr>
             </thead>
             <tbody>
@@ -79,24 +143,16 @@ function JobList() {
                   <td>{job.experience}</td>
                   <td>{job.location}</td>
                   <td>{job.description}</td>
-                  <td>
-                    <button>Apply</button>
-                  </td>
+                  {applyButton()}
                   {addSave(job._id)}
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <Link to="/createJobs" className="myButton">
-          Create A new Job
-        </Link>
-        <Link to="/savedJobs" className="myButton">
-          View Saved Jobs
-        </Link>
-        <Link to="/myJobs" className="myButton">
-          View Created Jobs
-        </Link>
+        {addCreateJobButton()}
+        {addSavedJobButton()}
+        {addCreatedJobButton()}
       </div>
     </div>
   );

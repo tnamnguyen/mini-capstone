@@ -6,7 +6,6 @@ import Logout from "./components/logout";
 import Signup from "./components/signup";
 import Home from "./components/home";
 import Profile from "./components/profile";
-
 import EditProfile from "./components/editProfile.js";
 import JobApplicationForm from "./components/createJob.js";
 import JobList from "./components/jobs.js";
@@ -23,7 +22,6 @@ import OTP from "./components/OTP"
 
 
 ReactDOM.render(
-
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
@@ -43,12 +41,8 @@ ReactDOM.render(
         <Route path="/OTP" element={<OTP/>} />
         <Route path="/admin" element={<Admin/>}/>
         <Route path="/adminListUsers" element={<AdminListUsers/>}/>
-     
-   
-                
-            </Routes>
-        </BrowserRouter>
-    </React.StrictMode>,
-    document.getElementById('root')
-
+      </Routes>
+    </BrowserRouter>
+  </React.StrictMode>,
+  document.getElementById("root")
 );

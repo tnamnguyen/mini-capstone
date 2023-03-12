@@ -8,7 +8,6 @@ import "../Styles/sign-up.scss";
 function MyJobList() {
   const [jobs, setJobs] = useState([]);
 
-  //const SERVER_URL = "//localhost:3001"
   const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
   useEffect(() => {

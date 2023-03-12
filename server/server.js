@@ -677,6 +677,115 @@ app.post('/editprofile', authenticateToken, async(req, res) =>{
 
 });
 
+  // ************************ Saving Job to Saved Job List ************************ //
+  app.post('/savejob', authenticateToken, async(req, res) => {
+    console.log (`route for saving job is running`)
+
+    // Connecting to the specific database and collection
+    const database_name = "Accounts"
+    const collection_name = "savedjobs"
+    const db_client = await MongoClient.connect(url)
+    const dbo = db_client.db(database_name)
+
+    // New saved job that will be added to the database
+    var newSavedJob = new SavedJob({
+      user_id: res.user.id,
+      job_id: req.body.job_id
+    })
+    dbo.collection(collection_name).findOne({user_id: res.user.id, job_id: req.body.job_id},
+      function(err, result){
+      // If entry exists in database
+      if (result != null) {
+        console.log('Job Exists')
+        res.json({
+          message: 'Job already saved'
+        })
+      }
+      // Else, inserting new saved job
+      else{
+        dbo.collection(collection_name).insertOne(newSavedJob, function(err, result) {
+          if(err) throw err;
+          console.log("-> 1 new Job was saved for user on " + database_name + " database inside the " + collection_name + " collection!")
+          res.json({
+            message: 'Job saved successfully'
+          })
+          db.client.close();
+        })
+    }
+      })
+
+  })
+
+
+
+// ************************ Saved Job Browsing ************************ //
+app.post('/savedjobs', authenticateToken, async(req, res) => {
+  console.log(`route for saved jobs is running`)
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "savedjobs"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // Find all job_ids that are associated with the user
+  try {
+    const job_ids = await dbo
+    .collection(collection_name)
+    .find({
+      user_id: res.user.id
+    })
+      .project({job_id: 1, _id: 0}).toArray();
+    
+    const collection_name_Jobs = "Jobs"
+
+    // Removing the field names of the array
+    const filtered_jobids = job_ids.map(job_ids => job_ids.job_id)
+
+    // Associating them as ObjectIds
+    const object_ids = filtered_jobids.map(filtered_jobids => new ObjectId(filtered_jobids));
+
+    // Finding all jobs matching ids from array
+    const jobs = await dbo.collection(collection_name_Jobs).find({_id: {$in: object_ids}}).toArray();
+    res.json(jobs)
+
+  } catch(error) {
+    console.log("Error when fetching from database");
+    console.log(error);
+    db_client.close();
+  }
+})
+
+
+// ************************ Removing Job from Saved List ************************ //
+app.post('/removejob', authenticateToken, async(req, res) => {
+  console.log(`remove job route is running`)
+
+  userId = res.user.id
+  jobId = req.body.job_id
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "savedjobs"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // Delete document containing user id and job id
+  dbo.collection(collection_name).deleteOne({user_id: userId, job_id: jobId},
+  function(err, result){
+    if(err){
+      console.log(err)
+    }
+    else {
+      console.log("Saved job was deleted successfully");
+      res.json({
+        message: "Job removed successfully"
+      })
+    }
+  }
+  )
+
+})
 
 // Submit Changes
 app.post('/submiteditprofile', authenticateToken, async(req, res) => {
