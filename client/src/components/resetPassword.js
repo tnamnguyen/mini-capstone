@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link,useLocation  } from 'react-router-dom';
 import axios from "axios";
 import NavBar from './navBar';
 import '../Styles/sign-up.scss';
 
 
-function Signup() {
+function ResetPassword() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -14,19 +14,28 @@ function Signup() {
     const [signUpStatus_success, setSignUpStatus_success] = useState('');
     const [signUpStatus_err, setSignUpStatus_err] = useState('');
 
-
     //const SERVER_URL = "//localhost:3001"
-
     const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
-    const handleSignup = async () => {
-        // Send a request to the server to sign the user up
-        // If the signup is successful, redirect the user to the login page
-        // If the signup fails, update the error state with the error message
 
-        // Code Example:
+    const { search } = useLocation();
+    const query = new URLSearchParams(search);
+    const emailFromUrl = query.get('email');
+
+  useEffect(() => {
+    if (emailFromUrl) {
+      setEmail(emailFromUrl);
+    }
+  }, [emailFromUrl]);
+
+    const ResetPassword = async () => {
+        // Send a request to the server to change the password the user up
+        // If the password reset is successful, redirect the user to the login page
+        // If it fails, update the error state with the error message
+
         
-        await axios.post(SERVER_URL + '/signup', {username, email, password, passwordConfirm})
+        
+        await axios.post(SERVER_URL + '/reset', {email, password, passwordConfirm})
             .then(response => {
                 //If backend returns an error
                 if(response.data.isError == "True"){
@@ -53,28 +62,26 @@ function Signup() {
 
     return (
         <>
+           
             <NavBar></NavBar>
+           
             <div className="signup-form" data-testid="signUp">
 
                 {error && <div className="error">{error}</div>}
                 <div className="signup-container">
-                    <h2 id='signup_title'>Sign Up</h2>
+                    <h2 id='signup_title'>Reset Password</h2>
                     <div>
-                        <input
-                                type="text"
-                                placeholder="Username"
-                                value={username}
-                                onChange={e => setUsername(e.target.value)}
-                            />
-                        <input
+
+                    <input
                             type="email"
                             placeholder="Email"
                             value={email}
-                            onChange={e => setEmail(e.target.value)}
+                            readOnly
                         />
+                    
                         <input
                             type="password"
-                            placeholder="Password"
+                            placeholder="New Password"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                         />
@@ -85,7 +92,7 @@ function Signup() {
                             onChange={e => setPasswordConfirm(e.target.value)}
                         />
                     </div>
-                    <button id='signup_button' onClick={handleSignup}>Sign Up</button>
+                    <button id='signup_button' onClick={ResetPassword}>Change Password</button>
                     <Link to="/login">Already have an account?</Link>
 
                     <div className='signUpStatus_err'>{signUpStatus_err}</div>
@@ -96,4 +103,4 @@ function Signup() {
     );
 }
 
-export default Signup;
+export default ResetPassword;

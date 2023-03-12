@@ -1,12 +1,32 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
+
 import NavBar from './navBar';
 import '../Styles/sign-up.scss';
 import '../Styles/createJob.scss';
 
 
+export const Checkbox = () => {
+  const [isChecked, setIsChecked] = useState(true);
+  const checkHandler = () => {
+    setIsChecked(!isChecked);
+  };
+  return (
+    <div>
+      <label>Check Box to Require Resume</label>
+      <input
+        type="checkbox"
+        id="checkbox"
+        checked={isChecked}
+        onChange={checkHandler}
+      />
+    </div>
+  );
+};
+
 function JobApplicationForm() {
+
     const [title, setTitle] = useState('');
     const [experience, setExperience] = useState('');
     const [location, setLocation] = useState('');
@@ -92,5 +112,5 @@ function JobApplicationForm() {
     
     );
   }
-  
-  export default JobApplicationForm;
+
+export default JobApplicationForm;

@@ -3,26 +3,13 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import NavBar from "./navBar";
-import "../Styles/job.scss";
+import "../Styles/sign-up.scss";
 
-function JobList() {
-  const [login, setLogin] = useState(true)
+function MyJobList() {
   const [jobs, setJobs] = useState([]);
 
-
- // const SERVER_URL = "//localhost:3001"
+  //const SERVER_URL = "//localhost:3001"
   const SERVER_URL = process.env.REACT_APP_SERVER_URL
-
-  const accessToken = localStorage.getItem("token")
-  const isTokenAvailable = (localStorage.getItem("token") != null)
-  if(isTokenAvailable){
-    axios.post(SERVER_URL + '/home', {accessToken})
-    .then(response => {
-      setLogin(false)
-    })
-
-  }
-
 
   useEffect(() => {
     // Fetch all jobs from the backend API when the component mounts
@@ -35,24 +22,6 @@ function JobList() {
         console.error("Error fetching jobs:", error);
       });
   }, []);
-
-  // Call to save the job to database
-  function saveJob(job_id){
-    console.log('save button was clicked')
-    axios.post(SERVER_URL + '/savejob', {job_id, accessToken})
-    .then(response => {
-      //Display success message
-    })
-  }
-
-  // Add the save button if the user is logged in
-  function addSave(job_id){
-    if(!login){
-      return(
-      <td><button onClick={() => saveJob(job_id)} className = 'jobs_saveJob_button'>Save Job</button></td>
-    )
-    }
-  }
 
   return (
     <div data-testid="jobs-1">
@@ -69,7 +38,7 @@ function JobList() {
                 <th>Experience</th>
                 <th>Location</th>
                 <th>Description</th>
-                <th>Apply</th>
+                <th>Edit Button</th>
               </tr>
             </thead>
             <tbody>
@@ -80,9 +49,11 @@ function JobList() {
                   <td>{job.location}</td>
                   <td>{job.description}</td>
                   <td>
-                    <button>Apply</button>
+                    <Link to="/editJob">
+                      {" "}
+                      <button>Edit Job</button>
+                    </Link>
                   </td>
-                  {addSave(job._id)}
                 </tr>
               ))}
             </tbody>
@@ -94,12 +65,12 @@ function JobList() {
         <Link to="/savedJobs" className="myButton">
           View Saved Jobs
         </Link>
-        <Link to="/myJobs" className="myButton">
-          View Created Jobs
+        <Link to="/jobs" className="myButton">
+          Back
         </Link>
       </div>
     </div>
   );
 }
 
-export default JobList;
+export default MyJobList;

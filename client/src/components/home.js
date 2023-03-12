@@ -10,7 +10,7 @@ function Home() {
     
    
     //Check if User is logged-in
-    const SERVER_URL = "https://jobilee-server.vercel.app"
+    const SERVER_URL = process.env.REACT_APP_SERVER_URL
     const accessToken = localStorage.getItem("token")
     axios.post(SERVER_URL + '/home', {accessToken})
     .then(response => {
