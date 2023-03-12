@@ -13,7 +13,6 @@ function JobList() {
   const [savedJobId, setSavedJobId] = useState(null)
 
   const SERVER_URL = process.env.REACT_APP_SERVER_URL
-
   const accessToken = localStorage.getItem("token")
   const isTokenAvailable = (localStorage.getItem("token") != null)
   if(isTokenAvailable){
