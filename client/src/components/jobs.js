@@ -9,7 +9,6 @@ function JobList() {
   const [login, setLogin] = useState(true)
   const [jobs, setJobs] = useState([]);
 
-
  // const SERVER_URL = "//localhost:3001"
   const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
@@ -22,7 +21,6 @@ function JobList() {
     })
 
   }
-
 
   useEffect(() => {
     // Fetch all jobs from the backend API when the component mounts
