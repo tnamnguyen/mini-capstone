@@ -65,7 +65,7 @@ function Profile() {
     return ( 
         <>
             <NavBar></NavBar>
-            <div class='profile_container1'>
+            <div class='profile_container1' data-testid="profile_container">
                 <div class='profile_pic'>
                     <img src={require('../assets/images/profile.png')} width='140' height='140' alt='profile pic'></img>
                 </div>
