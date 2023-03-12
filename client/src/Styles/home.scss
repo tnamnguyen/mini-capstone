@@ -1,10 +1,52 @@
 //This file contains all the CSS styling of the home page
 @import "./variables/variables.scss";
 
+
+.header {
+    color: $blue_Color;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 500px; 
+}
+
+.header-title {
+    font-size: 85px; 
+    text-align: center;
+}
+
+.content {
+    justify-content: center;
+    align-items: center;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px; 
+}
+
+.rounded-button {
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin-right: 10px;
+}
+  
+.normal-button {
+    background-color: white;
+    color: blue;
+    border: 2px solid blue;
+    border-radius: 20px;
+    padding: 10px 20px;
+}
+  
 #home_profile_pic{
     border-radius: 50%;
 }
-
 
 .home_main_container{
     padding: 10px;

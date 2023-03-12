@@ -6,16 +6,20 @@ import Logout from "./components/logout";
 import Signup from "./components/signup";
 import Home from "./components/home";
 import Profile from "./components/profile";
+import EditProfile from "./components/editProfile.js";
+import JobApplicationForm from "./components/createJob.js";
+import JobList from "./components/jobs.js";
 import SavedJobList from "./components/savedJobs";
-import EditProfile from './components/editProfile.js';
-import JobApplicationForm from './components/createJob.js';
-import JobList from './components/jobs.js';
 import Admin from './components/admin'
 import AdminListUsers from './components/adminListUsers';
 import "bootstrap/dist/css/bootstrap.css";
 import MyJobList from "./components/myJobs";
 import JobEditForm from "./components/editJob";
 import ForgotPassword from "./components/forgotPassword";
+import ResetPassword from "./components/resetPassword";
+import OTP from "./components/OTP"
+
+
 
 ReactDOM.render(
   <React.StrictMode>
@@ -33,6 +37,8 @@ ReactDOM.render(
         <Route path="/myJobs" element={<MyJobList />} />
         <Route path="/editJob" element={<JobEditForm />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
+        <Route path="/reset" element={<ResetPassword />} />
+        <Route path="/OTP" element={<OTP/>} />
         <Route path="/admin" element={<Admin/>}/>
         <Route path="/adminListUsers" element={<AdminListUsers/>}/>
       </Routes>
