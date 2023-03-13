@@ -38,18 +38,36 @@ function AddConnections(){
       }, []);
 
 
-        // console.log(user1) //shows current user logged in
-        console.log(user2)
-        const handleSubmit = async (e) => {
-            e.preventDefault();
-            setUser2(inputValue)
-            try {
-              await axios.post("/addConnections", { user1, user2 });
-              setUser2(inputValue)
-            } catch (error) {
-              console.error(error);
-            }
+       //console.log(user1) //shows current user logged in
+       //console.log(user2)
+        
+        const handleSubmit = async () => {
+                // Do something with the form data, such as send it to a server
+                console.log({ user1, user2 });
+
+                await axios.post(SERVER_URL + '/addConnections', {user1, user2 })
+                .then(response => {
+                    //If backend returns an error
+                    if(response.data.isError == "True"){
+                        
+                    }
+          
+                    //If backend returns success
+                    if(response.data.isError == "False"){
+                        
+          
+                        setTimeout(()=>{
+                            window.location.href = "http://localhost:3000/"
+                        }, 4000)
+                    }
+                    
+                })
+                .catch(error => {
+                   
+                });                
+           
           };
+
 
     return(
         <>
@@ -59,7 +77,7 @@ function AddConnections(){
             <h2 id="createjob_title">Add Connection</h2>
             <br />
             <br />
-            <form >
+            <form onSubmit={handleSubmit}>
                 <label>
                 Username
                 <input
@@ -67,6 +85,17 @@ function AddConnections(){
                     placeholder="Search..."
                     onChange={(event)=> {setInputValue(event.target.value); } }
                 />
+                <label >User:</label>
+                 <input
+                     type="text"
+                     id="user2"
+                     value={user2}
+                     placeholder='Enter the username'
+                    onChange={(e) => setUser2(e.target.value)}
+                />
+                    <button id='addToConnections' className="myButton" type='submit'> 
+                        Add Connection
+                    </button>
                 
                 </label>
 
@@ -82,17 +111,12 @@ function AddConnections(){
                 
             {users.filter((user) => {if (inputValue === ''){
                 return user} 
-                else if(typeof user.name === 'string' && inputValue.toLowerCase().includes(user.name)){
+                else if(typeof user.name === 'string' && inputValue.toLowerCase().includes(user.name.toLowerCase())){
                     return user
                 }})
                 .map(user => (
                 <tr key={user.id}>
                     <td>{user.name}</td>
-                    <td>
-                    <button id='addToConnections' className="myButton" type='submit' onSubmit={() => handleSubmit}> 
-                        Add
-                    </button>
-                    </td>
                 </tr>
 
                 ))} 
