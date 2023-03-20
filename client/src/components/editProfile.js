@@ -51,6 +51,28 @@ function EditProfile() {
     }
 
 
+    // Call to delete profile
+    function deleteProfile(){
+        console.log(`delete button was clicked`)
+        // Call confirm delete function or create confirm button
+    }
+
+    // Confirmed delete, called by an "Are you sure" Dialog button
+    function confirmedDelete(){
+        console.log(`confirmed delete button was clicked`)
+        axios.post(SERVER_URL + '/confirmdelete')
+        .then(response => {
+            // Delete profile
+            // Message of confirmation that the profile has been deleted
+            // Redirecting to home page
+            console.log(`Redirecting user to home page...`);
+            setTimeout(() => {
+                window.location.href = "/"
+            }, 3000)
+        })
+    }
+
+
     //HTML Forms that appear under each field when the "Edit" button is pressed
     const [editProfilePic, setEditProfilePic] = useState(false);
     const [editUserName, setEditUserName] = useState(false);
