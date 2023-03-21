@@ -13,6 +13,7 @@ const SavedJob = require("./savedJobModel.js")
 const nodemailer = require("nodemailer");
 const Profile = require('./profileModel.js')
 const jwt = require('jsonwebtoken')
+const Connection = require("./connectionModel.js")
 
 
 // **************************************** Connecting to Mongoose DB **************************************** //
@@ -1037,7 +1038,153 @@ app.post('/reset', async(req, res) => {
 )
 
 
+// ************************ Print all users names ************************ //
+app.get('/addConnections', async(req, res) => {
+  console.log(`route  for printing connections is running`)
 
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "users"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+
+  // Query all the users
+  try {
+    const users = await (await dbo.collection(collection_name).find().toArray())
+    res.json(users);
+  } catch (error) {
+    console.log("Error when fetching from database");
+    console.log(error);
+      db_client.close();
+  }
+ 
+  
+  
+  });
+
+  // ************************ User Connections ************************ //
+  app.get('/connections', authenticateToken, async(req, res) => {
+    console.log(`route  for showing connections is running`)
+  
+    if(res.isLoggedIn) {
+    // Connecting to the specific database and collection
+    //const name = res.user.name
+    const database_name = "Accounts"
+    const collection_name = "Connections"
+    const db_client =  await MongoClient.connect(url) 
+    const dbo = db_client.db(database_name)
+    //await dbo.collection(collection_name).findOne({user_name: name})  
+    
+    // Query all the users
+    try {
+      const user_connections = await (await dbo.collection(collection_name).find().toArray())
+      res.json(user_connections);
+      console.log('data is sent')
+    } catch (error) {
+      console.log("Error when fetching connections from database");
+      console.log(error);
+        db_client.close();
+    } 
+    }});
+
+    
+// ************************ adding User Connections ************************ //
+app.post('/addConnections',  async (req, res) => {
+  
+  // Extract the usernames of the users from the request body
+  
+  const input_user1 = req.body.user1
+  const input_user2 = req.body.user2
+  const input_status = 'pending'
+  console.log(input_user1)
+  console.log(input_user2)
+  
+  // Create a new connection document
+  var connection = new Connection({
+    user1 : input_user1,
+    user2 : input_user2,
+    status: input_status
+  });
+
+  // Insert the new connection document into the Connections collection
+  const database_name = "Accounts"
+  const collection_name = "Connections"
+  const db_client = await MongoClient.connect(url);
+  const dbo = db_client.db(database_name);
+ 
+
+  dbo.collection(collection_name).insertOne(connection, function(err, res) {
+    if (err) throw err; 
+    console.log("-> 1 New connection succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
+    db_client.close();
+  })
+
+  // Return a response indicating that the connection was created
+  res.json({
+    success: true,
+    message: `Connection created between ${input_user1} and ${input_user2}`
+  });
+});
+
+
+app.put('/connections/:id/accept', async (req, res) => {
+  // Extract the connection ID from the request parameters
+  const connectionId = req.params.id;
+
+  // Find the connection document in the Connections collection
+  const database_name = "Accounts"
+  const collection_name = "Connections"
+  const db_client = await MongoClient.connect(url);
+  const dbo = db_client.db(database_name);
+  const connection = await dbo.collection(collection_name).findOne({ _id: ObjectId(connectionId) });
+
+  // If the connection doesn't exist, return a 404 error
+  if (!connection) {
+    return res.status(404).json({ success: false, message: `Connection with ID ${connectionId} not found` });
+  }
+
+  // If the connection is already accepted, return a 400 error
+  if (connection.status === 'accepted') {
+    return res.status(400).json({ success: false, message: `Connection with ID ${connectionId} is already accepted` });
+  }
+
+  // Update the connection status to 'accepted'
+  await dbo.collection(collection_name).updateOne({ _id: ObjectId(connectionId) }, { $set: { status: 'accepted' } });
+
+  // Return a success response
+  res.json({ success: true, message: `Connection with ID ${connectionId} accepted` });
+});
+
+
+app.put('/connections/:id/reject', async (req, res) => {
+  // Extract the connection ID from the request parameters
+  const connectionId = req.params.id;
+
+  // Find the connection document in the Connections collection
+  const database_name = "Accounts"
+  const collection_name = "Connections"
+  const db_client = await MongoClient.connect(url);
+  const dbo = db_client.db(database_name);
+  const connection = await dbo.collection(collection_name).findOne({ _id: ObjectId(connectionId) });
+
+  // If the connection doesn't exist, return a 404 error
+  if (!connection) {
+    return res.status(404).json({ success: false, message: `Connection with ID ${connectionId} not found` });
+  }
+
+  // If the connection is already accepted, return a 400 error
+  if (connection.status === 'accepted') {
+    return res.status(400).json({ success: false, message: `Connection with ID ${connectionId} is already accepted` });
+  }
+
+  // Update the connection status to 'rejected'
+  await dbo.collection(collection_name).updateOne({ _id: ObjectId(connectionId) }, { $set: { status: 'rejected' } });
+
+  // Return a success response
+  res.json({ success: true, message: `Connection with ID ${connectionId} rejected` });
+});
   
 
 app.listen(port, () => {

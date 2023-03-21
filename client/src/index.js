@@ -17,6 +17,8 @@ import MyJobList from "./components/myJobs";
 import JobEditForm from "./components/editJob";
 import ForgotPassword from "./components/forgotPassword";
 import ResetPassword from "./components/resetPassword";
+import Connections from './components/connections.js';
+import AddConnections from './components/addConnections.js';
 import OTP from "./components/OTP"
 
 
@@ -41,6 +43,8 @@ ReactDOM.render(
         <Route path="/OTP" element={<OTP/>} />
         <Route path="/admin" element={<Admin/>}/>
         <Route path="/adminListUsers" element={<AdminListUsers/>}/>
+        <Route path="/connections" element={<Connections/>}/>
+        <Route path="/addConnections" element={<AddConnections/>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
