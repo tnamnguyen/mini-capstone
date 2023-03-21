@@ -643,42 +643,35 @@ app.post('/submiteditprofile', authenticateToken, async(req, res) => {
 
 // ************************ Confirm Delete Profile ************************ //
 
-app.post('/confirmdelete', async(req, res) => {
+app.post('/confirmdelete', authenticateToken, async(req, res) => {
   console.log(`route for confirmed delete is running`);
 
+  const userid = res.user.id
+
   const database_name = "Accounts"
-  const collection_name = "profile"
+  const collection_name_profile = "profile"
+  const collection_name_savedjobs = "savedjobs"
+  const collection_name_users = "users"
   const db_client =  await MongoClient.connect(url) 
   const dbo = db_client.db(database_name)
 
   // Deleting from profile collection
-  dbo.collection(collection_name).deleteOne({user_id: res.user.id},
-    function(err, result){
-      if (err, result){
-        if(err){
-          console.log(err)
-        }
-      }
-      else{
-        console.log("User Profile was deleted successfully")
-        const collection_name_Users = "users"
-
-        // Deleting from users collection
-        dbo.collection(collection_name_Users).deleteOne({_id: new ObjectId(res.user.id)},
-        function(err, result){
-          if (err){
-            console.log(err)
-          }
-          else{
-            console.log("User login credentials were deleted successfully")
-            res.json({
-              message: "Account deleted successfully"
-            })
-          }
-        })
-      }
+  console.log(`Deleting Profile`)
+  dbo.collection(collection_name_profile).deleteOne({user_id: userid}, (err, result) => {
+    if (err) throw err;
+    console.log(`Profile deleted successfully`);
+    dbo.collection(collection_name_savedjobs).deleteMany({user_id: userid}, (err, result) => {
+      if (err) throw err;
+      console.log(`${result.deletedCount} saved jobs deleted.`);
+      dbo.collection(collection_name_users).deleteOne({user_id: userid}, (err, result) => {
+        if (err) throw err;
+        console.log("User login credentials were deleted successfully")
+        db_client.close();
+        res.json('User deleted successfully')
+      })
     })
-})
+  })
+});
 
 
 
