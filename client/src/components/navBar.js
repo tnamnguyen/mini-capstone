@@ -9,14 +9,11 @@ function NavBar() {
     const [adminElement, setAdminElement] = useState(false)
     const [userName, setUserName] = useState('')
 
-
-    //If User is logged-in -> add his name to navBar & remove login button
-
-    //const SERVER_URL = "//localhost:3001"
-
     const SERVER_URL = process.env.REACT_APP_SERVER_URL
     const accessToken = localStorage.getItem("token")
     const isTokenAvailable = (localStorage.getItem("token") != null)
+
+    //If User is logged-in -> add his name to navBar & remove login button
     if(isTokenAvailable){
         axios.post(SERVER_URL + '/home', {accessToken})
         .then(response => {
