@@ -83,7 +83,8 @@ function JobList() {
   //========== Add specific Buttons if signed in ==========//
   function applyRow() {
     if (!login) {
-      return <th>Apply</th>;
+      return <th>Apply</th>,
+              <th>Save</th>;
     }
   }
 
@@ -156,7 +157,6 @@ function JobList() {
                 <th>Location</th>
                 <th>Description</th>
                 {applyRow()}
-                <th>Save</th>
                 <th>View Job</th>
               </tr>
             </thead>
