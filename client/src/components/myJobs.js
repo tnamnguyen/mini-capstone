@@ -48,8 +48,7 @@ function MyJobList() {
                   <td>{job.location}</td>
                   <td>{job.description}</td>
                   <td>
-                    <Link to="/editJob">
-                      {" "}
+                    <Link to={`/editJob/${job._id}`}>
                       <button>Edit Job</button>
                     </Link>
                   </td>

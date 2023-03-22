@@ -34,7 +34,7 @@ ReactDOM.render(
         <Route path="/jobs" element={<JobList />} />
         <Route path="/savedJobs" element={<SavedJobList />} />
         <Route path="/myJobs" element={<MyJobList />} />
-        <Route path="/editJob" element={<JobEditForm />} />
+        <Route path="/editJob/:jobId" component={JobEditForm} element={<JobEditForm />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/reset" element={<ResetPassword />} />
         <Route path="/OTP" element={<OTP />} />

@@ -700,6 +700,52 @@ app.post('/createJobs', async(req, res) => {
 });
 
 
+// ************************ Edit Job ************************ //
+app.post('/editjob', async(req, res) => {
+  console.log(`route for edit job is running`)
+  console.log(req.body.jobId)
+  console.log(req.body.title)
+  console.log(req.body.experience)
+  console.log(req.body.location)
+  console.log(req.body.description)
+
+  const input_title = req.body.title
+  const input_experience = req.body.experience
+  const input_location = req.body.location
+  const input_description = req.body.description
+
+  const database_name = "Accounts"
+  const collection_name = "Jobs"
+  mongoose.set("strictQuery", false);
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  const job = await dbo.collection(collection_name).findOne({_id: new ObjectId(req.body.jobId)})
+  if (job){
+    job.title = input_title
+    job_experience = input_experience
+    job_location = input_location
+    job_description = input_description
+
+    await dbo.collection(collection_name).updateOne({ _id: new ObjectId(req.body.jobId)}, {$set: job})
+    
+    console.log(`sending response...`);
+    res.json({
+      isError: "False",
+      message: "Successfully edited job!"
+    })
+  }
+  else{
+    console.log(`sending response...`);
+    errorMessage = "An error has occured"
+    res.json({
+      isError: "True",
+      message: errorMessage
+    })
+  }
+
+})
+
 
 
 // ************************ Job Browsing ************************ //
@@ -832,45 +878,6 @@ app.post('/removejob', authenticateToken, async(req, res) => {
   }
   )
 
-})
-
-
-
-// ************************ Saved Job Browsing ************************ //
-app.post('/savedjobs', authenticateToken, async(req, res) => {
-  console.log(`route for saved jobs is running`)
-
-  const database_name = "Accounts"
-  const collection_name = "savedjobs"
-  const db_client =  await MongoClient.connect(url) 
-  const dbo = db_client.db(database_name)
-
-  // Find all job_ids that are associated with the user
-  try {
-    const job_ids = await dbo
-    .collection(collection_name)
-    .find({
-      user_id: res.user.id
-    })
-      .project({job_id: 1, _id: 0}).toArray();  // Remove _id and keep only job_id
-    
-    const collection_name_Jobs = "Jobs"
-
-    // Removing the field names of the array
-    const filtered_jobids = job_ids.map(job_ids => job_ids.job_id)
-
-    // Associating them as ObjectIds
-    const object_ids = filtered_jobids.map(filtered_jobids => new ObjectId(filtered_jobids));
-
-    // Finding all jobs matching ids from array
-    const jobs = await dbo.collection(collection_name_Jobs).find({_id: {$in: object_ids}}).toArray();
-    res.json(jobs)
-
-  } catch(error) {
-    console.log("Error when fetching from database");
-    console.log(error);
-    db_client.close();
-  }
 })
 
 
