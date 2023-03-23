@@ -643,7 +643,7 @@ app.post('/submiteditprofile', authenticateToken, async(req, res) => {
 
 // ************************ Job posting ************************ //
 
-app.post('/createJobs', async(req, res) => {
+app.post('/createJobs', authenticateToken, async(req, res) => {
   console.log(`route for creating job is running`)
   console.log(req.body.title)
   console.log(req.body.experience)
@@ -655,6 +655,7 @@ app.post('/createJobs', async(req, res) => {
   const input_experience = req.body.experience
   const input_location = req.body.location
   const input_description = req.body.description
+  const userId = res.user.id
 
   
   // Connecting to the specific database and collection
@@ -672,6 +673,7 @@ app.post('/createJobs', async(req, res) => {
     experience: input_experience,
     location: input_location,
     description: input_description,
+    user_id: userId
   })
 
   // Adding Job to DB
@@ -771,6 +773,54 @@ app.get('/jobs', async(req, res) => {
   }
  
 });
+
+
+  // ************************ Created Job Browsing ************************ //
+  app.post('/myjobs', authenticateToken, async(req, res) => {
+    console.log(`route for my created jobs is running`);
+
+        // Connecting to the specific database and collection
+        const database_name = "Accounts"
+        const collection_name = "Jobs"
+        const db_client = await MongoClient.connect(url)
+        const dbo = db_client.db(database_name)
+
+        userId = res.user.id
+        try {
+          const jobs = await (await dbo.collection(collection_name).find({ user_id: userId}).toArray())
+          res.json(jobs);
+        }
+        catch (error) {
+          console.log("Error when fetching from database");
+          console.log(error);
+          db_client.close();
+        }
+
+  })
+
+  // ************************ Deleting Created Job ************************ //
+  app.post('/deletejob', async(req, res) => {
+    console.log(`delete job route is running`);
+    console.log(req.body.job_id);
+      // Connecting to the specific database and collection
+    const database_name = "Accounts"
+    const collection_name = "Jobs"
+    const db_client =  await MongoClient.connect(url) 
+    const dbo = db_client.db(database_name)
+
+    dbo.collection(collection_name).deleteOne({_id: new ObjectId(req.body.job_id)},
+    function(err, result) {
+      if(err){
+        console.log(err);
+      }
+      else {
+        console.log(`Job was deleted successfully`);
+        res.json({
+          message: "Job deleted successfully"
+        })
+      }
+    })
+  })
 
 
   // ************************ Saving Job to Saved Job List ************************ //

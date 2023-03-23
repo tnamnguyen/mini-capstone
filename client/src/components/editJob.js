@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import NavBar from "./navBar";
 import "../Styles/create-job.scss";
+import "../Styles/editJob.scss";
 
 function JobEditForm() {
   const [title, setTitle] = useState("");
@@ -102,7 +103,7 @@ function JobEditForm() {
 
             <button type="submit">Submit</button>
             <div className='editErr'>{editErr}</div>
-            <div classname='editSuccess'>{editSuccess}</div>
+            <div className='editSuccess'>{editSuccess}</div>
           </form>
         </div>
       </div>
