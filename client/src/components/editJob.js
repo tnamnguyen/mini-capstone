@@ -15,6 +15,9 @@ function JobEditForm() {
 
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
+  const accessToken = localStorage.getItem("token")
+
+  // Getting the parameter from my jobs page
   const { jobId } = useParams();
   console.log(jobId);
   const handleSubmit = async (event) => {
@@ -29,12 +32,16 @@ function JobEditForm() {
         experience,
         location,
         description,
+        accessToken
       })
       .then((response) => {
         //If backend returns an error
         if (response.data.isError == "True") {
           setEditErr(response.data.message)
           setEditSuccess('')
+          setTimeout(() => {
+            window.location.href = "/myJobs";
+          }, 3000)
         }
 
         //If backend returns success

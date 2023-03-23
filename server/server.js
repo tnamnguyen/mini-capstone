@@ -703,7 +703,7 @@ app.post('/createJobs', authenticateToken, async(req, res) => {
 
 
 // ************************ Edit Job ************************ //
-app.post('/editjob', async(req, res) => {
+app.post('/editjob', authenticateToken, async(req, res) => {
   console.log(`route for edit job is running`)
   console.log(req.body.jobId)
   console.log(req.body.title)
@@ -716,21 +716,37 @@ app.post('/editjob', async(req, res) => {
   const input_location = req.body.location
   const input_description = req.body.description
 
+  // Loading up the correct database
   const database_name = "Accounts"
   const collection_name = "Jobs"
   mongoose.set("strictQuery", false);
   const db_client =  await MongoClient.connect(url) 
   const dbo = db_client.db(database_name)
 
+  // Find the job in the database using the id that was provided from the client side
   const job = await dbo.collection(collection_name).findOne({_id: new ObjectId(req.body.jobId)})
   if (job){
+
+    // Verify if the user editing the job is the owner of the job
+    if(res.user.id != job.user_id){
+      console.log(`incorrect user. Sending response...`);
+      res.json({
+        isError: "True",
+        message: "You do not have permission to edit this job."
+      })
+      return
+    }
+
     job.title = input_title
     job.experience = input_experience
     job.location = input_location
     job.description = input_description
 
+    // Update the job document with the new inputs
     await dbo.collection(collection_name).updateOne({ _id: new ObjectId(req.body.jobId)}, {$set: job})
     
+
+    // Sending a response back to the client side
     console.log(`sending response...`);
     res.json({
       isError: "False",
@@ -808,6 +824,7 @@ app.get('/jobs', async(req, res) => {
     const db_client =  await MongoClient.connect(url) 
     const dbo = db_client.db(database_name)
 
+    // Delete the job that was clicked from the database
     dbo.collection(collection_name).deleteOne({_id: new ObjectId(req.body.job_id)},
     function(err, result) {
       if(err){
