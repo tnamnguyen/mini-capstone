@@ -26,6 +26,8 @@ function Profile() {
     const accessToken = localStorage.getItem("token")                
 
     const isTokenAvailable = (accessToken != null)
+
+    // get response for user profile
     useEffect(() => {
         if (isTokenAvailable){
             axios.post(SERVER_URL + '/profile', {accessToken})

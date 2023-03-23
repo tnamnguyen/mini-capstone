@@ -364,95 +364,6 @@ app.post('/signup', async(req, res) => {
 
 
 
-// ************************ Job posting ************************ //
-
-app.post('/createJobs', async(req, res) => {
-  console.log(`route for creating job is running`)
-  console.log(req.body.title)
-  console.log(req.body.experience)
-  console.log(req.body.location)
-  console.log(req.body.description)
-
-  // Storing the username, password, and email from the request body
-  const input_title = req.body.title
-  const input_experience = req.body.experience
-  const input_location = req.body.location
-  const input_description = req.body.description
-
-  
-  // Connecting to the specific database and collection
-  const database_name = "Accounts"
-  const collection_name = "Jobs"
-  mongoose.set("strictQuery", false);
-  const db_client =  await MongoClient.connect(url) 
-  const dbo = db_client.db(database_name)
-
-
-
-  // New user that will be added to database
-  var newJob = new Job({
-    title: input_title,
-    experience: input_experience,
-    location: input_location,
-    description: input_description,
-  })
-
-  // Adding Job to DB
-  dbo.collection(collection_name).insertOne(newJob, function(err, result) {
-    if (err){
-      errorMessage = "An error has occured"
-      console.log(errorMessage)
-      console.log(err);
-      res.json({
-        isError: "True",
-        message: errorMessage
-      })
-    }
-    else{
-      var successMessage = "Job created successfully!"
-      console.log(successMessage)
-      res.json({
-        isError: "False",
-        message: successMessage
-      })
-    } 
-    console.log("-> 1 New Job succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
-    db_client.close();
-
-  })
-});
-
-
-
-
-// ************************ Job Browsing ************************ //
-app.get('/jobs', async(req, res) => {
-  console.log(`route  for job list is running`)
-
-
-  // Connecting to the specific database and collection
-  const database_name = "Accounts"
-  const collection_name = "Jobs"
-  const db_client =  await MongoClient.connect(url) 
-  const dbo = db_client.db(database_name)
-
-
-  // Query all the jobs
-  try {
-    const jobs = await (await dbo.collection(collection_name).find().toArray())
-    res.json(jobs);
-  } catch (error) {
-    console.log("Error when fetching from database");
-    console.log(error);
-      db_client.close();
-  }
- 
-});
-
-
-
-
-
 
 // ************************ Admin ************************ //
 app.get('/admin', async(req, res) => {
@@ -578,7 +489,8 @@ app.post('/profile', authenticateToken, async(req, res) => {
           languages: 'English',
           bio: ''
         })
-  
+        
+        // Create a template profile for users without a profile
         dbo.collection(collection_name).insertOne(newProfile, function(err, res) {
           if(err) throw err;
           console.log("-> Profile template created for the new user on " + database_name +" database inside the " + collection_name + "collection!");
@@ -617,6 +529,7 @@ app.post('/editprofile', authenticateToken, async(req, res) =>{
     const db_client = await MongoClient.connect(url)
     const dbo=db_client.db(database_name)
 
+    // Find user profile
     await dbo.collection(collection_name).findOne( {user_id: id})
     .then(result => {
       if(!result){
@@ -641,41 +554,178 @@ app.post('/editprofile', authenticateToken, async(req, res) =>{
       console.log("Error:" + err)
     })
   }
+});
 
+// ************************ Edit Profile Submit Changes ************************ //
+app.post('/submiteditprofile', authenticateToken, async(req, res) => {
+  console.log(`route submitting profile changes is running`)
+  const id = res.user.id
+  const token_email = res.user.email
+  const token_pw = res.user.pw
+  
+  // Associate the info from the edit page
+  const input_userName = req.body.userName
+  const input_education = req.body.education
+  const input_pastJob = req.body.pastJob
+  const input_currentJob = req.body.currentJob
+  const input_languages = req.body.languages
+  const input_bio = req.body.bio
 
-  app.post('/savejob', authenticateToken, async(req, res) => {
-    console.log (`route for saving job is running`)
+  // Loading database
+  const database_name = "Accounts"
+  const collection_name = "profile"
+  const collection_users = "users"
+  mongoose.set("strictQuery", false);
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
 
-    // Connecting to the specific database and collection
-    const database_name = "Accounts"
-    const collection_name = "savedjobs"
-    const db_client = await MongoClient.connect(url)
-    const dbo = db_client.db(database_name)
-
-    // New saved job that will be added to the database
-    var newSavedJob = new SavedJob({
-      user_id: res.user.id,
-      job_id: req.body.job_id
-    })
-    dbo.collection(collection_name).findOne({user_id: res.user.id, job_id: req.body.job_id},
-      function(err, result){
-      // If entry exists in database
-      if (result != null) {
-        console.log('Job Exists')
-      }
-      // Else, inserting new saved job
-      else{
-        dbo.collection(collection_name).insertOne(newSavedJob, function(err, res) {
-          if(err) throw err;
-          console.log("-> 1 new Job was saved for user on " + database_name + " database inside the " + collection_name + " collection!")
-          db.client.close();
+  // Find a profile corresponding to user_id
+  const userProfile = await dbo.collection(collection_name).findOne({user_id: id})
+  if (userProfile){
+    userProfile.education = input_education
+    userProfile.pastJob = input_pastJob
+    userProfile.currentJob = input_currentJob
+    userProfile.languages = input_languages
+    userProfile.bio = input_bio
+  
+    // Update userProfile
+    await dbo.collection(collection_name).updateOne({ user_id: id }, { $set: userProfile });
+    
+    // Find from users collection matching id to modify the userName
+    const user = await dbo.collection(collection_users).findOne({_id: new ObjectId(id)})
+      // If user is not found
+      if(!user){
+        anyError = true
+        errorMessage = "An error has occured"
+        console.log("invalid id")
+        res.json({
+          isError: "True",
+          message: errorMessage
         })
-    }
-      })
+      }
+      // Modify userName
+      else{
+        user.name = input_userName
+        await dbo.collection(collection_users).updateOne({ _id: new ObjectId(id) }, { $set: user });
+      
+        const user_info = {
+          id: id,
+          name: input_userName,
+          email: token_email,
+          password: token_pw
+        }
 
+        const newToken = jwt.sign(user_info, "jwtsecret", {
+          expiresIn: 300000
+        })
+        
+        console.log("sending response...")
+        res.json({
+          isError: "False",
+          message: "Successfully edited profile!",
+          token: newToken,
+        })
+      }
+    console.log("Profile Saved")
+  }
+  else {  
+    console.log("User Profile not found")
+    anyError = true
+    errorMessage = "An error has occured"
+    console.log("sending error response...");
+    res.json({
+      isError: "True",
+      message: errorMessage
+    })
+  }
+});
+
+
+// ************************ Job posting ************************ //
+
+app.post('/createJobs', async(req, res) => {
+  console.log(`route for creating job is running`)
+  console.log(req.body.title)
+  console.log(req.body.experience)
+  console.log(req.body.location)
+  console.log(req.body.description)
+
+  // Storing the username, password, and email from the request body
+  const input_title = req.body.title
+  const input_experience = req.body.experience
+  const input_location = req.body.location
+  const input_description = req.body.description
+
+  
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "Jobs"
+  mongoose.set("strictQuery", false);
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+
+
+  // New user that will be added to database
+  var newJob = new Job({
+    title: input_title,
+    experience: input_experience,
+    location: input_location,
+    description: input_description,
   })
 
+  // Adding Job to DB
+  dbo.collection(collection_name).insertOne(newJob, function(err, result) {
+    if (err){
+      errorMessage = "An error has occured"
+      console.log(errorMessage)
+      console.log(err);
+      res.json({
+        isError: "True",
+        message: errorMessage
+      })
+    }
+    else{
+      var successMessage = "Job created successfully!"
+      console.log(successMessage)
+      res.json({
+        isError: "False",
+        message: successMessage
+      })
+    } 
+    console.log("-> 1 New Job succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
+    db_client.close();
+
+  })
 });
+
+
+
+
+// ************************ Job Browsing ************************ //
+app.get('/jobs', async(req, res) => {
+  console.log(`route  for job list is running`)
+
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "Jobs"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+
+  // Query all the jobs
+  try {
+    const jobs = await (await dbo.collection(collection_name).find().toArray())
+    res.json(jobs);
+  } catch (error) {
+    console.log("Error when fetching from database");
+    console.log(error);
+      db_client.close();
+  }
+ 
+});
+
 
   // ************************ Saving Job to Saved Job List ************************ //
   app.post('/savejob', authenticateToken, async(req, res) => {
@@ -761,9 +811,6 @@ app.post('/savedjobs', authenticateToken, async(req, res) => {
 app.post('/removejob', authenticateToken, async(req, res) => {
   console.log(`remove job route is running`)
 
-  userId = res.user.id
-  jobId = req.body.job_id
-
   // Connecting to the specific database and collection
   const database_name = "Accounts"
   const collection_name = "savedjobs"
@@ -771,7 +818,7 @@ app.post('/removejob', authenticateToken, async(req, res) => {
   const dbo = db_client.db(database_name)
 
   // Delete document containing user id and job id
-  dbo.collection(collection_name).deleteOne({user_id: userId, job_id: jobId},
+  dbo.collection(collection_name).deleteOne({user_id: res.user.id, job_id: req.body.job_id},
   function(err, result){
     if(err){
       console.log(err)
@@ -787,82 +834,6 @@ app.post('/removejob', authenticateToken, async(req, res) => {
 
 })
 
-// Submit Changes
-app.post('/submiteditprofile', authenticateToken, async(req, res) => {
-  console.log(`route submitting profile changes is running`)
-  const id = res.user.id
-  const token_email = res.user.email
-  const token_pw = res.user.pw
-  
-  // Associate the info from the edit page
-  const input_userName = req.body.userName
-  const input_education = req.body.education
-  const input_pastJob = req.body.pastJob
-  const input_currentJob = req.body.currentJob
-  const input_languages = req.body.languages
-  const input_bio = req.body.bio
-
-  // Loading database
-  const database_name = "Accounts"
-  const collection_name = "profile"
-  const collection_users = "users"
-  mongoose.set("strictQuery", false);
-  const db_client = await MongoClient.connect(url)
-  const dbo = db_client.db(database_name)
-
-  // Find a profile corresponding to user_id
-  const userProfile = await dbo.collection(collection_name).findOne({user_id: id})
-  if (userProfile){
-    userProfile.education = input_education
-    userProfile.pastJob = input_pastJob
-    userProfile.currentJob = input_currentJob
-    userProfile.languages = input_languages
-    userProfile.bio = input_bio
-  
-    // Update userProfile
-    await dbo.collection(collection_name).updateOne({ user_id: id }, { $set: userProfile });
-    
-    // Find from users collection matching id to modify the userName
-    const user = await dbo.collection(collection_users).findOne({_id: new ObjectId(id)})
-      // If user is not found
-      if(!user){
-        anyError = true
-        errorMessage = "An error has occured"
-        console.log("invalid id")
-        res.json({
-          isError: "True",
-          message: errorMessage
-        })
-      }
-      // Modify userName
-      else{
-        user.name = input_userName
-        await dbo.collection(collection_users).updateOne({ _id: new ObjectId(id) }, { $set: user });
-      
-        const user_info = {
-          id: id,
-          name: input_userName,
-          email: token_email,
-          password: token_pw
-        }
-
-        const newToken = jwt.sign(user_info, "jwtsecret", {
-          expiresIn: 300000
-        })
-        
-        console.log("sending response...")
-        res.json({
-          isError: "False",
-          message: "Successfully edited profile!",
-          token: newToken,
-        })
-      }
-    console.log("Profile Saved")
-  }
-  else {  
-    console.log("User Profile not found")
-    anyError = true
-    errorMessage = "An error has occured"
 
 
 // ************************ Saved Job Browsing ************************ //
@@ -881,7 +852,7 @@ app.post('/savedjobs', authenticateToken, async(req, res) => {
     .find({
       user_id: res.user.id
     })
-      .project({job_id: 1, _id: 0}).toArray();
+      .project({job_id: 1, _id: 0}).toArray();  // Remove _id and keep only job_id
     
     const collection_name_Jobs = "Jobs"
 
@@ -900,13 +871,7 @@ app.post('/savedjobs', authenticateToken, async(req, res) => {
     console.log(error);
     db_client.close();
   }
-  // console.log(jobs)
 })
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
-
 
 
 
@@ -914,7 +879,7 @@ app.listen(port, () => {
 
 
 // Sending the email
-app.post("/send_recovery_email", (req, res) => { //small change added here to allow CORS
+app.post("/send_recovery_email", (req, res) => {
   console.log (`route for forgot password is running`)
   sendEmail(req.body)
     .then((response) => res.send(response.message))
@@ -992,10 +957,6 @@ app.post('/reset', async(req, res) => {
   const input_email = req.body.email
   const input_password = req.body.password
   const input_confirm_password = req.body.passwordConfirm
-  //console.log(input_email);
-  //console.log(input_password);
-  //console.log(input_confirm_password);
-  
 
   //Connecting to the specific database and collection
   const database_name = "Accounts"
@@ -1076,13 +1037,8 @@ app.post('/reset', async(req, res) => {
 )
 
 
-    console.log("sending error response...");
-    res.json({
-      isError: "True",
-      message: errorMessage
-    })
-  }
-});
+
+  
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

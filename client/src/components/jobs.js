@@ -127,6 +127,19 @@ function JobList() {
     }
   }
 
+  function addViewButton() {
+    if (!login) {
+      return (
+        <td>
+          <Link to="/viewJob">
+            <button>View Details</button>
+          </Link>
+        </td>
+      );
+    }
+  }
+  var passingObj;
+  const [data] = React.useState(passingObj);
   return (
     <div data-testid="jobs-1">
       <NavBar></NavBar>
@@ -144,6 +157,7 @@ function JobList() {
                 <th>Description</th>
                 {applyRow()}
                 <th>Save</th>
+                <th>View Job</th>
               </tr>
             </thead>
             <tbody>
@@ -155,6 +169,17 @@ function JobList() {
                   <td>{job.description}</td>
                   {applyButton()}
                   {addSave(job._id)}
+
+                  <td>
+                    <Link
+                      to="/viewJob"
+                      state={{
+                        data: data,
+                      }}
+                    >
+                      <button>View Details</button>
+                    </Link>
+                  </td>
                 </tr>
               ))}
             </tbody>

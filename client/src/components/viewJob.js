@@ -15,11 +15,8 @@ function ViewJob(props) {
       <NavBar></NavBar>
       <div className="viewJob_container1">
         <h1>{data ? data.passTitle : "Go to Home"}</h1>
-        <h2>Education Requirements: {data ? data.passEduc : "Oops"}</h2>{" "}
         <h2>Experience Requirements: {data ? data.passExp : "Oops"}</h2>
-        <h3>Tools Needed/Used: {data ? data.passTools : "Oops"}</h3>{" "}
         <h3>Location of Job Site: {data ? data.passPlace : "Oops"}</h3>
-        <h3>Languages Required: {data ? data.passLang : "Oops"}</h3>
       </div>
       <div className="extra">
         <h1>Description:</h1>

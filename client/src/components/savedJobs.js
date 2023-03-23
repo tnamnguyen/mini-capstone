@@ -33,7 +33,7 @@ function SavedJobList() {
       .catch((error) => {
         console.error("Error fetching jobs:", error);
       });
-  }, [buttonClicked]);
+  }, [buttonClicked]);    // Refresh the table when the buttonClicked state changes
 
   // Call to remove saved job
   function removeJob(job_id){
