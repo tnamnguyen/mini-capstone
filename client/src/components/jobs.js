@@ -138,8 +138,7 @@ function JobList() {
       );
     }
   }
-  var passingObj;
-  const [data] = React.useState(passingObj);
+
   return (
     <div data-testid="jobs-1">
       <NavBar></NavBar>
@@ -174,7 +173,7 @@ function JobList() {
                     <Link
                       to="/viewJob"
                       state={{
-                        data: data,
+                        data: job,
                       }}
                     >
                       <button>View Details</button>
