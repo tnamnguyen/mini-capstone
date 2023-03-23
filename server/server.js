@@ -723,9 +723,9 @@ app.post('/editjob', async(req, res) => {
   const job = await dbo.collection(collection_name).findOne({_id: new ObjectId(req.body.jobId)})
   if (job){
     job.title = input_title
-    job_experience = input_experience
-    job_location = input_location
-    job_description = input_description
+    job.experience = input_experience
+    job.location = input_location
+    job.description = input_description
 
     await dbo.collection(collection_name).updateOne({ _id: new ObjectId(req.body.jobId)}, {$set: job})
     
