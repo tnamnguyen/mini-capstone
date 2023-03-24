@@ -178,8 +178,7 @@ function addSave(job_id) {
       );
     }
   }
-  var passingObj;
-  const [data] = React.useState(passingObj);
+
   return (
     <div data-testid="jobs-1">
       <NavBar></NavBar>
@@ -214,7 +213,7 @@ function addSave(job_id) {
                     <Link
                       to="/viewJob"
                       state={{
-                        data: data,
+                        data: job,
                       }}
                     >
                       <button>View Details</button>
