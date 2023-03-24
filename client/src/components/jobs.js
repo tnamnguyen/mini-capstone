@@ -10,7 +10,9 @@ function JobList() {
   const [login, setLogin] = useState(true);
   const [jobs, setJobs] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState("");
+  const [applySuccess, setApplySuccess] = useState("");
   const [savedJobId, setSavedJobId] = useState(null);
+  const [appliedJobId, setAppliedJobId] = useState(null);
 
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const accessToken = localStorage.getItem("token");
@@ -50,19 +52,57 @@ function JobList() {
       });
   }
 
+
+  // Call to apply to the job
+  function applyJob(job_id) {
+    clearTimer();
+    console.log("apply button was clicked");
+    axios
+      .post(SERVER_URL + "/applyJob", { job_id, accessToken })
+      .then((response) => {
+        setAppliedJobId(job_id);
+        setApplySuccess(response.data.message);
+        const timer = setTimeout(() => {
+          setApplySuccess("");
+          setAppliedJobId(null);
+        }, 5000);
+        timerRef.current = timer;
+      });
+  }
+
   // Add the save button if the user is logged in
-  function addSave(job_id) {
+function addSave(job_id) {
+  if (!login) {
+    return (
+      <td>
+        <button
+          onClick={() => saveJob(job_id)}
+          className="jobs_saveJob_button"
+        >
+          Save Job
+        </button>
+        {savedJobId === job_id && (
+          <div className="success-message popup">{saveSuccess}</div>
+        )}
+      </td>
+    );
+  }
+}
+
+
+  // Add the apply button if the user is logged in
+  function addApply(job_id) {
     if (!login) {
       return (
         <td>
           <button
-            onClick={() => saveJob(job_id)}
+            onClick={() => applyJob(job_id)}
             className="jobs_saveJob_button"
           >
-            Save Job
+            Apply
           </button>
-          {savedJobId === job_id && (
-            <div className="success-message popup">{saveSuccess}</div>
+          {appliedJobId === job_id && (
+            <div className="success-message popup">{applySuccess}</div>
           )}
         </td>
       );
@@ -87,16 +127,6 @@ function JobList() {
     }
   }
 
-  function applyButton() {
-    if (!login) {
-      return (
-        <td>
-          <button>Apply</button>
-        </td>
-      );
-    }
-  }
-
   function addCreateJobButton() {
     if (!login) {
       return (
@@ -112,6 +142,16 @@ function JobList() {
       return (
         <Link to="/savedJobs" className="myButton">
           View Saved Jobs
+        </Link>
+      );
+    }
+  }
+
+  function addAppliedJobButton() {
+    if (!login) {
+      return (
+        <Link to="/appliedJobs" className="myButton">
+          View my applications
         </Link>
       );
     }
@@ -167,7 +207,7 @@ function JobList() {
                   <td>{job.experience}</td>
                   <td>{job.location}</td>
                   <td>{job.description}</td>
-                  {applyButton()}
+                  {addApply(job._id)}
                   {addSave(job._id)}
 
                   <td>
@@ -187,6 +227,7 @@ function JobList() {
         </div>
         {addCreateJobButton()}
         {addSavedJobButton()}
+        {addAppliedJobButton()}
         {addCreatedJobButton()}
       </div>
     </div>
