@@ -127,18 +127,6 @@ function JobList() {
     }
   }
 
-  function addViewButton() {
-    if (!login) {
-      return (
-        <td>
-          <Link to="/viewJob">
-            <button>View Details</button>
-          </Link>
-        </td>
-      );
-    }
-  }
-
   return (
     <div data-testid="jobs-1">
       <NavBar></NavBar>
