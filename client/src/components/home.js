@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from './navBar';
 import axios from "axios";
 import '../Styles/home.scss';
+import { Button } from 'reactstrap';
 import {Link} from "react-router-dom";
 
 function Home() {
@@ -48,26 +49,28 @@ function Home() {
                             <div class='profile_pic'>
                                 <img src={require('../assets/images/profile.png')} width='140' height='140' alt='profile pic' id='home_profile_pic'></img>
                             </div>
-                            <div>{userName}</div><br></br>
-                            <text>Bio</text><br></br>
-                            <text>Who viewed your profile: 34</text><br></br>
-                            <text>Total Connections: 12</text><br></br>
+                            <div><text>{userName}</text></div>
+                            <Button color="primary">Profile </Button>
                             </div>
                         </div>
-                        <div class='home_posts'>
-                            <div>
-                                <text>User Likes this</text><br></br>
-                                <text>User got a new job</text><br></br>
-                                <text>User update</text><br></br>
-                            </div>
+                    <div className='home_posts'>
+                        <div class="row">
+                        <span class="column">
+                            <Button color="primary">Connections</Button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div><br></br></div>
+                            <div><Button color="primary">Saved Jobs</Button>&nbsp;</div>
+                            <div><br></br></div>
+                            <span><Button color="primary">Messaging</Button></span>
+                        </span>
+                        <span class="column">
+                            <div><Button color="primary">Invites</Button></div>
+                            <div><br></br></div>
+                            <div><Button color="primary" href="/jobs">Your Jobs</Button></div>
+                            <div><br></br></div>
+                            <div><Button color="primary">Applied Jobs</Button></div>
+                        </span>
                         </div>
-                        <div class='home_news'>
-                            <div>
-                                <text>Jubilee News #1</text><br></br>
-                                <text>Jubilee News #2</text><br></br>
-                                <text>Jubilee News #3</text><br></br>
-                            </div>
-                        </div>
+                    </div>
                 </div>
             )
         }

@@ -49,22 +49,23 @@
 }
 
 .home_main_container{
-    padding: 10px;
+    background-color: white;
+    padding: 30px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    
+
     justify-content:space-between;
-    gap:80px;
+    gap:0px;
 }
 
 .home_main_profile{
     background-color: $grey_Color;
     text-align: center;
-    padding: 30px;
+    padding: 50px;
     border-style: solid;
     border-width: 3px;
-    border-radius: 30%;
+    border-radius: 25px 0% 0% 25px;
     border-color: $grey_Color;
     order: 1;
     flex-grow: 3;
@@ -72,11 +73,11 @@
   
 .home_posts{
 background-color: $grey_Color;
-text-align: center;
-padding: 30px;
+text-align: left;
+padding-top: 60px;
+padding-left: 0px;
 border-style: solid;
 border-width: 3px;
-border-radius: 30%;
 border-color: $grey_Color;
 order: 2;
 flex-grow: 3;
@@ -88,7 +89,7 @@ text-align: center;
 padding: 30px;
 border-style: solid;
 border-width: 3px;
-border-radius: 30%;
+border-radius: 0% 25px 25px 0%;
 border-color: $grey_Color;
 order: 3;
 flex-grow: 3;
