@@ -7,8 +7,10 @@ import NavBar from "./navBar";
 import "../Styles/sign-up.scss";
 
 function AppliedJobList() {
+  const [render, setRender] = useState(false)
   const [login, setLogin] = useState(true)
   const [jobs, setJobs] = useState([]);
+  const [applications, setApplications] = useState([]);
   const [removedJobId, setRemovedJobId] = useState(null);
   const [removeSuccess, setRemoveSuccess] = useState('')
 
@@ -31,7 +33,9 @@ function AppliedJobList() {
     axios
       .post(SERVER_URL + "/appliedjobs", {accessToken})
       .then((response) => {
-        setJobs(response.data);
+        setJobs(response.data.jobs);
+        setApplications(response.data.applications)
+        setRender(true);
       })
       .catch((error) => {
         console.error("Error fetching jobs:", error);
@@ -39,17 +43,20 @@ function AppliedJobList() {
   }, [buttonClicked]);    // Refresh the table when the buttonClicked state changes
 
   // Call to remove saved job
-  function removeJob(job_id){
+  async function removeJob(job_id){
+    clearTimer();
     console.log('remove button was clicked')
-    axios.post(SERVER_URL + '/removejobApplication', {job_id, accessToken})
+    await axios.post(SERVER_URL + '/removejobApplication', {job_id, accessToken})
     .then(response => {
       setRemoveSuccess(response.data.message)
       setRemovedJobId(job_id);
-      console.log(removedJobId);
+      //await new Promise(resolve => setTimeout(resolve, 5000));
       const timer = setTimeout(() => {
         setRemoveSuccess("");
         setRemovedJobId(null);
-      }, 5000);
+        setRender(true);
+      }, 3000);
+     
      
       timerRef.current = timer;
       
@@ -86,7 +93,10 @@ function AppliedJobList() {
         timerRef.current = null;
       }
     }
-
+  
+  //Only Render page when all variables are loaded to avoid errors!
+  if(render)
+  {
   return (
     <div data-testid="jobs-1">
       <NavBar></NavBar>
@@ -102,6 +112,7 @@ function AppliedJobList() {
                 <th>Experience</th>
                 <th>Location</th>
                 <th>Description</th>
+                <th>Application Status</th>
                 <th>Remove Button</th>
               </tr>
             </thead>
@@ -112,9 +123,8 @@ function AppliedJobList() {
                   <td>{job.experience}</td>
                   <td>{job.location}</td>
                   <td>{job.description}</td>
-                  <td>
-                    {removeButton(job._id)}
-                  </td>
+                  <td>{applications.find(({job_id}) => job_id === job._id).status}</td>
+                  <td>{removeButton(job._id)}</td>
                 </tr>
               ))}
             </tbody>
@@ -125,7 +135,7 @@ function AppliedJobList() {
         </Link>
       </div>
     </div>
-  );
+  );}
 }
 
 export default AppliedJobList;

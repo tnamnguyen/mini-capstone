@@ -893,7 +893,8 @@ app.post('/applyJob', authenticateToken, async(req, res) => {
   // New applied job that will be added to the database
   var newAppliedJob = new ApplyJob({
     user_id: res.user.id,
-    job_id: req.body.job_id
+    job_id: req.body.job_id,
+    status: "pending"
   })
   dbo.collection(collection_name).findOne({user_id: res.user.id, job_id: req.body.job_id},
     function(err, result){
@@ -950,7 +951,9 @@ app.post('/appliedjobs', authenticateToken, async(req, res) => {
 
     // Finding all jobs matching ids from array
     const jobs = await dbo.collection(collection_name_Jobs).find({_id: {$in: object_ids}}).toArray();
-    res.json(jobs)
+    const applications = await dbo.collection("applyJob").find({user_id: res.user.id}).toArray();
+    
+    res.json({jobs, applications})
 
   } catch(error) {
     console.log("Error when fetching from database");

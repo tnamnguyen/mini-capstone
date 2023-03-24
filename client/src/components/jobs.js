@@ -35,6 +35,10 @@ function JobList() {
       });
   }, []);
 
+
+
+  // ---------------------------------- API Calls ---------------------------------- //
+
   // Call to save the job to database
   function saveJob(job_id) {
     clearTimer();
@@ -47,7 +51,7 @@ function JobList() {
         const timer = setTimeout(() => {
           setSaveSuccess("");
           setSavedJobId(null);
-        }, 5000);
+        }, 3000);
         timerRef.current = timer;
       });
   }
@@ -65,32 +69,24 @@ function JobList() {
         const timer = setTimeout(() => {
           setApplySuccess("");
           setAppliedJobId(null);
-        }, 5000);
+        }, 3000);
         timerRef.current = timer;
       });
   }
 
-  // Add the save button if the user is logged in
-function addSave(job_id) {
-  if (!login) {
-    return (
-      <td>
-        <button
-          onClick={() => saveJob(job_id)}
-          className="jobs_saveJob_button"
-        >
-          Save Job
-        </button>
-        {savedJobId === job_id && (
-          <div className="success-message popup">{saveSuccess}</div>
-        )}
-      </td>
-    );
+
+
+
+  // ---------------------------------- Row Buttons ---------------------------------- //
+
+  //All Row buttons
+  function applyRow() {
+    if (!login) {
+      return <th>Apply</th>;
+    }
   }
-}
 
-
-  // Add the apply button if the user is logged in
+  //Job Application Button
   function addApply(job_id) {
     if (!login) {
       return (
@@ -109,64 +105,27 @@ function addSave(job_id) {
     }
   }
 
-  // Hold a reference to the timer
-  const timerRef = useRef(null);
 
-  // Reset the timer when the button is pressed
-  function clearTimer() {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-  }
-
-  //========== Add specific Buttons if signed in ==========//
-  function applyRow() {
-    if (!login) {
-      return <th>Apply</th>;
-    }
-  }
-
-  function addCreateJobButton() {
+  //Save Job Button
+  function addSave(job_id) {
     if (!login) {
       return (
-        <Link to="/createJobs" className="myButton">
-          Create A new Job
-        </Link>
+        <td>
+          <button
+            onClick={() => saveJob(job_id)}
+            className="jobs_saveJob_button"
+          >
+            Save Job
+          </button>
+          {savedJobId === job_id && (
+            <div className="success-message popup">{saveSuccess}</div>
+          )}
+        </td>
       );
     }
   }
 
-  function addSavedJobButton() {
-    if (!login) {
-      return (
-        <Link to="/savedJobs" className="myButton">
-          View Saved Jobs
-        </Link>
-      );
-    }
-  }
-
-  function addAppliedJobButton() {
-    if (!login) {
-      return (
-        <Link to="/appliedJobs" className="myButton">
-          View my applications
-        </Link>
-      );
-    }
-  }
-
-  function addCreatedJobButton() {
-    if (!login) {
-      return (
-        <Link to="/myJobs" className="myButton">
-          View Created Jobs
-        </Link>
-      );
-    }
-  }
-
+  //View details Button
   function addViewButton() {
     if (!login) {
       return (
@@ -178,6 +137,68 @@ function addSave(job_id) {
       );
     }
   }
+
+
+  // ---------------------------------- Timer ---------------------------------- //
+
+  // Hold a reference to the timer
+  const timerRef = useRef(null);
+
+  // Reset the timer when the button is pressed
+  function clearTimer() {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  }
+
+  // ---------------------------------- Big Blue Buttons at the bottom ---------------------------------- //
+  
+  //Create new job button
+  function addCreateJobButton() {
+    if (!login) {
+      return (
+        <Link to="/createJobs" className="myButton">
+          Create A new Job
+        </Link>
+      );
+    }
+  }
+
+  //View saved jobs button
+  function addSavedJobButton() {
+    if (!login) {
+      return (
+        <Link to="/savedJobs" className="myButton">
+          View Saved Jobs
+        </Link>
+      );
+    }
+  }
+
+  //view job applications button
+  function addAppliedJobButton() {
+    if (!login) {
+      return (
+        <Link to="/appliedJobs" className="myButton">
+          View my applications
+        </Link>
+      );
+    }
+  }
+
+  //view created jobs button
+  function addCreatedJobButton() {
+    if (!login) {
+      return (
+        <Link to="/myJobs" className="myButton">
+          View Created Jobs
+        </Link>
+      );
+    }
+  }
+
+  
 
   return (
     <div data-testid="jobs-1">
