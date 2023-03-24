@@ -10,6 +10,7 @@ const User = require("./userModel.js")
 const Job = require("./jobModel.js")
 const { db } = require('./userModel.js')
 const SavedJob = require("./savedJobModel.js")
+const ApplyJob = require("./applyJobModel.js")
 const nodemailer = require("nodemailer");
 const Profile = require('./profileModel.js')
 const jwt = require('jsonwebtoken')
@@ -872,6 +873,124 @@ app.post('/savedjobs', authenticateToken, async(req, res) => {
     db_client.close();
   }
 })
+
+
+
+
+
+
+// ************************ Apply Job ************************ //
+app.post('/applyJob', authenticateToken, async(req, res) => {
+  console.log(`route for aplying to jobs is running`)
+
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "applyJob"
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  // New applied job that will be added to the database
+  var newAppliedJob = new ApplyJob({
+    user_id: res.user.id,
+    job_id: req.body.job_id
+  })
+  dbo.collection(collection_name).findOne({user_id: res.user.id, job_id: req.body.job_id},
+    function(err, result){
+    // If entry already exists in database
+    if (result != null) {
+      console.log('ALready applied to this job!')
+      res.json({
+        message: 'ALready applied to this job!'
+      })
+    }
+    // Else, inserting new applied job
+    else{
+      dbo.collection(collection_name).insertOne(newAppliedJob, function(err, result) {
+        if(err) throw err;
+        console.log("-> 1 new Job application for user on " + database_name + " database inside the " + collection_name + " collection!")
+        res.json({
+          message: 'Job application saved successfully'
+        })
+        db.client.close();
+      })
+  }
+    })
+  
+})
+
+
+
+
+// ************************ Applied Job Browsing ************************ //
+app.post('/appliedjobs', authenticateToken, async(req, res) => {
+  console.log(`route for applied jobs browsing is running`)
+
+  const database_name = "Accounts"
+  const collection_name = "applyJob"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // Find all job_ids that are associated with the user
+  try {
+    const job_ids = await dbo
+    .collection(collection_name)
+    .find({
+      user_id: res.user.id
+    })
+      .project({job_id: 1, _id: 0}).toArray();  // Remove _id and keep only job_id
+    
+    const collection_name_Jobs = "Jobs"
+
+    // Removing the field names of the array
+    const filtered_jobids = job_ids.map(job_ids => job_ids.job_id)
+
+    // Associating them as ObjectIds
+    const object_ids = filtered_jobids.map(filtered_jobids => new ObjectId(filtered_jobids));
+
+    // Finding all jobs matching ids from array
+    const jobs = await dbo.collection(collection_name_Jobs).find({_id: {$in: object_ids}}).toArray();
+    res.json(jobs)
+
+  } catch(error) {
+    console.log("Error when fetching from database");
+    console.log(error);
+    db_client.close();
+  }
+})
+
+
+
+// ************************ Removing Job Application ************************ //
+app.post('/removejobApplication', authenticateToken, async(req, res) => {
+  console.log(`remove job application route is running`)
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "applyJob"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // Delete document containing user id and job id
+  dbo.collection(collection_name).deleteOne({user_id: res.user.id, job_id: req.body.job_id},
+  function(err, result){
+    if(err){
+      console.log(err)
+    }
+    else {
+      console.log("Job application was deleted successfully");
+      res.json({
+        message: "Job application removed successfully"
+      })
+    }
+  }
+  )
+
+})
+
+
+
+
 
 
 
