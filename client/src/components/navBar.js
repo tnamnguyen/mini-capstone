@@ -94,7 +94,7 @@ function NavBar() {
         if(!loginElement){
             return(
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Notifications</a>
+                    <a class="nav-link" href="/notifications">Notifications</a>
                 </li>
             )
         }

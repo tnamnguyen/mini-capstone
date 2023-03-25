@@ -20,6 +20,7 @@ import ForgotPassword from "./components/forgotPassword";
 import ResetPassword from "./components/resetPassword";
 import OTP from "./components/OTP";
 import ViewJob from "./components/viewJob";
+import Notifications from "./components/notifications";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -43,6 +44,8 @@ ReactDOM.render(
         <Route path="/admin" element={<Admin />} />
         <Route path="/adminListUsers" element={<AdminListUsers />} />
         <Route path="/viewJob" element={<ViewJob />} />
+        <Route path="/notifications" element={<Notifications />} />
+
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

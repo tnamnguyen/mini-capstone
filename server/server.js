@@ -11,7 +11,8 @@ const Job = require("./jobModel.js")
 const { db } = require('./userModel.js')
 const SavedJob = require("./savedJobModel.js")
 const ApplyJob = require("./applyJobModel.js")
-const nodemailer = require("nodemailer");
+const Notifications = require("./notificationsModel.js")
+const nodemailer = require("nodemailer")
 const Profile = require('./profileModel.js')
 const jwt = require('jsonwebtoken')
 
@@ -1157,6 +1158,98 @@ app.post('/reset', async(req, res) => {
 
 }
 )
+
+
+
+//****************************************  Notifications ****************************************************//
+
+app.post('/createNotification', authenticateToken, async(req, res) => {
+
+  console.log(`route for creating notifications is running`)
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "notifications"
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  // New applied job that will be added to the database
+  var newNotification
+
+  //If type of notification is Job Application
+  if(req.body.type == "Job Application")
+  {
+    //Retrieving Job info
+    const job = await dbo.collection("Jobs").findOne({_id: new ObjectId(req.body.job_id)})
+
+    //Setting up the message that will appear in the notification
+    const message = "The job application for the Job \"" + job.title + "\" has been successfully sent to the recruiter, Good Luck!"
+
+    newNotification = new Notifications({
+      time_stamp: new Date(),
+      user_id: res.user.id,
+      object_id: req.body.job_id,
+      type: "Job Application",
+      message: message,
+      status: "Unread",
+      favorite: false
+    })
+  }
+
+  
+  //Adding the notification to the database
+  dbo.collection(collection_name).insertOne(newNotification, function(err, result) {
+    if(err) throw err;
+    console.log("-> 1 new Notification for user on " + database_name + " database inside the " + collection_name + " collection!")
+    db.client.close();
+  })
+})
+
+
+app.post('/removeNotification', authenticateToken, async(req, res) => {
+
+  console.log(`route for removing notifications is running`)
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "notifications"
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  dbo.collection(collection_name).deleteOne({_id: new ObjectID(req.body.notification_id)})
+
+})
+
+app.post('/getNotifications', authenticateToken, async(req, res) => {
+
+  console.log(`route for fetching notifications is running`)
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "notifications"
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  const notifications = await dbo.collection(collection_name).find({user_id: res.user.id}).toArray();
+  console.log(notifications)
+  res.json(notifications)
+
+})
+
+
+app.post('/deleteNotification', async(req, res) => {
+
+  console.log(`route for deleting notification is running`)
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "notifications"
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  const notifications = await dbo.collection(collection_name).deleteOne({_id: new ObjectId(req.body.notification_id)})
+
+})
 
 
 
