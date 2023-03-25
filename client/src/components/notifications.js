@@ -8,8 +8,9 @@ import "../Styles/notifications.scss";
 
 function Notifications() {
   
-  const [notifications, setNotifications] = useState([]);
-  const [refresh, setRefresh] = useState(false);
+  const [notifications, setNotifications] = useState([])
+  const [refresh, setRefresh] = useState(false)
+  const [removeSuccess, setRemoveSuccess] = useState('')
   
   const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
@@ -19,6 +20,7 @@ function Notifications() {
 
 
   useEffect(() => {
+    setRefresh(false)
     // Fetch all jobs from the backend API when the component mounts
     axios
       .post(SERVER_URL + "/getNotifications", {accessToken})
@@ -37,6 +39,7 @@ function Notifications() {
     axios
       .post(SERVER_URL + "/deleteNotification", {accessToken, notification_id: id})
       .then((response) => {
+        setRemoveSuccess(response.data)
       })
       .catch((error) => {
         console.error("Error deleting the  notification:", error);
@@ -45,47 +48,27 @@ function Notifications() {
       setRefresh(true)
   }
 
+  // function popup()
+  // {
+  //   const timer = setTimeout(() => {
+  //     setRefresh(true)
+  //     return(<div className="success-message popup">{removeSuccess}</div>)
+  //   }, 3000);
+   
+  // }
+
   
 
-  // Call to remove saved job
-  // async function removeJob(job_id){
-  //   clearTimer();
-  //   console.log('remove button was clicked')
-  //   await axios.post(SERVER_URL + '/removejobApplication', {job_id, accessToken})
-  //   .then(response => {
-  //     setRemoveSuccess(response.data.message)
-  //     setRemovedJobId(job_id);
-  //     //await new Promise(resolve => setTimeout(resolve, 5000));
-  //     const timer = setTimeout(() => {
-  //       setRemoveSuccess("");
-  //       setRemovedJobId(null);
-  //       setRender(true);
-  //     }, 3000);
-     
-     
-  //     timerRef.current = timer;
-      
-  //   })
-  //   if(jobs.length === 1){
-  //     setJobs([])
-  //   }
-  //   else{
-  //     setButtonClicked(!buttonClicked)
-  //   }
-  // };
+  // Hold a reference to the timer
+  const timerRef = useRef(null);
 
-   
-
-    // Hold a reference to the timer
-    const timerRef = useRef(null);
-
-    // Reset the timer when the button is pressed
-    function clearTimer() {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
+  // Reset the timer when the button is pressed
+  function clearTimer() {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
     }
+  }
   
   return (
     <div data-testid="jobs-1">
@@ -134,6 +117,7 @@ function Notifications() {
           See All Notifications
         </Link>
       </div>
+      
     </div>
     
 

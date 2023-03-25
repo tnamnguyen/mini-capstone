@@ -1217,7 +1217,7 @@ app.post('/removeNotification', authenticateToken, async(req, res) => {
   const dbo = db_client.db(database_name)
 
   dbo.collection(collection_name).deleteOne({_id: new ObjectID(req.body.notification_id)})
-
+  res.json("Notification deleted Successfully")
 })
 
 app.post('/getNotifications', authenticateToken, async(req, res) => {
@@ -1231,7 +1231,6 @@ app.post('/getNotifications', authenticateToken, async(req, res) => {
   const dbo = db_client.db(database_name)
 
   const notifications = await dbo.collection(collection_name).find({user_id: res.user.id}).toArray();
-  console.log(notifications)
   res.json(notifications)
 
 })
