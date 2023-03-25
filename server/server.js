@@ -221,6 +221,7 @@ app.post('/signup', async(req, res) => {
   // in case of an error
   let anyError = false
   let erorrMessage = 'No errors detected'
+  console.log()
 
   // Storing the username, password, and email from the request body
   const input_name = req.body.username
@@ -1065,10 +1066,10 @@ app.get('/addConnections', async(req, res) => {
   });
 
   // ************************ User Connections ************************ //
-  app.get('/connections', authenticateToken, async(req, res) => {
+  app.get('/connections', async(req, res) => {
     console.log(`route  for showing connections is running`)
-  
-    if(res.isLoggedIn) {
+    //console.log(res.isLoggedIn);
+    
     // Connecting to the specific database and collection
     //const name = res.user.name
     const database_name = "Accounts"
@@ -1076,18 +1077,26 @@ app.get('/addConnections', async(req, res) => {
     const db_client =  await MongoClient.connect(url) 
     const dbo = db_client.db(database_name)
     //await dbo.collection(collection_name).findOne({user_name: name})  
-    
-    // Query all the users
+    const connections = await dbo.collection(collection_name).find().toArray();
+    //console.log(connections.user1);
+
+    // Query all the connections
     try {
-      const user_connections = await (await dbo.collection(collection_name).find().toArray())
-      res.json(user_connections);
-      console.log('data is sent')
+      const users = await (await dbo.collection(collection_name).find().toArray())
+      res.json(users);
     } catch (error) {
-      console.log("Error when fetching connections from database");
+      console.log("Error when fetching all connections from database");
       console.log(error);
         db_client.close();
-    } 
-    }});
+    }
+  
+    // Print the information stored in each document
+  connections.forEach((connection) => {
+    console.log(`User 1: ${connection.user1}`);
+    console.log(`User 2: ${connection.user2}`);
+    console.log(`Status: ${connection.status}`);
+  });
+    });
 
     
 // ************************ adding User Connections ************************ //

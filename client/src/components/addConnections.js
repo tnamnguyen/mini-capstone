@@ -85,20 +85,8 @@ function AddConnections(){
                     placeholder="Search..."
                     onChange={(event)=> {setInputValue(event.target.value); } }
                 />
-                <label >User:</label>
-                 <input
-                     type="text"
-                     id="user2"
-                     value={user2}
-                     placeholder='Enter the username'
-                    onChange={(e) => setUser2(e.target.value)}
-                />
-                    <button id='addToConnections' className="myButton" type='submit'> 
-                        Add Connection
-                    </button>
-                
-                </label>
 
+                </label>
                 {/*  printing the users in table */}
                 <div className="container">
             <table className="job-table">
@@ -117,8 +105,11 @@ function AddConnections(){
                 .map(user => (
                 <tr key={user.id}>
                     <td>{user.name}</td>
+                    <td >
+                        <button className='button-14' type ='' onClick={() => setUser2(user.name)}>Add</button>
+                    </td>
                 </tr>
-
+                    
                 ))} 
             </tbody>
             </table>

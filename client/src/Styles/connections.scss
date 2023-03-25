@@ -59,7 +59,7 @@ input {
 .job-table {
   border-collapse: collapse;
   width: 100%;
-  max-width: 800px;
+  max-width: 400px;
 }
 
 button {
@@ -168,7 +168,21 @@ padding-right: 110px;
     position:relative;
     top:1px;
   }
+  
  
+  .connection_message{
+    margin: 2px;
+    background-color: $light_blue_Color;
+}
+  .connection_delete{
+  margin: 2px;
+  background-color: $light_blue_Color;
+}
+
+.delete_td{
+  text-align: center;
+}
+
 
   // test for add connections
   #addToConnections{
@@ -177,3 +191,49 @@ padding-right: 110px;
     border-radius: 30px;
     background-color: $light_blue_Color;
   }
+
+
+.button-14 {
+  background-image: linear-gradient(#f7f8fa ,#e7e9ec)!important;
+  border-color: #adb1b8 #a2a6ac #8d9096!important;
+  border-style: solid!important;
+  border-width: 1px!important;
+  border-radius: 3px!important;
+  box-shadow: rgba(255,255,255,.6) 0 1px 0 inset!important;
+  box-sizing: border-box!important;
+  color: #0f1111!important;
+  cursor: pointer!important;
+  display: inline-block!important;
+  font-family: "Amazon Ember",Arial,sans-serif!important;
+  font-size: 14px!important;
+  height: 29px!important;
+  font-size: 13px!important;
+  outline: 0!important;
+  overflow: hidden!important;
+  padding: 0 11px!important;
+  text-align: center!important;
+  text-decoration: none!important;
+  text-overflow: ellipsis!important;
+  user-select: none!important;
+  -webkit-user-select: none!important;
+  touch-action: manipulation!important;
+  white-space: nowrap!important;
+}
+
+.button-14:active {
+  border-bottom-color: #a2a6ac;
+}
+
+.button-14:active:hover {
+  border-bottom-color: #a2a6ac;
+}
+
+.button-14:hover {
+  border-color: #a2a6ac #979aa1 #82858a;
+}
+
+.button-14:focus {
+  border-color: #e77600;
+  box-shadow: rgba(228, 121, 17, .5) 0 0 3px 2px;
+  outline: 0;
+}
