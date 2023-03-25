@@ -1138,6 +1138,7 @@ app.post('/addConnections',  async (req, res) => {
 });
 
 
+// ************************ accepting User Connections ************************ //
 app.put('/connections/:id/accept', async (req, res) => {
   // Extract the connection ID from the request parameters
   const connectionId = req.params.id;
@@ -1166,7 +1167,7 @@ app.put('/connections/:id/accept', async (req, res) => {
   res.json({ success: true, message: `Connection with ID ${connectionId} accepted` });
 });
 
-
+// ************************ rejecting User Connections ************************ //
 app.put('/connections/:id/reject', async (req, res) => {
   // Extract the connection ID from the request parameters
   const connectionId = req.params.id;

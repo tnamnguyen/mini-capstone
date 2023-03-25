@@ -7,7 +7,7 @@ import '../Styles/connections.scss';
    
 
 
-function Connections () {
+function PendingConnections () {
     const [connections, setConnections] = useState([]);
     const accessToken = localStorage.getItem("token")
     const [user1, setUser1] = useState("");
@@ -26,7 +26,6 @@ function Connections () {
            })
        }
 
-
     useEffect(() => {
         axios.get(SERVER_URL+ '/Connections')
           .then(response => {
@@ -41,11 +40,12 @@ function Connections () {
       }, []);
 
 
+
     return (
         <>
         <NavBar></NavBar>
         
-        <h1 id="job_title" >Your connections</h1>
+        <h1 id="job_title" >Connection Requests</h1>
             <br />
             <div className="container">
             <table className="job-table">
@@ -54,23 +54,21 @@ function Connections () {
                 <tr>
                 <th>Name</th>
                 <th>Status</th>
-                <th>Send Message</th>
-                <th>Remove Connection</th>
                 </tr>
                 
             </thead>
              <tbody>
                 {connections.map((connection) => {
-                    if( connection.status === 'accpeted' && user1 == connection.user1 || user1 == connection.user2 ){
+                    if(user1 === connection.user2 && connection.status === 'pending'){
                         return(
                             <tr key={connection._id}>
-                            <td>{connection.user2}</td>
+                            <td>{connection.user1}</td>
                             <td>{connection.status}</td>
                             <td className='message_td'>
-                                <button onClick=''  className='button-14'>Message</button>
+                                <button onClick=''  className='button-14'>Accept</button>
                             </td>
                             <td >
-                                <button onClick=''  className='button-14'>Delete</button>
+                                <button onClick=''  className='button-14'>Deny</button>
                             </td>
                         </tr>
                         )
@@ -83,14 +81,15 @@ function Connections () {
             
             </div>
         <div>
-            <Link to="/addConnections" className="myButton" >add a connection</Link>
-            <Link to='/pendingConnections' className='myButton'>Pending Connections</Link>
+            <Link to="/Connections" className="myButton" >Your Connections</Link>
         </div>
+        <div>
 
+        </div>
 
     </>
 
     );
 }
 
-export default Connections
+export default PendingConnections

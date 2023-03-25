@@ -19,6 +19,7 @@ import ForgotPassword from "./components/forgotPassword";
 import ResetPassword from "./components/resetPassword";
 import Connections from './components/connections.js';
 import AddConnections from './components/addConnections.js';
+import PendingConnections from './components/pendingConnections.js';
 import OTP from "./components/OTP"
 
 
@@ -45,6 +46,7 @@ ReactDOM.render(
         <Route path="/adminListUsers" element={<AdminListUsers/>}/>
         <Route path="/connections" element={<Connections/>}/>
         <Route path="/addConnections" element={<AddConnections/>}/>
+        <Route path="/pendingConnections" element={<PendingConnections/>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
