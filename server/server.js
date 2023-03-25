@@ -1251,6 +1251,19 @@ app.post('/deleteNotification', async(req, res) => {
 
 })
 
+app.post('/getNumberOfNotifications', authenticateToken,async(req, res) => {
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "notifications"
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  const num = await dbo.collection(collection_name).countDocuments()
+  res.json(num)
+
+})
+
 
 
   

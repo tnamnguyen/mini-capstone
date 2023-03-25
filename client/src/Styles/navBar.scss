@@ -9,3 +9,31 @@
     padding-left:15px;
     padding-right:15px;
 }
+
+
+
+
+.badge {
+    padding-top: 5px;
+    padding-left: 9px;
+    padding-right: 9px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+  }
+  
+  .label-warning[href],
+  .badge-warning[href] {
+    background-color: #c67605;
+  }
+  #lblCartCount {
+    border-radius: 50px;
+      font-size: 12px;
+      padding-bottom: 10px;
+      background: #ff0000;
+      color: #fff;
+      padding: 5px;
+      width: 18px;
+      height: 18px;
+   
+  }

@@ -8,12 +8,13 @@ function NavBar() {
     const [loginElement, setLoginElement] = useState(true)
     const [adminElement, setAdminElement] = useState(false)
     const [userName, setUserName] = useState('')
+    const [numNotifications, setNumNotifications] = useState(0)
 
     const SERVER_URL = process.env.REACT_APP_SERVER_URL
     const accessToken = localStorage.getItem("token")
     const isTokenAvailable = (localStorage.getItem("token") != null)
 
-    //If User is logged-in -> add his name to navBar & remove login button
+    //If User is logged-in -> add his name to navBar & remove login button & retrive number of notifications
     if(isTokenAvailable){
         axios.post(SERVER_URL + '/home', {accessToken})
         .then(response => {
@@ -27,6 +28,11 @@ function NavBar() {
             if(response.data.isAdmin){
                 setAdminElement(true)
             }
+        })
+
+        axios.post(SERVER_URL + '/getNumberOfNotifications', {accessToken})
+        .then(response => {
+            setNumNotifications(response.data)
         })
     }
     
@@ -94,7 +100,9 @@ function NavBar() {
         if(!loginElement){
             return(
                 <li class="nav-item">
-                    <a class="nav-link" href="/notifications">Notifications</a>
+                    <a class="nav-link" href="/notifications">Notifications 
+                        <span class='badge badge-warning' id='lblCartCount'>{numNotifications}</span>
+                    </a>
                 </li>
             )
         }

@@ -9,6 +9,7 @@ import "../Styles/notifications.scss";
 function Notifications() {
   
   const [notifications, setNotifications] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   
   const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
@@ -22,18 +23,12 @@ function Notifications() {
     axios
       .post(SERVER_URL + "/getNotifications", {accessToken})
       .then((response) => {
-        var test = response.data.notifications
-        console.log("asjdashk")
-        notifications.forEach(function(entry) {
-          console.log("assds")
-          console.log(entry);
-        });
         setNotifications(response.data)
       })
       .catch((error) => {
         console.error("Error fetching notifications:", error);
       });
-  }, []);    // Refresh the table when the buttonClicked state changes
+  }, [refresh]);    // Refresh the table when the buttonClicked state changes
 
 
   function deleteNotification(id)
@@ -46,6 +41,8 @@ function Notifications() {
       .catch((error) => {
         console.error("Error deleting the  notification:", error);
       });
+
+      setRefresh(true)
   }
 
   
@@ -138,6 +135,9 @@ function Notifications() {
         </Link>
       </div>
     </div>
+    
+
+    
   );}
 
 
