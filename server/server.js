@@ -1034,12 +1034,11 @@ app.get("/addConnections", async (req, res) => {
 
 // ************************ Adding Connections ************************ //
 app.post("/addConnections", async (req, res) => {
-  // checking if the connection exists or pending. To avoid duplicate connections
   try {
     const check = await Connection.findOne({
       user1: req.body.user1,
       user2: req.body.user2,
-      status: {$in : ["completed", "pending"]},
+      status: { $in: ["completed", "pending"] },
     });
     if (check) {
       res.status(200).json({
@@ -1047,7 +1046,8 @@ app.post("/addConnections", async (req, res) => {
         status: true,
       });
     } else {
-      const result = await Connection.create(req.body);
+      const newData = new Connection(req.body);
+      const result = await newData.save();
       if (result) {
         res.status(200).json({
           message: "Connections Added successfully",
