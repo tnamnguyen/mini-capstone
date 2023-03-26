@@ -81,6 +81,7 @@ function AddConnections() {
       <div className="createjob-form" data-testid="createJob-1">
         <div className="createjob-container">
           <h2 id="createjob_title">Add Connection</h2>
+          <h5 id="createjob_title">More users exist</h5>
           <br />
           <br />
           <form onSubmit={handleSubmit}>

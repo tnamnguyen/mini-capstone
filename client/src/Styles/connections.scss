@@ -255,6 +255,6 @@ padding-right: 110px;
   background-color: #fff;
 }
 
-table.add-table tbody tr:nth-child(n+7) {
+table.add-table tbody tr:nth-child(n+11) {
   display: none; // hide rows starting from the 6th row (index 5)
 }
