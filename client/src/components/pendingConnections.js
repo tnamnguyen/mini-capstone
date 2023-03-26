@@ -12,8 +12,7 @@ function PendingConnections() {
   const [refetch, setRefetch] = useState(0);
   const [showPopUp, setShowPopUp] = useState("");
   
-  const SERVER_URL = "http://localhost:3001";
-  // const SERVER_URL = "https://jobilee-server.vercel.app"
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
   // assigning user 1 as the logged-in user
   const isTokenAvailable = localStorage.getItem("token") != null;
@@ -41,7 +40,27 @@ function PendingConnections() {
     }
   }, [user1?.id, user1.name, refetch]);
 
-  console.log(connections);
+
+  const handleRemove = async (id) => {
+    await axios
+      .delete(SERVER_URL + `/connections/${id}`)
+      .then((response) => {
+        console.log(response);
+        //If backend returns an error
+        if (response.data.status) {
+          setShowPopUp("connection Denied");
+          setRefetch(refetch + 1);
+          setTimeout(() => {
+            setShowPopUp("");
+          }, 3000);
+        } else {
+          setTimeout(() => {
+            window.location.href = "http://localhost:3000/";
+          }, 4000);
+        }
+      })
+      .catch((error) => {});
+  };
 
   const handleUpdate = async (id, status) => {
     // Do something with the form data, such as send it to a server
@@ -105,7 +124,7 @@ function PendingConnections() {
                 </td>
                 <td>
                   <button
-                    onClick={() => handleUpdate(connection?._id, "rejected")}
+                    onClick={() => handleRemove(connection?._id)}
                     className="button-14"
                   >
                     Deny

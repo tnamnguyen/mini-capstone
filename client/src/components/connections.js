@@ -12,8 +12,8 @@ function Connections() {
   const [refetch, setRefetch] = useState(0);
   const [showPopUp, setShowPopUp] = useState("");
 
-  const SERVER_URL = "http://localhost:3001";
-  // const SERVER_URL = "https://jobilee-server.vercel.app"
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL
+
 
   // assigning user 1 as the logged-in user
   const isTokenAvailable = localStorage.getItem("token") != null;
