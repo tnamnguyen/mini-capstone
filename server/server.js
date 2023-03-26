@@ -1035,9 +1035,10 @@ app.get("/addConnections", async (req, res) => {
 // ************************ Adding Connections ************************ //
 app.post("/addConnections", async (req, res) => {
   try {
+    const { user1, user2 } = req.body;
     const check = await Connection.findOne({
-      user1: req.body.user1,
-      user2: req.body.user2,
+      user1: user1,
+      user2: user2,
       status: { $in: ["completed", "pending"] },
     });
     if (check) {
