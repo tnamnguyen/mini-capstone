@@ -1036,12 +1036,24 @@ app.get("/addConnections", async (req, res) => {
 app.post("/addConnections", async (req, res) => {
   try {
     const { user1, user2 } = req.body;
+    // trying to fix the vulnerabilities
+    if (typeof user1 !== 'string' || typeof user2 !== 'string') {
+      throw new Error('Invalid input: user1 and user2 must be strings');
+    }
+
     const check = await Connection.findOne({
       user1: user1,
       user2: user2,
       status: { $in: ["completed", "pending"] },
     });
-    if (check) {
+
+const checkAgain = await Connection.findOne({
+      user1: user2,
+      user2: user1,
+      status: { $in: ["completed", "pending"] },
+    });
+
+    if (check || checkAgain) {
       res.status(200).json({
         message: "Already connected!",
         status: true,
