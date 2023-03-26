@@ -1,17 +1,6 @@
 @import "./variables/variables.scss";
 
-//////////////////////////////////
-/// This is the create job scss
-///////////////////////////////////
 
-.createjob-form{
-  display: flex;
-  flex-wrap: wrap;
-  input, button {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-}
   
 .createjob-container {
   margin: auto;
@@ -38,6 +27,12 @@
 }
 
 .createjob-form {
+  display: flex;
+  flex-wrap: wrap;
+  input, button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 input {
   padding: 10px;
   width: 100%;
@@ -56,7 +51,7 @@ input {
   cursor: pointer;
 }
 
-.job-table {
+.connection-table {
   border-collapse: collapse;
   width: 100%;
   max-width: 400px;
@@ -119,26 +114,26 @@ padding-right: 110px;
   }
 
 
-  .job-table {
+  .connection-table {
     border-collapse: collapse;
     
     width: 100%;
     max-width: 800px;
   }
 
-  .job-table th,
-  .job-table td {
+  .connection-table th,
+  .connection-table td {
     padding: 10px;
     text-align: left;
     border: 1px solid #ccc;
   }
   
-  .job-table th {
+  .connection-table th {
     background-color: #f0f0f0;
     font-weight: bold;
   }
   
-  .job-table td {
+  .connection-table td {
     background-color: #fff;
   }
 
@@ -152,7 +147,6 @@ padding-right: 110px;
     text-align: center;
     cursor:pointer;
     color:#ffffff;
-    font-family:Arial;
     font-size:15px;
     font-weight:bold;
     padding:6px 24px;
@@ -207,7 +201,6 @@ padding-right: 110px;
   font-family: "Amazon Ember",Arial,sans-serif!important;
   font-size: 14px!important;
   height: 29px!important;
-  font-size: 13px!important;
   outline: 0!important;
   overflow: hidden!important;
   padding: 0 11px!important;
@@ -236,4 +229,31 @@ padding-right: 110px;
   border-color: #e77600;
   box-shadow: rgba(228, 121, 17, .5) 0 0 3px 2px;
   outline: 0;
+}
+
+
+.add-table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 800px;
+}
+
+.add-table th,
+.add-table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ccc;
+}
+
+.add-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.add-table td {
+  background-color: #fff;
+}
+
+table.add-table tbody tr:nth-child(n+7) {
+  display: none; // hide rows starting from the 6th row (index 5)
 }
