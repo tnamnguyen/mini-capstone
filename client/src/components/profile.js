@@ -73,13 +73,13 @@ function Profile() {
                 </div>
                 <br></br>
                 <div class='profile_container2'>
-                    <div class='profile_greeting'>{getGreeting() + userName} 
+                    <div class='profile_greeting' data-testid="profile_greeting">{getGreeting() + userName} 
                 </div>
-                    <div class='profile_education'>Education: {education}</div>
-                    <div class='profile_past_job'>Past Job: {pastJob}</div>
-                    <div class='profile_current_job'>Current Job: {currentJob}</div>
-                    <div class='profile_languages'>Languages: {languages}</div>
-                    <div class='profile_bio'>
+                    <div class='profile_education' data-testid="profile_education">Education: {education}</div>
+                    <div class='profile_past_job' data-testid="profile_past_job">Past Job: {pastJob}</div>
+                    <div class='profile_current_job' data-testid="profile_current_job">Current Job: {currentJob}</div>
+                    <div class='profile_languages' data-testid="profile_languages">Languages: {languages}</div>
+                    <div class='profile_bio' data-testid="profile_bio">
                         <label id='bio_title'>Bio</label>
                         <p id='bio_text'>{bio}</p>
                     </div>
