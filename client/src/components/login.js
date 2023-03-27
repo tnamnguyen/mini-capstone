@@ -35,7 +35,7 @@ function Login() {
 
           //Redirect to main page
           setTimeout(() => {
-            window.location.href = "/";
+            window.location.href = "/profile";
           }, 4000);
         }
       });

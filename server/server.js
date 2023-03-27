@@ -1038,6 +1038,58 @@ app.post('/reset', async(req, res) => {
 
 
 
+
+//****************************************  see user profile ****************************************************//
+
+app.post('/user', async(req, res) => {
+  console.log('route for seeing other user profile is running')
+  const database_name = "Accounts"
+  const collection_name = "profile"
+  const db_client = await MongoClient.connect(url)
+  const dbo=db_client.db(database_name)
+  const id = req.body.selectedUserId // get the user ID from the URL parameter
+  console.log(id);
+
+  await dbo.collection(collection_name).findOne({user_id: id})
+  .then(result => {
+
+    if(!result){
+      anyError = true
+      errorMessage = "No User profile was found for this user"
+      console.log(errorMessage);
+
+      res.send({
+        profileExists: "False",
+        message: errorMessage
+      })
+    }
+    else{
+      console.log("The user has been found in the database");
+      console.log(result.pastJob);
+      console.log(result.education);
+      console.log(result.currentJob);
+      res.send({
+        profileExists: "True",
+        "user": res.user,
+        education: result.education,   
+        pastJob: result.pastJob,
+        currentJob: result.currentJob,
+        languages: result.languages,
+        bio: result.bio
+      })
+      db_client.close();
+    }
+  })
+  .catch(err => {
+    console.log("Error:" + err)
+  })
+
+
+}
+)
+
+
+
   
 
 app.listen(port, () => {
