@@ -1065,12 +1065,16 @@ app.post('/user', async(req, res) => {
     }
     else{
       console.log("The user has been found in the database");
-      console.log(result.pastJob);
-      console.log(result.education);
-      console.log(result.currentJob);
+      //Debug
+      //console.log(result.pastJob);
+      //console.log(result.education);
+      //console.log(result.currentJob);
+      //console.log(result.username);
+      
       res.send({
         profileExists: "True",
         "user": res.user,
+        username : result.username,
         education: result.education,   
         pastJob: result.pastJob,
         currentJob: result.currentJob,

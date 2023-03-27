@@ -77,13 +77,14 @@ function User() {
         if (selectedUserId !== '') {
             axios.post(SERVER_URL + '/user', {selectedUserId})
                 .then(response => {
-                    const { education, pastJob, currentJob, languages, bio } = response.data;
+                    const { username, education, pastJob, currentJob, languages, bio } = response.data;
                     /*setUserName(response.data.user.name)
                     setEducation(response.data.education)
                     setCurrentJob(response.data.currentJob)
                     setPastJob(response.data.pastJob)
                     setLanguages(response.data.languages)
                     setBio(response.data.bio)*/
+                    setUserName("blank for now");
                     setEducation(education);
                     setPastJob(pastJob);
                     setCurrentJob(currentJob);
