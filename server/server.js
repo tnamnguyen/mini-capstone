@@ -660,17 +660,17 @@ app.post('/confirmdelete', authenticateToken, async(req, res) => {
   dbo.collection(collection_name_profile).deleteOne({user_id: userid}, (err, result) => {
     if (err) throw err;
     console.log(`Profile deleted successfully`);
-    dbo.collection(collection_name_savedjobs).deleteMany({user_id: userid}, (err, result) => {
-      if (err) throw err;
-      console.log(`${result.deletedCount} saved jobs deleted.`);
-      dbo.collection(collection_name_users).deleteOne({user_id: userid}, (err, result) => {
-        if (err) throw err;
-        console.log("User login credentials were deleted successfully")
-        db_client.close();
-        res.json('User deleted successfully')
-      })
-    })
   })
+  dbo.collection(collection_name_savedjobs).deleteMany({user_id: userid}, (err, result) => {
+    if (err) throw err;
+    console.log(`${result.deletedCount} saved jobs deleted.`);
+    })
+  dbo.collection(collection_name_users).deleteOne({_id: new ObjectId(userid)}, (err, result) => {
+    if (err) throw err;
+    console.log("User login credentials were deleted successfully")
+    db_client.close();
+    res.json('User deleted successfully')
+      })
 });
 
 
