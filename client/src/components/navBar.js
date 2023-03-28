@@ -72,7 +72,7 @@ function NavBar() {
         if(!loginElement){
             return(
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Connections</a>
+                    <a class="nav-link" href="/Connections">Connections</a>
                 </li>
             )
         }

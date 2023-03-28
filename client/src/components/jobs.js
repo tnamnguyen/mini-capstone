@@ -86,6 +86,12 @@ function JobList() {
     }
   }
 
+  function saveRow() {
+    if(!login) {
+      return <th>Save</th>
+    }
+  }
+
   //Job Application Button
   function addApply(job_id) {
     if (!login) {
@@ -216,7 +222,7 @@ function JobList() {
                 <th>Location</th>
                 <th>Description</th>
                 {applyRow()}
-                <th>Save</th>
+                {saveRow()}
                 <th>View Job</th>
               </tr>
             </thead>
