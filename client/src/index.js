@@ -10,8 +10,8 @@ import EditProfile from "./components/editProfile.js";
 import JobApplicationForm from "./components/createJob.js";
 import JobList from "./components/jobs.js";
 import SavedJobList from "./components/savedJobs";
-import Admin from './components/admin'
-import AdminListUsers from './components/adminListUsers';
+import Admin from "./components/admin";
+import AdminListUsers from "./components/adminListUsers";
 import "bootstrap/dist/css/bootstrap.css";
 import MyJobList from "./components/myJobs";
 import JobEditForm from "./components/editJob";
@@ -21,7 +21,7 @@ import Connections from './components/connections.js';
 import AddConnections from './components/addConnections.js';
 import PendingConnections from './components/pendingConnections.js';
 import OTP from "./components/OTP"
-
+import ViewJob from "./components/viewJob";
 
 
 ReactDOM.render(
@@ -38,7 +38,7 @@ ReactDOM.render(
         <Route path="/jobs" element={<JobList />} />
         <Route path="/savedJobs" element={<SavedJobList />} />
         <Route path="/myJobs" element={<MyJobList />} />
-        <Route path="/editJob" element={<JobEditForm />} />
+        <Route path="/editJob/:jobId" component={JobEditForm} element={<JobEditForm />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/reset" element={<ResetPassword />} />
         <Route path="/OTP" element={<OTP/>} />
@@ -47,6 +47,7 @@ ReactDOM.render(
         <Route path="/connections" element={<Connections/>}/>
         <Route path="/addConnections" element={<AddConnections/>}/>
         <Route path="/pendingConnections" element={<PendingConnections/>}/>
+        <Route path="/viewJob" element={<ViewJob />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
