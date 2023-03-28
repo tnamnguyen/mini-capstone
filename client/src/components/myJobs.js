@@ -8,7 +8,7 @@ import "../Styles/sign-up.scss";
 function MyJobList() {
   const [jobs, setJobs] = useState([]);
 
-  const SERVER_URL = process.env.REACT_APP_SERVER_URL
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
     // Fetch all jobs from the backend API when the component mounts
@@ -51,6 +51,16 @@ function MyJobList() {
                     <Link to="/editJob">
                       {" "}
                       <button>Edit Job</button>
+                    </Link>
+                  </td>
+                  <td>
+                    <Link
+                      to="/viewJob"
+                      state={{
+                        data: job,
+                      }}
+                    >
+                      <button>View Details</button>
                     </Link>
                   </td>
                 </tr>

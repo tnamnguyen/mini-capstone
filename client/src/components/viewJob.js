@@ -17,6 +17,8 @@ function ViewJob(props) {
 
   const [saveSuccess, setSaveSuccess] = useState("");
   const [savedJobId, setSavedJobId] = useState(null);
+  const [applySuccess, setApplySuccess] = useState("");
+  const [appliedJobId, setAppliedJobId] = useState(null);
 
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const accessToken = localStorage.getItem("token");
@@ -42,6 +44,37 @@ function ViewJob(props) {
         }, 5000);
         timerRef.current = timer;
       });
+  }
+  // Call to apply to the job
+  function applyJob(job_id) {
+    clearTimer();
+    console.log("apply button was clicked");
+    axios
+      .post(SERVER_URL + "/applyJob", { job_id, accessToken })
+      .then((response) => {
+        setAppliedJobId(job_id);
+        setApplySuccess(response.data.message);
+        const timer = setTimeout(() => {
+          setApplySuccess("");
+          setAppliedJobId(null);
+        }, 3000);
+        timerRef.current = timer;
+      });
+  }
+  //Job Application Button
+  function addApply(job_id) {
+    if (!login) {
+      return (
+        <td>
+          <button onClick={() => applyJob(job_id)} id="viewJob_apply">
+            Apply
+          </button>
+          {appliedJobId === job_id && (
+            <div className="success-message popup">{applySuccess}</div>
+          )}
+        </td>
+      );
+    }
   }
 
   // Hold a reference to the timer
@@ -88,13 +121,7 @@ function ViewJob(props) {
         <br></br>
       </div>
       {addSave(data.id)}
-      <Link to="/jobs">
-        <button
-          id="viewJob_apply" /*onClick={} backend method to apply goes here */
-        >
-          Apply
-        </button>
-      </Link>
+      {addApply(data.id)}
       <Link to="/jobs">
         <button id="viewJob_save">Back</button>
       </Link>
