@@ -850,57 +850,6 @@ app.get("/jobs", async (req, res) => {
   })
 
 
-
-// ************************ Saved Job Browsing ************************ //
-app.post('/savedjobs', authenticateToken, async(req, res) => {
-  console.log(`route for saved jobs is running`)
-
-  // Connecting to the specific database and collection
-  const database_name = "Accounts";
-  const collection_name = "savedjobs";
-  const db_client = await MongoClient.connect(url);
-  const dbo = db_client.db(database_name);
-
-  // New saved job that will be added to the database
-  var newSavedJob = new SavedJob({
-    user_id: res.user.id,
-    job_id: req.body.job_id,
-  });
-  dbo
-    .collection(collection_name)
-    .findOne(
-      { user_id: res.user.id, job_id: req.body.job_id },
-      function (err, result) {
-        // If entry exists in database
-        if (result != null) {
-          console.log("Job Exists");
-          res.json({
-            message: "Job already saved",
-          });
-        }
-        // Else, inserting new saved job
-        else {
-          dbo
-            .collection(collection_name)
-            .insertOne(newSavedJob, function (err, result) {
-              if (err) throw err;
-              console.log(
-                "-> 1 new Job was saved for user on " +
-                  database_name +
-                  " database inside the " +
-                  collection_name +
-                  " collection!"
-              );
-              res.json({
-                message: "Job saved successfully",
-              });
-              db.client.close();
-            });
-        }
-      }
-    );
-});
-
 // ************************ Saved Job Browsing ************************ //
 app.post("/savedjobs", authenticateToken, async (req, res) => {
   console.log(`route for saved jobs is running`);
