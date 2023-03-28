@@ -17,8 +17,12 @@ import MyJobList from "./components/myJobs";
 import JobEditForm from "./components/editJob";
 import ForgotPassword from "./components/forgotPassword";
 import ResetPassword from "./components/resetPassword";
-import OTP from "./components/OTP";
+import Connections from './components/connections.js';
+import AddConnections from './components/addConnections.js';
+import PendingConnections from './components/pendingConnections.js';
+import OTP from "./components/OTP"
 import ViewJob from "./components/viewJob";
+
 
 ReactDOM.render(
   <React.StrictMode>
@@ -37,9 +41,12 @@ ReactDOM.render(
         <Route path="/editJob/:jobId" component={JobEditForm} element={<JobEditForm />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/reset" element={<ResetPassword />} />
-        <Route path="/OTP" element={<OTP />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/adminListUsers" element={<AdminListUsers />} />
+        <Route path="/OTP" element={<OTP/>} />
+        <Route path="/admin" element={<Admin/>}/>
+        <Route path="/adminListUsers" element={<AdminListUsers/>}/>
+        <Route path="/connections" element={<Connections/>}/>
+        <Route path="/addConnections" element={<AddConnections/>}/>
+        <Route path="/pendingConnections" element={<PendingConnections/>}/>
         <Route path="/viewJob" element={<ViewJob />} />
       </Routes>
     </BrowserRouter>
