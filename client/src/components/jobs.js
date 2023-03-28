@@ -35,8 +35,6 @@ function JobList() {
       });
   }, []);
 
-
-
   // ---------------------------------- API Calls ---------------------------------- //
 
   // Call to save the job to database
@@ -56,7 +54,6 @@ function JobList() {
       });
   }
 
-
   // Call to apply to the job
   function applyJob(job_id) {
     clearTimer();
@@ -73,9 +70,6 @@ function JobList() {
         timerRef.current = timer;
       });
   }
-
-
-
 
   // ---------------------------------- Row Buttons ---------------------------------- //
 
@@ -111,7 +105,6 @@ function JobList() {
     }
   }
 
-
   //Save Job Button
   function addSave(job_id) {
     if (!login) {
@@ -131,20 +124,6 @@ function JobList() {
     }
   }
 
-  //View details Button
-  function addViewButton() {
-    if (!login) {
-      return (
-        <td>
-          <Link to="/viewJob">
-            <button>View Details</button>
-          </Link>
-        </td>
-      );
-    }
-  }
-
-
   // ---------------------------------- Timer ---------------------------------- //
 
   // Hold a reference to the timer
@@ -159,7 +138,7 @@ function JobList() {
   }
 
   // ---------------------------------- Big Blue Buttons at the bottom ---------------------------------- //
-  
+
   //Create new job button
   function addCreateJobButton() {
     if (!login) {
@@ -203,8 +182,6 @@ function JobList() {
       );
     }
   }
-
-  
 
   return (
     <div data-testid="jobs-1">

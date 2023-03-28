@@ -10,7 +10,7 @@ function MyJobList() {
   const [deleteSuccess, setDeleteSuccess] = useState('')
   const [buttonClicked, setButtonClicked] = useState(false)
 
-  const SERVER_URL = process.env.REACT_APP_SERVER_URL
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
   const accessToken = localStorage.getItem("token")
 
@@ -74,6 +74,16 @@ function MyJobList() {
                     </Link>
                   </td>
                   <td><button onClick={() => deleteJob(job._id)} className = 'deleteJob_button'>Delete</button></td>
+                  <td>
+                    <Link
+                      to="/viewJob"
+                      state={{
+                        data: job,
+                      }}
+                    >
+                      <button>View Details</button>
+                    </Link>
+                  </td>
                 </tr>
               ))}
             </tbody>
