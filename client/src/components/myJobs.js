@@ -58,6 +58,7 @@ function MyJobList() {
                 <th>Location</th>
                 <th>Description</th>
                 <th>Edit Button</th>
+                <th>View</th>
                 <th>Delete</th>
               </tr>
             </thead>
@@ -73,17 +74,15 @@ function MyJobList() {
                       <button>Edit Job</button>
                     </Link>
                   </td>
-                  <td><button onClick={() => deleteJob(job._id)} className = 'deleteJob_button'>Delete</button></td>
-                  <td>
-                    <Link
+                  <td><Link
                       to="/viewJob"
                       state={{
                         data: job,
                       }}
                     >
                       <button>View Details</button>
-                    </Link>
-                  </td>
+                    </Link></td>
+                  <td><button onClick={() => deleteJob(job._id)} className = 'deleteJob_button'>Delete</button></td>
                 </tr>
               ))}
             </tbody>
