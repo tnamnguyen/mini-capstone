@@ -612,6 +612,42 @@ app.post("/submiteditprofile", authenticateToken, async (req, res) => {
     });
   }
 });
+
+// ************************ Confirm Delete Profile ************************ //
+
+app.post('/confirmdelete', authenticateToken, async(req, res) => {
+  console.log(`route for confirmed delete is running`);
+
+  const userid = res.user.id
+  console.log('userid: ' + userid);
+  const database_name = "Accounts"
+  const collection_name_profile = "profile"
+  const collection_name_savedjobs = "savedjobs"
+  const collection_name_users = "users"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // Deleting from profile collection
+  console.log(`Deleting Profile`)
+  dbo.collection(collection_name_profile).deleteOne({user_id: userid}, (err, result) => {
+    if (err) throw err;
+    console.log(`Profile deleted successfully`);
+  })
+  // Delete all saved jobs from collection savedjobs related to user
+  dbo.collection(collection_name_savedjobs).deleteMany({user_id: userid}, (err, result) => {
+    if (err) throw err;
+    console.log(`${result.deletedCount} saved jobs deleted.`);
+    })
+  // Delete user from collection users
+  dbo.collection(collection_name_users).deleteOne({_id: new ObjectId(userid)}, (err, result) => {
+    if (err) throw err;
+    console.log("User login credentials were deleted successfully")
+    db_client.close();
+    res.json('User deleted successfully')
+  })
+
+});
+
 // ************************ Job posting ************************ //
 
 app.post('/createJobs', authenticateToken, async(req, res) => {
