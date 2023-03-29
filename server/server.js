@@ -209,6 +209,7 @@ app.post("/signup", async (req, res) => {
   // const database_name = "Accounts"
   const database_name = "Accounts";
   const collection_name = "users";
+  const collection_name_profile = "profile"
   mongoose.set("strictQuery", false);
   const db_client = await MongoClient.connect(url);
   const dbo = db_client.db(database_name);
@@ -336,6 +337,29 @@ app.post("/signup", async (req, res) => {
             collection_name +
             " collection!"
         );
+      
+        console.log("Creating a new profile for user");
+        var newProfile = new Profile({
+          user_id: res._id,
+          education: "None",
+          pastJob: "None",
+          currentJob: "None",
+          languages: "English",
+          bio: "",
+        });
+
+        dbo
+        .collection(collection_name_profile)
+        .insertOne(newProfile, function (err, res) {
+          if (err) throw err;
+          console.log(
+            "-> Profile template created for the new user on " +
+              database_name +
+              " database inside the " +
+              collection_name_profile +
+              "collection!"
+          );
+        });
       });
   }
 
