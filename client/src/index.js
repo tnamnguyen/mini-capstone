@@ -35,7 +35,6 @@ ReactDOM.render(
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/editProfile" element={<EditProfile />} />
-        <Route path="/deleteprofile" element={<DeleteProfile />} />
         <Route path="/createJobs" element={<JobApplicationForm />} />
         <Route path="/jobs" element={<JobList />} />
         <Route path="/savedJobs" element={<SavedJobList />} />
