@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="1f58d950-fc33-4226-a528-bb8877cf2b77" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/navBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/navBar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/Styles/home.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/Styles/home.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/Styles/navBar.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/Styles/navBar.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +39,21 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="mini-capstone" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="mini-capstone" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -49,6 +66,7 @@
       <workItem from="1679429256453" duration="10087000" />
       <workItem from="1679610472701" duration="8376000" />
       <workItem from="1679795822382" duration="2085000" />
+      <workItem from="1680048983816" duration="1880000" />
     </task>
     <servers />
   </component>

@@ -56,18 +56,19 @@ function Home() {
                     <div className='home_posts'>
                         <div class="row">
                         <span class="column">
-                            <Button color="primary">Connections</Button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <text>&nbsp;&nbsp;&nbsp;&nbsp;</text>
+                            <Link to="#"><button class="button_6">Connections</button></Link>&nbsp;&nbsp;&nbsp;&nbsp;
                             <div><br></br></div>
-                            <div><Button color="primary">Saved Jobs</Button>&nbsp;</div>
+                            <div><Link to="#"><button class="button_6">Saved Jobs</button></Link></div>
                             <div><br></br></div>
-                            <span><Button color="primary">Messaging</Button></span>
+                            <span><Link to="#"><button class="button_6">Messaging</button></Link></span>
                         </span>
                         <span class="column">
-                            <div><Button color="primary">Invites</Button></div>
+                            <div><Link to="#"><button class="button_6">Invites</button></Link></div>
                             <div><br></br></div>
-                            <div><Button color="primary" href="/jobs">Your Jobs</Button></div>
+                            <div><Link to="/jobs"><button class="button_6" href="/jobs">Your Jobs</button></Link></div>
                             <div><br></br></div>
-                            <div><Button color="primary">Applied Jobs</Button></div>
+                            <div><Link to="#"><button class="button_6">Applied Jobs</button></Link></div>
                         </span>
                         </div>
                     </div>
