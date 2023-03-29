@@ -22,7 +22,7 @@ test('My Jobs List is loaded', () => {
         description: 'desc',
     }    
 ]
-    axios.get.mockResolvedValue({data: jobs});
+    axios.post.mockResolvedValue({data: jobs});
     render(<BrowserRouter><MyJobList/></BrowserRouter>)
     const myjobs = screen.getByTestId("jobs-1");
     expect(myjobs).toBeInTheDocument();

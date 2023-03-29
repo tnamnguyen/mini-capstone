@@ -79,7 +79,7 @@ function EditProfile() {
         <>
             <NavBar></NavBar>
            
-                <div class='edit_profile_container1'>
+                <div class='edit_profile_container1' data-testid="container">
     
                     {/* ********** Profile Picture Element ********** */}
                     <div class='edit_profile_pic'>

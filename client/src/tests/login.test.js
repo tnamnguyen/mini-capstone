@@ -1,3 +1,7 @@
+import {render, screen, cleanup} from "@testing-library/react"
+import '@testing-library/jest-dom'
+import { BrowserRouter } from "react-router-dom"
+import Login from '../components/login'
 import mockAxios from '../__mocks__/axios'
 
 //Testing if login form returns an active token 
@@ -25,3 +29,9 @@ test("should return an ative token", async() => {
 
 })
 
+// Testing the static document
+test('Login is loaded', () => {
+    render(<BrowserRouter><Login/></BrowserRouter>)
+    const login = screen.getByTestId("login-form");
+    expect(login).toBeInTheDocument();
+})

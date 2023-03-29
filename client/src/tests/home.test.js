@@ -1,5 +1,6 @@
 import {render, screen, cleanup} from "@testing-library/react"
 import '@testing-library/jest-dom'
+import axios from 'axios'
 import NavBar from "../components/navBar.js"
 import Home from "../components/home.js"
 
@@ -14,8 +15,21 @@ test('NavBar is loaded', () => {
 });
 
 
+jest.mock('axios')
+
 //Testing if main HTML component is loaded properly
 test('HomePage is loaded', () => {
+    const homedata = {
+        isLoggedIn: true,
+        isAdmin: false,
+        user: {
+            name: 'John Doe',
+            email: 'john.doe@test.com',
+            password: 'encryptedpassword',
+            type: "regular_user"
+        }
+    }
+    axios.post.mockResolvedValue({data: homedata});
     render(<Home></Home>)
     const home = screen.getByTestId("home_main_container");
     expect(home).toBeInTheDocument();   

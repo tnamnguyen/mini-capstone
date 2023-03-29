@@ -15,7 +15,7 @@ function Logout(){
 
     return(
         <>
-            <div className='log_out'>
+            <div className='log_out' data-testid="logout">
                 <h1 className='log_out_title'>Logging Out...</h1>
             </div>
         </>
