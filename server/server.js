@@ -340,7 +340,7 @@ app.post("/signup", async (req, res) => {
       
         console.log("Creating a new profile for user");
         var newProfile = new Profile({
-          user_id: res._id,
+          user_id: res.insertedId,
           name: input_name,
           education: "None",
           pastJob: "None",
