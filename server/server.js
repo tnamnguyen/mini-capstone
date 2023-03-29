@@ -29,6 +29,9 @@ function connectToMongooseDB(){
     .then(()=> console.log("Connected to Mongoose DB!\n"))
     .catch(()=> console.log("Unable to connect to Mongoose DB!"))
 }
+function disconnectMongooseDB(){
+  mongoose.connection.close()
+}
 connectToMongooseDB();
 
 
@@ -79,6 +82,7 @@ app.post('/home', authenticateToken, (req, res) => {
       "isAdmin": res.isAdmin,
       "user": res.user
     })
+    disconnectMongooseDB()
   }
 })
 
@@ -200,6 +204,7 @@ app.post('/login', async(req, res) => {
       message: "Successfully Signed-in! Redirecting to main page...",
       token: token, 
     })
+    disconnectMongooseDB()
   }
 });
 
@@ -355,9 +360,11 @@ app.post('/signup', async(req, res) => {
   //Sending back response to front end
   if (anyError){
     return res.send({isError: "True", message: erorrMessage})
+    disconnectMongooseDB()
   }
   else{
     return res.send({isError: "False", message: "User succesfully added to database, Redirecting to login page..."})
+    disconnectMongooseDB()
   }
 
 
@@ -383,6 +390,7 @@ app.get('/admin', async(req, res) => {
 
   //Seding response back to front-end
   res.send({numOfUsers: numOfUsers, numOfJobs: numOfJobs})
+  disconnectMongooseDB()
 
 });
 
@@ -409,6 +417,7 @@ app.get('/admin_listUsers', async(req, res) => {
   try {
     const users = await (await dbo.collection(collection_name).find().toArray())
     res.json(users);
+    disconnectMongooseDB()
   } catch (error) {
     console.log("Error when fetching from database");
     console.log(error);
@@ -434,6 +443,8 @@ app.post('/admin_makeAdmin', async(req, res) => {
   // update user type to admin
   const update = await (await dbo.collection(collection_name).updateOne({email: req.body.email}, {$set :{type :"admin"}}))
 
+  disconnectMongooseDB()
+
 });
 
 
@@ -452,6 +463,7 @@ app.post('/admin_makeRegularUser', async(req, res) => {
   // update user type to regular_user
   const update = await (await dbo.collection(collection_name).updateOne({email: req.body.email}, {$set :{type :"regular_user"}}))
 
+  disconnectMongooseDB()
 });
 
 
@@ -549,6 +561,7 @@ app.post('/editprofile', authenticateToken, async(req, res) =>{
           languages: result.languages,
           bio: result.bio
         })
+        disconnectMongooseDB()
         db_client.close();
       }
     })
@@ -604,6 +617,7 @@ app.post('/submiteditprofile', authenticateToken, async(req, res) => {
           isError: "True",
           message: errorMessage
         })
+        disconnectMongooseDB()
       }
       // Modify userName
       else{
@@ -627,6 +641,7 @@ app.post('/submiteditprofile', authenticateToken, async(req, res) => {
           message: "Successfully edited profile!",
           token: newToken,
         })
+        disconnectMongooseDB()
       }
     console.log("Profile Saved")
   }
@@ -639,6 +654,7 @@ app.post('/submiteditprofile', authenticateToken, async(req, res) => {
       isError: "True",
       message: errorMessage
     })
+    disconnectMongooseDB()
   }
 });
 
@@ -686,6 +702,7 @@ app.post('/createJobs', async(req, res) => {
         isError: "True",
         message: errorMessage
       })
+      disconnectMongooseDB()
     }
     else{
       var successMessage = "Job created successfully!"
@@ -694,6 +711,7 @@ app.post('/createJobs', async(req, res) => {
         isError: "False",
         message: successMessage
       })
+      disconnectMongooseDB()
     } 
     console.log("-> 1 New Job succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
     db_client.close();
@@ -720,10 +738,12 @@ app.get('/jobs', async(req, res) => {
   try {
     const jobs = await (await dbo.collection(collection_name).find().toArray())
     res.json(jobs);
+    disconnectMongooseDB()
   } catch (error) {
     console.log("Error when fetching from database");
     console.log(error);
-      db_client.close();
+    db_client.close();
+    disconnectMongooseDB()
   }
  
 });
@@ -752,6 +772,7 @@ app.get('/jobs', async(req, res) => {
         res.json({
           message: 'Job already saved'
         })
+        disconnectMongooseDB()
       }
       // Else, inserting new saved job
       else{
@@ -761,6 +782,7 @@ app.get('/jobs', async(req, res) => {
           res.json({
             message: 'Job saved successfully'
           })
+          disconnectMongooseDB()
           db.client.close();
         })
     }
@@ -800,10 +822,12 @@ app.post('/savedjobs', authenticateToken, async(req, res) => {
     // Finding all jobs matching ids from array
     const jobs = await dbo.collection(collection_name_Jobs).find({_id: {$in: object_ids}}).toArray();
     res.json(jobs)
+    disconnectMongooseDB()
 
   } catch(error) {
     console.log("Error when fetching from database");
     console.log(error);
+    disconnectMongooseDB()
     db_client.close();
   }
 })
@@ -830,6 +854,7 @@ app.post('/removejob', authenticateToken, async(req, res) => {
       res.json({
         message: "Job removed successfully"
       })
+      disconnectMongooseDB()
     }
   }
   )
@@ -867,10 +892,12 @@ app.post('/savedjobs', authenticateToken, async(req, res) => {
     // Finding all jobs matching ids from array
     const jobs = await dbo.collection(collection_name_Jobs).find({_id: {$in: object_ids}}).toArray();
     res.json(jobs)
+    disconnectMongooseDB()
 
   } catch(error) {
     console.log("Error when fetching from database");
     console.log(error);
+    disconnectMongooseDB()
     db_client.close();
   }
 })
@@ -905,6 +932,7 @@ app.post('/applyJob', authenticateToken, async(req, res) => {
       res.json({
         message: 'ALready applied to this job!'
       })
+      disconnectMongooseDB()
     }
     // Else, inserting new applied job
     else{
@@ -914,6 +942,7 @@ app.post('/applyJob', authenticateToken, async(req, res) => {
         res.json({
           message: 'Job application saved successfully'
         })
+        disconnectMongooseDB()
         db.client.close();
       })
   }
@@ -953,12 +982,13 @@ app.post('/appliedjobs', authenticateToken, async(req, res) => {
     // Finding all jobs matching ids from array
     const jobs = await dbo.collection(collection_name_Jobs).find({_id: {$in: object_ids}}).toArray();
     const applications = await dbo.collection("applyJob").find({user_id: res.user.id}).toArray();
-    
     res.json({jobs, applications})
+    disconnectMongooseDB()
 
   } catch(error) {
     console.log("Error when fetching from database");
     console.log(error);
+    disconnectMongooseDB()
     db_client.close();
   }
 })
@@ -986,6 +1016,7 @@ app.post('/removejobApplication', authenticateToken, async(req, res) => {
       res.json({
         message: "Job application removed successfully"
       })
+      disconnectMongooseDB()
     }
   }
   )
@@ -1143,6 +1174,7 @@ app.post('/reset', async(req, res) => {
     );
 
     // Close the database connection
+    disconnectMongooseDB()
     db_client.close();
 
 
@@ -1202,11 +1234,12 @@ app.post('/createNotification', authenticateToken, async(req, res) => {
     if(err) throw err;
     console.log("-> 1 new Notification for user on " + database_name + " database inside the " + collection_name + " collection!")
     db.client.close();
+    disconnectMongooseDB()
   })
 })
 
 
-app.post('/removeNotification', authenticateToken, async(req, res) => {
+app.post('/deleteNotification', authenticateToken, async(req, res) => {
 
   console.log(`route for removing notifications is running`)
 
@@ -1216,8 +1249,9 @@ app.post('/removeNotification', authenticateToken, async(req, res) => {
   const db_client = await MongoClient.connect(url)
   const dbo = db_client.db(database_name)
 
-  dbo.collection(collection_name).deleteOne({_id: new ObjectID(req.body.notification_id)})
-  res.json("Notification deleted Successfully")
+  dbo.collection(collection_name).deleteOne({_id: new ObjectId(req.body.notification_id)})
+  res.json("Notification deleted Successfully!")
+  disconnectMongooseDB()
 })
 
 app.post('/getNotifications', authenticateToken, async(req, res) => {
@@ -1232,23 +1266,11 @@ app.post('/getNotifications', authenticateToken, async(req, res) => {
 
   const notifications = await dbo.collection(collection_name).find({user_id: res.user.id}).toArray();
   res.json(notifications)
+  disconnectMongooseDB()
 
 })
 
 
-app.post('/deleteNotification', async(req, res) => {
-
-  console.log(`route for deleting notification is running`)
-
-  // Connecting to the specific database and collection
-  const database_name = "Accounts"
-  const collection_name = "notifications"
-  const db_client = await MongoClient.connect(url)
-  const dbo = db_client.db(database_name)
-
-  const notifications = await dbo.collection(collection_name).deleteOne({_id: new ObjectId(req.body.notification_id)})
-
-})
 
 app.post('/getNumberOfNotifications', authenticateToken,async(req, res) => {
 
@@ -1260,6 +1282,7 @@ app.post('/getNumberOfNotifications', authenticateToken,async(req, res) => {
 
   const num = await dbo.collection(collection_name).countDocuments()
   res.json(num)
+  disconnectMongooseDB()
 
 })
 

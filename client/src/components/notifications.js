@@ -20,6 +20,7 @@ function Notifications() {
 
 
   useEffect(() => {
+    setRemoveSuccess("")
     setRefresh(false)
     // Fetch all jobs from the backend API when the component mounts
     axios
@@ -40,6 +41,9 @@ function Notifications() {
       .post(SERVER_URL + "/deleteNotification", {accessToken, notification_id: id})
       .then((response) => {
         setRemoveSuccess(response.data)
+        setTimeout(()=>{
+          setRemoveSuccess("")
+      }, 3000)
       })
       .catch((error) => {
         console.error("Error deleting the  notification:", error);
@@ -113,6 +117,7 @@ function Notifications() {
             </tbody>
           </table>
         </div>
+        <div id="notifications_remove_message">{removeSuccess}</div>
         <Link to="/jobs" className="myButton">
           See All Notifications
         </Link>
