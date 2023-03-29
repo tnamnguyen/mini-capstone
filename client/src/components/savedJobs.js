@@ -78,6 +78,7 @@ function SavedJobList() {
                 <th>Experience</th>
                 <th>Location</th>
                 <th>Description</th>
+                <th>View</th>
                 <th>Remove Button</th>
               </tr>
             </thead>
@@ -88,7 +89,6 @@ function SavedJobList() {
                   <td>{job.experience}</td>
                   <td>{job.location}</td>
                   <td>{job.description}</td>
-                  <td>{removeButton(job._id)}</td>
                   <td>
                     <Link
                       to="/viewJob"
@@ -99,6 +99,7 @@ function SavedJobList() {
                       <button>View Details</button>
                     </Link>
                   </td>
+                  <td>{removeButton(job._id)}</td>
                 </tr>
               ))}
             </tbody>

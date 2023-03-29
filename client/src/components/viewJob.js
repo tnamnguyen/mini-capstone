@@ -120,8 +120,8 @@ function ViewJob(props) {
         <h3>{data ? data.description : "Oops"}</h3>
         <br></br>
       </div>
-      {addSave(data.id)}
-      {addApply(data.id)}
+      {addSave(data._id)}
+      {addApply(data._id)}
       <Link to="/jobs">
         <button id="viewJob_save">Back</button>
       </Link>

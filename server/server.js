@@ -946,9 +946,9 @@ app.post('/applyJob', authenticateToken, async(req, res) => {
     function(err, result){
     // If entry already exists in database
     if (result != null) {
-      console.log('ALready applied to this job!')
+      console.log('Already applied to this job!')
       res.json({
-        message: 'ALready applied to this job!'
+        message: 'Already applied to this job!'
       })
     }
     // Else, inserting new applied job
