@@ -341,6 +341,7 @@ app.post("/signup", async (req, res) => {
         console.log("Creating a new profile for user");
         var newProfile = new Profile({
           user_id: res._id,
+          name: input_name,
           education: "None",
           pastJob: "None",
           currentJob: "None",
@@ -466,6 +467,7 @@ app.post("/profile", authenticateToken, async (req, res) => {
           console.log("Creating a new profile for user");
           var newProfile = new Profile({
             user_id: id,
+            name: res.user.name,
             education: "None",
             pastJob: "None",
             currentJob: "None",
@@ -574,6 +576,7 @@ app.post("/submiteditprofile", authenticateToken, async (req, res) => {
     .collection(collection_name)
     .findOne({ user_id: id });
   if (userProfile) {
+    userProfile.name = input_userName;
     userProfile.education = input_education;
     userProfile.pastJob = input_pastJob;
     userProfile.currentJob = input_currentJob;
@@ -599,7 +602,7 @@ app.post("/submiteditprofile", authenticateToken, async (req, res) => {
         message: errorMessage,
       });
     }
-    // Modify userName
+    // Modify userName in users
     else {
       user.name = input_userName;
       await dbo

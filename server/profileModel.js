@@ -5,6 +5,10 @@ const profileSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    name: {
+        type: String,
+        required: true
+    },
     education: {
         type: String,
         required: false
