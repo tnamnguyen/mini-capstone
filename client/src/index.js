@@ -21,6 +21,7 @@ import Connections from './components/connections.js';
 import AddConnections from './components/addConnections.js';
 import PendingConnections from './components/pendingConnections.js';
 import OTP from "./components/OTP"
+import DeleteProfile from "./components/deleteProfile";
 import ViewJob from "./components/viewJob";
 
 
