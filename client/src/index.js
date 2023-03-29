@@ -10,6 +10,7 @@ import EditProfile from "./components/editProfile.js";
 import JobApplicationForm from "./components/createJob.js";
 import JobList from "./components/jobs.js";
 import SavedJobList from "./components/savedJobs";
+import AppliedJobList from "./components/appliedJobs";
 import Admin from "./components/admin";
 import AdminListUsers from "./components/adminListUsers";
 import "bootstrap/dist/css/bootstrap.css";
@@ -37,6 +38,7 @@ ReactDOM.render(
         <Route path="/createJobs" element={<JobApplicationForm />} />
         <Route path="/jobs" element={<JobList />} />
         <Route path="/savedJobs" element={<SavedJobList />} />
+        <Route path="/appliedJobs" element={<AppliedJobList />} />
         <Route path="/myJobs" element={<MyJobList />} />
         <Route path="/editJob/:jobId" component={JobEditForm} element={<JobEditForm />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
