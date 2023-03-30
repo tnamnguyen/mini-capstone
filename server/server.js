@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const port = 3001
+const Moment = require('moment')
 const cors = require('cors')
 const bodyParser = require("express")
 const bcrypt = require('bcryptjs')
@@ -30,7 +31,7 @@ function connectToMongooseDB(){
     .catch(()=> console.log("Unable to connect to Mongoose DB!"))
 }
 function disconnectMongooseDB(){
-  mongoose.connection.close()
+  //mongoose.connection.close()
 }
 connectToMongooseDB();
 
@@ -1208,20 +1209,41 @@ app.post('/createNotification', authenticateToken, async(req, res) => {
   // New applied job that will be added to the database
   var newNotification
 
+
+
+
   //If type of notification is Job Application
   if(req.body.type == "Job Application")
   {
     //Retrieving Job info
-    const job = await dbo.collection("Jobs").findOne({_id: new ObjectId(req.body.job_id)})
+    const job = await dbo.collection("Jobs").findOne({_id: new ObjectId(req.body.object_id)})
 
     //Setting up the message that will appear in the notification
     const message = "The job application for the Job \"" + job.title + "\" has been successfully sent to the recruiter, Good Luck!"
-
     newNotification = new Notifications({
-      time_stamp: new Date(),
+      time_stamp: Moment().format('DD-MM-YYYY HH:mm'),
       user_id: res.user.id,
-      object_id: req.body.job_id,
+      object_id: req.body.object_id,
       type: "Job Application",
+      message: message,
+      status: "Unread",
+      favorite: false
+    })
+  }
+
+  //If type of notification is Job Application withdrawal
+  else if(req.body.type == "Job Application Withdrawal")
+  {
+    //Retrieving Job info
+    const job = await dbo.collection("Jobs").findOne({_id: new ObjectId(req.body.object_id)})
+
+    //Setting up the message that will appear in the notification
+    const message = "The job application for the Job \"" + job.title + "\" has been successfully withdrawn!"
+    newNotification = new Notifications({
+      time_stamp: Moment().format('DD-MM-YYYY HH:mm'),
+      user_id: res.user.id,
+      object_id: req.body.object_id,
+      type: "Job Application Withdrawal",
       message: message,
       status: "Unread",
       favorite: false
@@ -1282,6 +1304,46 @@ app.post('/getNumberOfNotifications', authenticateToken,async(req, res) => {
 
   const num = await dbo.collection(collection_name).countDocuments()
   res.json(num)
+  disconnectMongooseDB()
+
+})
+
+
+
+
+app.post('/makeFavoriteNotification', authenticateToken,async(req, res) => {
+
+  console.log(`route for making a notification favorite is running`)
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "notifications"
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  console.log(req.body.notification_id)
+  await dbo.collection(collection_name).updateOne({_id: new ObjectId(req.body.notification_id)}, {$set: {favorite: true}})
+  res.json("Added to favorites!")
+  disconnectMongooseDB()
+
+})
+
+
+
+
+app.post('/unmakeFavoriteNotification', authenticateToken,async(req, res) => {
+
+  console.log(`route for unmaking a notification favorite is running`)
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "notifications"
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  console.log(req.body.notification_id)
+  await dbo.collection(collection_name).updateOne({_id: new ObjectId(req.body.notification_id)}, {$set: {favorite: false}})
+  res.json("Removed from favorites!")
   disconnectMongooseDB()
 
 })

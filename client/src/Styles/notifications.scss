@@ -120,6 +120,11 @@ button-job {
 
 
 #notification_trash_button{
+  margin-left: 15px;
+  padding-left: 5px;
+  background-color: white;
+  border-color: white;
+  border: 0px solid;
   width: 30px;
   height: 30px;
 }
@@ -128,4 +133,31 @@ button-job {
   color: red;
   font-size: 19px;
   text-align: center;
+}
+
+.star-icon {
+  text-align: center;
+  border-color: black;
+  fill: black;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+.star-icon-yellow {
+  text-align: center;
+  border-color: black;
+  fill: yellow;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+ 
+  stroke: #646464;
+  stroke-width: 1px;
+  stroke-linejoin: round;
+}
+
+#notification_favorite_button{
+  background-color: white;
+  border-color: white;
+  border: 0px solid;
 }

@@ -3,7 +3,7 @@ const mongoose = require ('mongoose');
 const notificationsSchema = new mongoose.Schema({
 
     time_stamp:{
-        type: Date,
+        type: String,
         required: true
     },
 

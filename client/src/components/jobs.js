@@ -69,7 +69,7 @@ function JobList() {
         //Create notification only if first time applying to the job
         if(response.data.message != 'ALready applied to this job!')
         {
-          createNotification(job_id)
+          createNotification(job_id, "Job Application")
         }
 
         setAppliedJobId(job_id);
@@ -84,10 +84,10 @@ function JobList() {
 
 
   // Call to create a new notification
-  function createNotification(job_id) {
+  function createNotification(job_id, typeOfNotification) {
     console.log("Notification creation is called!");
     axios
-      .post(SERVER_URL + "/createNotification", { job_id, accessToken, type:"Job Application" })
+      .post(SERVER_URL + "/createNotification", { object_id: job_id , accessToken, type: typeOfNotification })
       .then((response) => {
         setAppliedJobId(job_id);
         setApplySuccess(response.data.message);
