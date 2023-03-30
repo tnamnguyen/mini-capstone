@@ -376,11 +376,9 @@ app.post("/signup", async (req, res) => {
   //Sending back response to front end
   if (anyError){
     return res.send({isError: "True", message: erorrMessage})
-    disconnectMongooseDB()
   }
   else{
     return res.send({isError: "False", message: "User succesfully added to database, Redirecting to login page..."})
-    disconnectMongooseDB()
   }
 });
 

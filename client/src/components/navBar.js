@@ -101,9 +101,11 @@ function NavBar() {
         if(!loginElement){
             return(
                 <li class="nav-item">
-                    <a class="nav-link" href="/notifications" outline color="secondary">Notifications 
-                        <span class='badge badge-warning' id='lblCartCount'>{numNotifications}</span>
-                    </a>
+                    <Button class="nav-link" outline color="secondary" href="/notifications">
+                        <a outline color="secondary">Notifications 
+                            <span class='badge badge-warning' id='lblCartCount'>{numNotifications}</span>
+                        </a>
+                    </Button>
                 </li>
             )
         }
