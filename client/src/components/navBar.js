@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import "../Styles/navBar.scss"
 import axios from "axios"
+import { Button } from 'reactstrap';
 
 function NavBar() {
 
@@ -58,7 +59,7 @@ function NavBar() {
         {
             return(
                 <li class="nav-item">
-                    <a class="nav-link" href="/logout">Log Out</a>
+                    <Button class="nav-link" color="primary" href="/logout">Log Out</Button>
                 </li>
             ) 
         }
@@ -78,7 +79,7 @@ function NavBar() {
         if(!loginElement){
             return(
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Connections</a>
+                    <Button class="nav-link" outline color="secondary" href="/connections">Connections</Button>
                 </li>
             )
         }
@@ -89,7 +90,7 @@ function NavBar() {
         if(!loginElement){
             return(
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Chat</a>
+                    <Button class="nav-link" outline color="secondary" href="#">Chat</Button>
                 </li>
             )
         }
@@ -100,7 +101,7 @@ function NavBar() {
         if(!loginElement){
             return(
                 <li class="nav-item">
-                    <a class="nav-link" href="/notifications">Notifications 
+                    <a class="nav-link" href="/notifications" outline color="secondary">Notifications 
                         <span class='badge badge-warning' id='lblCartCount'>{numNotifications}</span>
                     </a>
                 </li>
@@ -113,7 +114,7 @@ function NavBar() {
         if(!loginElement){
             return(
                 <li class="nav-item">
-                    <a class="nav-link" href="/profile">Profile</a>
+                    <Button class="nav-link" outline color="secondary" href="/profile">Profile</Button>
                 </li>
             )
         }
@@ -131,7 +132,7 @@ function NavBar() {
                 <ul class="navbar-nav mr-auto">
                     {addConnections()}
                     <li class="nav-item">
-                        <a class="nav-link" href="/jobs">Jobs</a>
+                        <Button class="nav-link" outline color="secondary" href="/jobs">Jobs</Button>
                     </li>
                     {addChat()}
                     {addNotifications()}

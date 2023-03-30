@@ -18,9 +18,17 @@ import MyJobList from "./components/myJobs";
 import JobEditForm from "./components/editJob";
 import ForgotPassword from "./components/forgotPassword";
 import ResetPassword from "./components/resetPassword";
-import OTP from "./components/OTP";
+import Connections from './components/connections.js';
+import AddConnections from './components/addConnections.js';
+import PendingConnections from './components/pendingConnections.js';
+import OTP from "./components/OTP"
+import User from "./components/user"
+import DeleteProfile from "./components/deleteProfile";
 import ViewJob from "./components/viewJob";
 import Notifications from "./components/notifications";
+
+
+
 
 ReactDOM.render(
   <React.StrictMode>
@@ -32,19 +40,25 @@ ReactDOM.render(
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/editProfile" element={<EditProfile />} />
+        <Route path="/deleteprofile" element={<DeleteProfile />} />
         <Route path="/createJobs" element={<JobApplicationForm />} />
         <Route path="/jobs" element={<JobList />} />
         <Route path="/savedJobs" element={<SavedJobList />} />
         <Route path="/appliedJobs" element={<AppliedJobList />} />
         <Route path="/myJobs" element={<MyJobList />} />
-        <Route path="/editJob" element={<JobEditForm />} />
+        <Route path="/editJob/:jobId" component={JobEditForm} element={<JobEditForm />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/reset" element={<ResetPassword />} />
-        <Route path="/OTP" element={<OTP />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/adminListUsers" element={<AdminListUsers />} />
+        <Route path="/OTP" element={<OTP/>} />
+        <Route path="/admin" element={<Admin/>}/>
+        <Route path="/adminListUsers" element={<AdminListUsers/>}/>
+        <Route path="/user" element={<User/>}/>
+        <Route path="/connections" element={<Connections/>}/>
+        <Route path="/addConnections" element={<AddConnections/>}/>
+        <Route path="/pendingConnections" element={<PendingConnections/>}/>
         <Route path="/viewJob" element={<ViewJob />} />
         <Route path="/notifications" element={<Notifications />} />
+
 
       </Routes>
     </BrowserRouter>

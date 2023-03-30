@@ -35,13 +35,15 @@ function JobApplicationForm() {
   
     const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
+    const accessToken = localStorage.getItem("token")
+
     const handleSubmit = async (event) => {
       //Prevent the form from it's default behavior, which reloads the page
       event.preventDefault()
       // Do something with the form data, such as send it to a server
       console.log({ title, experience, location, description });
 
-      await axios.post(SERVER_URL + '/createJobs', {title,experience, location, description})
+      await axios.post(SERVER_URL + '/createJobs', {title,experience, location, description, accessToken})
       .then(response => {
         console.log(response.data.isError);
           //If backend returns an error

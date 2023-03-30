@@ -3,6 +3,7 @@ import {    useEffect   } from 'react';
 import NavBar from './navBar';
 import '../Styles/editProfile.scss';
 import axios from "axios"
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 
 function EditProfile() {
     const SERVER_URL = process.env.REACT_APP_SERVER_URL
@@ -51,6 +52,33 @@ function EditProfile() {
     }
 
 
+    // Call to delete profile
+    function deleteProfile(){
+        console.log(`delete button was clicked`)
+        // Call confirm delete function or create confirm button
+        toggleModal();
+
+    }
+
+    // Confirmed delete, called by an "Are you sure" Dialog button
+    function confirmedDelete(){
+        console.log(`confirmed delete button was clicked`)
+        // Delete profile
+        axios.post(SERVER_URL + '/confirmdelete', {accessToken})
+        .then((response) => {
+            // Redirecting to redirecting user to delete profile page
+            console.log(response);
+            console.log(`Redirecting user to delete profile page`);
+            setTimeout(() => {
+                window.location.href = "/deleteprofile"
+            }, 200)
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
+
     //HTML Forms that appear under each field when the "Edit" button is pressed
     const [editProfilePic, setEditProfilePic] = useState(false);
     const [editUserName, setEditUserName] = useState(false);
@@ -74,11 +102,26 @@ function EditProfile() {
     //Variables for the feedback
     const [editStatus_success, setEditStatus_success] = useState('');
     const [editStatus_err, setEditStatus_err] = useState('');
+
+    //Variables for the visibility of the modal
+    const [modal, setModal] = useState(false);
+    const toggleModal = () => setModal(!modal);
     
     return ( 
         <>
             <NavBar></NavBar>
            
+           {/* ********** Modal Element ********** */}
+            <Modal isOpen={modal} toggleModal={toggleModal}>
+                <ModalHeader toggleModal={toggleModal}>Delete Profile</ModalHeader>
+                <ModalBody>
+                    <center>Are you sure?</center>
+                </ModalBody>
+                <ModalFooter>
+                    <span><Button color="primary" onClick={confirmedDelete}>Yes</Button></span>
+                    <span><Button color="primary" onClick={toggleModal}>No</Button></span>
+                </ModalFooter>
+            </Modal>
                 <div class='edit_profile_container1'>
     
                     {/* ********** Profile Picture Element ********** */}
@@ -239,6 +282,11 @@ function EditProfile() {
                             }
                         </div>
                         
+
+                        {/* ********** Delete Button ********** */}
+                        <div class="delete_button">
+                            <button id='delete_button' onClick={() => deleteProfile()}>Delete Profile</button>
+                        </div>
 
 
                         {/* ********** Submit Button ********** */}

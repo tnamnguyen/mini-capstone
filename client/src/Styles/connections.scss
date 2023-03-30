@@ -1,0 +1,260 @@
+@import "./variables/variables.scss";
+
+
+  
+.createjob-container {
+  margin: auto;
+  background-color: $grey_Color;
+  border: solid 1px $blue_Color;
+  border-width: 0.5ch;
+  border-radius: 30px;
+  padding: 8em;
+
+  #createjob_title{
+    color: $blue_Color;
+    text-align: center;
+    margin:auto;
+    padding: 3;
+    margin-top: 33;
+  }
+
+}
+
+#createjob_title{
+  margin:auto;
+  padding: 3;
+  margin-top: 33;
+}
+
+.createjob-form {
+  display: flex;
+  flex-wrap: wrap;
+  input, button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+input {
+  padding: 10px;
+  width: 100%;
+  margin: 10px 0;
+  border: 1px solid gray;
+  border-radius: 4px;
+  background-color: white;
+}
+
+#createjob_button {
+  background-color: $blue_Color;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.connection-table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 400px;
+}
+
+button {
+  background-color: blue;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+}
+
+button-job {
+  background-color: blue;
+  color: white;
+  border: solid;
+  border-radius: 40%;
+  cursor: pointer;
+  border-color: black;
+  padding: 15px
+}
+
+#job_title{
+  color: $blue_Color;
+    text-align: center;
+    margin:auto;
+    padding: 3;
+    margin-top: 33;
+}
+
+
+
+.container {
+display: flex;
+justify-content: center;
+flex-wrap: wrap;
+text-align: left;
+border: solid;
+border-color: blue;
+max-width: 860px;
+}
+
+span {
+
+text-align: center;
+flex-grow: 1;
+flex-basis: 20%;
+
+height: 50px;
+
+}
+
+.container2 {
+display: flex;
+justify-content: flex-end;
+padding-right: 110px;
+  }
+
+
+  .connection-table {
+    border-collapse: collapse;
+    
+    width: 100%;
+    max-width: 800px;
+  }
+
+  .connection-table th,
+  .connection-table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+  }
+  
+  .connection-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+  }
+  
+  .connection-table td {
+    background-color: #fff;
+  }
+
+  .myButton {
+    box-shadow:inset 0px 1px 0px 0px #97c4fe;
+    background-color:blue;
+    border-radius:6px;
+    border:1px solid blue;
+    display:block;
+    margin: auto;
+    text-align: center;
+    cursor:pointer;
+    color:#ffffff;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px blue;
+  
+  }
+  .myButton:hover {
+    background:linear-gradient(to bottom, white 5%, #3d94f6 100%);
+    background-color:white;
+  }
+  .myButton:active {
+    position:relative;
+    top:1px;
+  }
+  
+ 
+  .connection_message{
+    margin: 2px;
+    background-color: $light_blue_Color;
+}
+  .connection_delete{
+  margin: 2px;
+  background-color: $light_blue_Color;
+}
+
+.delete_td{
+  text-align: center;
+}
+
+
+  // test for add connections
+  #addToConnections{
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 30px;
+    background-color: $light_blue_Color;
+  }
+
+
+.button-14 {
+  background-image: linear-gradient(#f7f8fa ,#e7e9ec)!important;
+  border-color: #adb1b8 #a2a6ac #8d9096!important;
+  border-style: solid!important;
+  border-width: 1px!important;
+  border-radius: 3px!important;
+  box-shadow: rgba(255,255,255,.6) 0 1px 0 inset!important;
+  box-sizing: border-box!important;
+  color: #0f1111!important;
+  cursor: pointer!important;
+  display: inline-block!important;
+  font-family: "Amazon Ember",Arial,sans-serif!important;
+  font-size: 14px!important;
+  height: 29px!important;
+  outline: 0!important;
+  overflow: hidden!important;
+  padding: 0 11px!important;
+  text-align: center!important;
+  text-decoration: none!important;
+  text-overflow: ellipsis!important;
+  user-select: none!important;
+  -webkit-user-select: none!important;
+  touch-action: manipulation!important;
+  white-space: nowrap!important;
+}
+
+.button-14:active {
+  border-bottom-color: #a2a6ac;
+}
+
+.button-14:active:hover {
+  border-bottom-color: #a2a6ac;
+}
+
+.button-14:hover {
+  border-color: #a2a6ac #979aa1 #82858a;
+}
+
+.button-14:focus {
+  border-color: #e77600;
+  box-shadow: rgba(228, 121, 17, .5) 0 0 3px 2px;
+  outline: 0;
+}
+
+
+.add-table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 800px;
+}
+
+.add-table th,
+.add-table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ccc;
+}
+
+.add-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.add-table td {
+  background-color: #fff;
+}
+
+table.add-table tbody tr:nth-child(n+11) {
+  display: none; // hide rows starting from the 6th row (index 5)
+}

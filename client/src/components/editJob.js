@@ -1,41 +1,59 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import NavBar from "./navBar";
 import "../Styles/create-job.scss";
+import "../Styles/editJob.scss";
 
 function JobEditForm() {
   const [title, setTitle] = useState("");
   const [experience, setExperience] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
+  const [editSuccess, setEditSuccess] = useState('');
+  const [editErr, setEditErr] = useState('');
 
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
-  const handleSubmit = async () => {
+  const accessToken = localStorage.getItem("token")
+
+  // Getting the parameter from my jobs page
+  const { jobId } = useParams();
+  console.log(jobId);
+  const handleSubmit = async (event) => {
+    event.preventDefault()
     // Do something with the form data, such as send it to a server
     console.log({ title, experience, location, description });
     //Change to edit and not post
     await axios
-      .post(SERVER_URL + "/createJobs", {
+      .post(SERVER_URL + "/editjob", {
+        jobId,
         title,
         experience,
         location,
         description,
+        accessToken
       })
       .then((response) => {
         //If backend returns an error
         if (response.data.isError == "True") {
+          setEditErr(response.data.message)
+          setEditSuccess('')
+          setTimeout(() => {
+            window.location.href = "/myJobs";
+          }, 3000)
         }
 
         //If backend returns success
         if (response.data.isError == "False") {
+          setEditErr('')
+          setEditSuccess(response.data.message)
           setTimeout(() => {
-            window.location.href = "http://localhost:3000/";
-          }, 4000);
+            window.location.href = "/myJobs";
+          }, 3000);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error);});
   };
 
   return (
@@ -91,6 +109,8 @@ function JobEditForm() {
             <br />
 
             <button type="submit">Submit</button>
+            <div className='editErr'>{editErr}</div>
+            <div className='editSuccess'>{editSuccess}</div>
           </form>
         </div>
       </div>
