@@ -22,8 +22,10 @@ import Connections from './components/connections.js';
 import AddConnections from './components/addConnections.js';
 import PendingConnections from './components/pendingConnections.js';
 import OTP from "./components/OTP"
+import User from "./components/user"
 import DeleteProfile from "./components/deleteProfile";
 import ViewJob from "./components/viewJob";
+
 
 
 
@@ -49,10 +51,12 @@ ReactDOM.render(
         <Route path="/OTP" element={<OTP/>} />
         <Route path="/admin" element={<Admin/>}/>
         <Route path="/adminListUsers" element={<AdminListUsers/>}/>
+        <Route path="/user" element={<User/>}/>
         <Route path="/connections" element={<Connections/>}/>
         <Route path="/addConnections" element={<AddConnections/>}/>
         <Route path="/pendingConnections" element={<PendingConnections/>}/>
         <Route path="/viewJob" element={<ViewJob />} />
+
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
