@@ -88,6 +88,9 @@ function Profile() {
                         <Link to="/editprofile">
                             <button id='profile_edit_profile_button'>Edit Profile</button>
                         </Link>
+                        <Link to="/appliedJobs">
+                            <button id='profile_edit_profile_button'>See my Job Applications</button>
+                        </Link>
                     </div>
                 </div>
             </div>
