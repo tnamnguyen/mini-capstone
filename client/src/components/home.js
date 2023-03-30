@@ -68,7 +68,7 @@ function Home() {
                             <div><br></br></div>
                             <div><Link to="/myJobs"><button class="button_6" href="/myJobs">Your Jobs</button></Link></div>
                             <div><br></br></div>
-                            <div><Link to="#"><button class="button_6">Applied Jobs</button></Link></div>
+                            <div><Link to="/appliedJobs"><button class="button_6">Applied Jobs</button></Link></div>
                         </span>
                         </div>
                     </div>
