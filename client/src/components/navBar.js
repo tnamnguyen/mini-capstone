@@ -73,7 +73,7 @@ function NavBar() {
         if(!loginElement){
             return(
                 <li class="nav-item">
-                    <Button class="nav-link" outline color="secondary" href="#">Connections</Button>
+                    <Button class="nav-link" outline color="secondary" href="/connections">Connections</Button>
                 </li>
             )
         }
