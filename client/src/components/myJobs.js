@@ -47,7 +47,7 @@ function MyJobList() {
       <NavBar></NavBar>
 
       <div>
-        <h1 id="job_title">All Jobs</h1>
+        <h1 id="job_title">Created Jobs</h1>
         <br />
         <div className="container">
           <table className="job-table">

@@ -22,7 +22,9 @@ import Connections from './components/connections.js';
 import AddConnections from './components/addConnections.js';
 import PendingConnections from './components/pendingConnections.js';
 import OTP from "./components/OTP"
+import DeleteProfile from "./components/deleteProfile";
 import ViewJob from "./components/viewJob";
+
 
 
 ReactDOM.render(
@@ -35,6 +37,7 @@ ReactDOM.render(
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/editProfile" element={<EditProfile />} />
+        <Route path="/deleteprofile" element={<DeleteProfile />} />
         <Route path="/createJobs" element={<JobApplicationForm />} />
         <Route path="/jobs" element={<JobList />} />
         <Route path="/savedJobs" element={<SavedJobList />} />
