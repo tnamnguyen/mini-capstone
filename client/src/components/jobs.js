@@ -57,9 +57,34 @@ function JobList() {
   // Call to apply to the job
   function applyJob(job_id) {
     clearTimer();
+    
     console.log("apply button was clicked");
     axios
       .post(SERVER_URL + "/applyJob", { job_id, accessToken })
+      .then((response) => {
+
+        //Create notification only if first time applying to the job
+        if(response.data.message != 'ALready applied to this job!')
+        {
+          createNotification(job_id, "Job Application")
+        }
+
+        setAppliedJobId(job_id);
+        setApplySuccess(response.data.message);
+        const timer = setTimeout(() => {
+          setApplySuccess("");
+          setAppliedJobId(null);
+        }, 3000);
+        timerRef.current = timer;
+      });
+  }
+
+
+  // Call to create a new notification
+  function createNotification(job_id, typeOfNotification) {
+    console.log("Notification creation is called!");
+    axios
+      .post(SERVER_URL + "/createNotification", { object_id: job_id , accessToken, type: typeOfNotification })
       .then((response) => {
         setAppliedJobId(job_id);
         setApplySuccess(response.data.message);

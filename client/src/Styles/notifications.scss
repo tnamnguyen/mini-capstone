@@ -1,0 +1,163 @@
+//This file contains all the CSS styling of the notifications page
+@import "./variables/variables.scss";
+
+
+button-job {
+    background-color: blue;
+    color: white;
+    border: solid;
+    border-radius: 40%;
+    cursor: pointer;
+    border-color: black;
+    padding: 15px
+  }
+  
+  #job_title{
+    color: $blue_Color;
+      text-align: center;
+      margin:auto;
+      padding: 3;
+      margin-top: 33;
+  }
+  
+  
+  
+  .container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: left;
+  border: solid;
+  border-color: blue;
+  }
+  
+  span {
+  
+  text-align: center;
+  flex-grow: 1;
+  flex-basis: 20%;
+  
+  height: 50px;
+  
+  }
+  
+  .container2 {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 110px;
+    }
+  
+  
+    .job-table {
+      border-collapse: collapse;
+      
+      width: 100%;
+      max-width: 800px;
+    }
+  
+    .job-table th,
+    .job-table td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ccc;
+    }
+    
+    .job-table th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+    
+    .job-table td {
+      background-color: #fff;
+    }
+  
+    .myButton {
+      box-shadow:inset 0px 1px 0px 0px #97c4fe;
+      background-color:blue;
+      border-radius:6px;
+      border:1px solid blue;
+      display:block;
+      margin: auto;
+      text-align: center;
+      cursor:pointer;
+      color:#ffffff;
+      font-family:Arial, sans-serif;
+      font-size:15px;
+      font-weight:bold;
+      padding:6px 24px;
+      text-decoration:none;
+      text-shadow:0px 1px 0px blue;
+    
+    }
+    .myButton:hover {
+      background:linear-gradient(to bottom, white 5%, #3d94f6 100%);
+      background-color:white;
+    }
+    .myButton:active {
+      position:relative;
+      top:1px;
+    }
+    
+    .success-message {
+      position: fixed;
+      color: green;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .popup {
+      position: fixed;
+      bottom: 10%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+
+#notification_trash_button{
+  margin-left: 15px;
+  padding-left: 5px;
+  background-color: white;
+  border-color: white;
+  border: 0px solid;
+  width: 30px;
+  height: 30px;
+}
+
+#notifications_remove_message{
+  color: red;
+  font-size: 19px;
+  text-align: center;
+}
+
+.star-icon {
+  text-align: center;
+  border-color: black;
+  fill: black;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+.star-icon-yellow {
+  text-align: center;
+  border-color: black;
+  fill: yellow;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+ 
+  stroke: #646464;
+  stroke-width: 1px;
+  stroke-linejoin: round;
+}
+
+#notification_favorite_button{
+  background-color: white;
+  border-color: white;
+  border: 0px solid;
+}

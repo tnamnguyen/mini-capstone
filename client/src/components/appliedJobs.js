@@ -46,6 +46,10 @@ function AppliedJobList() {
   async function removeJob(job_id){
     clearTimer();
     console.log('remove button was clicked')
+
+    //Creating a notification
+    createNotification(job_id, "Job Application Withdrawal")
+
     await axios.post(SERVER_URL + '/removejobApplication', {job_id, accessToken})
     .then(response => {
       setRemoveSuccess(response.data.message)
@@ -69,12 +73,25 @@ function AppliedJobList() {
     }
   };
 
+
+  // Call to create a new notification
+  function createNotification(job_id, typeOfNotification) {
+    console.log("Notification creation is called!");
+    axios
+      .post(SERVER_URL + "/createNotification", { object_id: job_id , accessToken, type: typeOfNotification })
+      .then((response) => {
+        const timer = setTimeout(() => {
+        }, 3000);
+        timerRef.current = timer;
+      });
+  }
+
     // Add remove button if user is logged in
     function removeButton(job_id){
       if(!login){
         return(
           <>
-            <button onClick={() => removeJob(job_id)} className = 'jobs_removeJob_button'>Remove my application!</button>
+            <button onClick={() => removeJob(job_id)} className = 'jobs_removeJob_button'>Withdraw my application!</button>
             {removedJobId === job_id && (
               <div className="success-message popup">{removeSuccess}</div>
             )}
