@@ -76,6 +76,10 @@
   flex-grow: 3;
 }
 
+.delete_button{
+  order: 8;
+  flex-grow: 3;
+}
 
 .edit_profile_submit{
   order: 8;
@@ -109,6 +113,22 @@
 }
 #edit_profile_submit_button:hover{
   background-color: greenyellow;
+  color: black;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 19px;
+}
+
+#delete_button{
+  background: blue;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 19px;
+}
+
+#delete_button:hover{
+  background-color: rgba(0, 0, 255, 0.508);
   color: black;
   padding: 10px;
   font-weight: bold;

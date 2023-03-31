@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import NavBar from './navBar';
-import {Link} from "react-router-dom";
+import {Link,useLocation } from "react-router-dom";
 import '../Styles/profile.scss';
 import axios from "axios"
 
@@ -20,14 +20,14 @@ function getGreeting(){
     }
 }
 
-function Profile() {
+function User() {
     const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
     const accessToken = localStorage.getItem("token")                
 
     const isTokenAvailable = (accessToken != null)
 
-    // get response for user profile
+ /*   // get response for user profile
     useEffect(() => {
         if (isTokenAvailable){
             axios.post(SERVER_URL + '/profile', {accessToken})
@@ -50,8 +50,7 @@ function Profile() {
             })
         }
     }, []);
-
-
+    */
     const [profilePic, setProfilePic] = useState('../assets/images/profile.png');
     const [userName, setUserName] = useState('');
     const [education, setEducation] = useState('');
@@ -60,8 +59,40 @@ function Profile() {
     const [languages, setLanguages] = useState('');
     const [bio, setBio] = useState('');
     const [resume, setResume] = useState('');
+    const [selectedUserId, setSelectedUserId] = useState('');
 
-    
+
+    const { search } = useLocation();
+    const query = new URLSearchParams(search);
+    const IdFromUrl = query.get('Id');
+
+  useEffect(() => {
+    if (IdFromUrl) {
+      setSelectedUserId(IdFromUrl);
+    }
+  }, [IdFromUrl]);
+
+
+    useEffect(() => {
+        if (selectedUserId !== '') {
+            axios.post(SERVER_URL + '/user', {selectedUserId})
+                .then(response => {
+                    const { username, education, pastJob, currentJob, languages, bio } = response.data;
+                    /*setUserName(response.data.user.name)
+                    setEducation(response.data.education)
+                    setCurrentJob(response.data.currentJob)
+                    setPastJob(response.data.pastJob)
+                    setLanguages(response.data.languages)
+                    setBio(response.data.bio)*/
+                    setUserName("blank for now");
+                    setEducation(education);
+                    setPastJob(pastJob);
+                    setCurrentJob(currentJob);
+                    setLanguages(languages);
+                    setBio(bio);
+                })
+        }
+    }, [selectedUserId]);
    
 
     return ( 
@@ -73,25 +104,16 @@ function Profile() {
                 </div>
                 <br></br>
                 <div class='profile_container2'>
-                    <div class='profile_greeting' data-testid="profile_greeting">{getGreeting() + userName} 
-                </div>
-                    <div class='profile_education' data-testid="profile_education">Education: {education}</div>
-                    <div class='profile_past_job' data-testid="profile_past_job">Past Job: {pastJob}</div>
-                    <div class='profile_current_job' data-testid="profile_current_job">Current Job: {currentJob}</div>
-                    <div class='profile_languages' data-testid="profile_languages">Languages: {languages}</div>
-                    <div class='profile_bio' data-testid="profile_bio">
+                    <div class='profile_greeting'>This is {userName} 's profile </div>
+                    <div class='profile_education'>Education: {education}</div>
+                    <div class='profile_past_job'>Past Job: {pastJob}</div>
+                    <div class='profile_current_job'>Current Job: {currentJob}</div>
+                    <div class='profile_languages'>Languages: {languages}</div>
+                    <div class='profile_bio'>
                         <label id='bio_title'>Bio</label>
                         <p id='bio_text'>{bio}</p>
                     </div>
-                    <div class='profile_resume'>Resume: {resume}</div>
-                    <div class="profile_edit_profile">
-                        <Link to="/editprofile">
-                            <button id='profile_edit_profile_button'>Edit Profile</button>
-                        </Link>
-                        <Link to="/appliedJobs">
-                            <button id='profile_edit_profile_button'>See my Job Applications</button>
-                        </Link>
-                    </div>
+                   
                 </div>
             </div>
             
@@ -99,4 +121,4 @@ function Profile() {
     );
 }
 
-export default Profile
+export default User

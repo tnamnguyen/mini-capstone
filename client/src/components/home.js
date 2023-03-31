@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from './navBar';
 import axios from "axios";
 import '../Styles/home.scss';
+import { Button } from 'reactstrap';
 import {Link} from "react-router-dom";
 
 function Home() {
@@ -48,26 +49,29 @@ function Home() {
                             <div class='profile_pic'>
                                 <img src={require('../assets/images/profile.png')} width='140' height='140' alt='profile pic' id='home_profile_pic'></img>
                             </div>
-                            <div>{userName}</div><br></br>
-                            <text>Bio</text><br></br>
-                            <text>Who viewed your profile: 34</text><br></br>
-                            <text>Total Connections: 12</text><br></br>
+                            <div><text>{userName}</text></div>
+                            <Link to="/profile"><Button color="primary">Profile</Button></Link>
                             </div>
                         </div>
-                        <div class='home_posts'>
-                            <div>
-                                <text>User Likes this</text><br></br>
-                                <text>User got a new job</text><br></br>
-                                <text>User update</text><br></br>
-                            </div>
+                    <div className='home_posts'>
+                        <div class="row">
+                        <span class="column">
+                            <text>&nbsp;&nbsp;&nbsp;&nbsp;</text>
+                            <Link to="/connections"><button class="button_6">Connections</button></Link>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div><br></br></div>
+                            <div><Link to="/savedJobs"><button class="button_6">Saved Jobs</button></Link></div>
+                            <div><br></br></div>
+                            <span><Link to="#"><button class="button_6">Messaging</button></Link></span>
+                        </span>
+                        <span class="column">
+                            <div><Link to="/pendingConnections"><button class="button_6">Invites</button></Link></div>
+                            <div><br></br></div>
+                            <div><Link to="/myJobs"><button class="button_6" href="/myJobs">Your Jobs</button></Link></div>
+                            <div><br></br></div>
+                            <div><Link to="/appliedJobs"><button class="button_6">Applied Jobs</button></Link></div>
+                        </span>
                         </div>
-                        <div class='home_news'>
-                            <div>
-                                <text>Jubilee News #1</text><br></br>
-                                <text>Jubilee News #2</text><br></br>
-                                <text>Jubilee News #3</text><br></br>
-                            </div>
-                        </div>
+                    </div>
                 </div>
             )
         }

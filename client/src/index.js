@@ -10,6 +10,7 @@ import EditProfile from "./components/editProfile.js";
 import JobApplicationForm from "./components/createJob.js";
 import JobList from "./components/jobs.js";
 import SavedJobList from "./components/savedJobs";
+import AppliedJobList from "./components/appliedJobs";
 import Admin from "./components/admin";
 import AdminListUsers from "./components/adminListUsers";
 import "bootstrap/dist/css/bootstrap.css";
@@ -21,7 +22,12 @@ import Connections from './components/connections.js';
 import AddConnections from './components/addConnections.js';
 import PendingConnections from './components/pendingConnections.js';
 import OTP from "./components/OTP"
+import User from "./components/user"
+import DeleteProfile from "./components/deleteProfile";
 import ViewJob from "./components/viewJob";
+import Notifications from "./components/notifications";
+
+
 
 
 ReactDOM.render(
@@ -34,9 +40,11 @@ ReactDOM.render(
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/editProfile" element={<EditProfile />} />
+        <Route path="/deleteprofile" element={<DeleteProfile />} />
         <Route path="/createJobs" element={<JobApplicationForm />} />
         <Route path="/jobs" element={<JobList />} />
         <Route path="/savedJobs" element={<SavedJobList />} />
+        <Route path="/appliedJobs" element={<AppliedJobList />} />
         <Route path="/myJobs" element={<MyJobList />} />
         <Route path="/editJob/:jobId" component={JobEditForm} element={<JobEditForm />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
@@ -44,10 +52,14 @@ ReactDOM.render(
         <Route path="/OTP" element={<OTP/>} />
         <Route path="/admin" element={<Admin/>}/>
         <Route path="/adminListUsers" element={<AdminListUsers/>}/>
+        <Route path="/user" element={<User/>}/>
         <Route path="/connections" element={<Connections/>}/>
         <Route path="/addConnections" element={<AddConnections/>}/>
         <Route path="/pendingConnections" element={<PendingConnections/>}/>
         <Route path="/viewJob" element={<ViewJob />} />
+        <Route path="/notifications" element={<Notifications />} />
+
+
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

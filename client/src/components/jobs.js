@@ -10,7 +10,9 @@ function JobList() {
   const [login, setLogin] = useState(true);
   const [jobs, setJobs] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState("");
+  const [applySuccess, setApplySuccess] = useState("");
   const [savedJobId, setSavedJobId] = useState(null);
+  const [appliedJobId, setAppliedJobId] = useState(null);
 
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const accessToken = localStorage.getItem("token");
@@ -33,6 +35,8 @@ function JobList() {
       });
   }, []);
 
+  // ---------------------------------- API Calls ---------------------------------- //
+
   // Call to save the job to database
   function saveJob(job_id) {
     clearTimer();
@@ -45,12 +49,88 @@ function JobList() {
         const timer = setTimeout(() => {
           setSaveSuccess("");
           setSavedJobId(null);
-        }, 5000);
+        }, 3000);
         timerRef.current = timer;
       });
   }
 
-  // Add the save button if the user is logged in
+  // Call to apply to the job
+  function applyJob(job_id) {
+    clearTimer();
+    
+    console.log("apply button was clicked");
+    axios
+      .post(SERVER_URL + "/applyJob", { job_id, accessToken })
+      .then((response) => {
+
+        //Create notification only if first time applying to the job
+        if(response.data.message != 'ALready applied to this job!')
+        {
+          createNotification(job_id, "Job Application")
+        }
+
+        setAppliedJobId(job_id);
+        setApplySuccess(response.data.message);
+        const timer = setTimeout(() => {
+          setApplySuccess("");
+          setAppliedJobId(null);
+        }, 3000);
+        timerRef.current = timer;
+      });
+  }
+
+
+  // Call to create a new notification
+  function createNotification(job_id, typeOfNotification) {
+    console.log("Notification creation is called!");
+    axios
+      .post(SERVER_URL + "/createNotification", { object_id: job_id , accessToken, type: typeOfNotification })
+      .then((response) => {
+        setAppliedJobId(job_id);
+        setApplySuccess(response.data.message);
+        const timer = setTimeout(() => {
+          setApplySuccess("");
+          setAppliedJobId(null);
+        }, 3000);
+        timerRef.current = timer;
+      });
+  }
+
+  // ---------------------------------- Row Buttons ---------------------------------- //
+
+  //All Row buttons
+  function applyRow() {
+    if (!login) {
+      return <th>Apply</th>;
+    }
+  }
+
+  function saveRow() {
+    if(!login) {
+      return <th>Save</th>
+    }
+  }
+
+  //Job Application Button
+  function addApply(job_id) {
+    if (!login) {
+      return (
+        <td>
+          <button
+            onClick={() => applyJob(job_id)}
+            className="jobs_saveJob_button"
+          >
+            Apply
+          </button>
+          {appliedJobId === job_id && (
+            <div className="success-message popup">{applySuccess}</div>
+          )}
+        </td>
+      );
+    }
+  }
+
+  //Save Job Button
   function addSave(job_id) {
     if (!login) {
       return (
@@ -69,6 +149,8 @@ function JobList() {
     }
   }
 
+  // ---------------------------------- Timer ---------------------------------- //
+
   // Hold a reference to the timer
   const timerRef = useRef(null);
 
@@ -80,29 +162,9 @@ function JobList() {
     }
   }
 
-  //========== Add specific Buttons if signed in ==========//
-  function applyRow() {
-    if (!login) {
-      return <th>Apply</th>;
-    }
-  }
+  // ---------------------------------- Big Blue Buttons at the bottom ---------------------------------- //
 
-  function applyButton() {
-    if (!login) {
-      return (
-        <td>
-          <button>Apply</button>
-        </td>
-      );
-    }
-  }
-
-  function saveRow() {
-    if(!login) {
-      return <th>Save</th>
-    }
-  }
-
+  //Create new job button
   function addCreateJobButton() {
     if (!login) {
       return (
@@ -113,6 +175,7 @@ function JobList() {
     }
   }
 
+  //View saved jobs button
   function addSavedJobButton() {
     if (!login) {
       return (
@@ -123,6 +186,18 @@ function JobList() {
     }
   }
 
+  //view job applications button
+  function addAppliedJobButton() {
+    if (!login) {
+      return (
+        <Link to="/appliedJobs" className="myButton">
+          View my applications
+        </Link>
+      );
+    }
+  }
+
+  //view created jobs button
   function addCreatedJobButton() {
     if (!login) {
       return (
@@ -133,19 +208,6 @@ function JobList() {
     }
   }
 
-  function addViewButton() {
-    if (!login) {
-      return (
-        <td>
-          <Link to="/viewJob">
-            <button>View Details</button>
-          </Link>
-        </td>
-      );
-    }
-  }
-  var passingObj;
-  const [data] = React.useState(passingObj);
   return (
     <div data-testid="jobs-1">
       <NavBar></NavBar>
@@ -173,14 +235,14 @@ function JobList() {
                   <td>{job.experience}</td>
                   <td>{job.location}</td>
                   <td>{job.description}</td>
-                  {applyButton()}
+                  {addApply(job._id)}
                   {addSave(job._id)}
 
                   <td>
                     <Link
                       to="/viewJob"
                       state={{
-                        data: data,
+                        data: job,
                       }}
                     >
                       <button>View Details</button>
@@ -193,6 +255,7 @@ function JobList() {
         </div>
         {addCreateJobButton()}
         {addSavedJobButton()}
+        {addAppliedJobButton()}
         {addCreatedJobButton()}
       </div>
     </div>

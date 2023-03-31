@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import "../Styles/navBar.scss"
 import axios from "axios"
+import { Button } from 'reactstrap';
 
 function NavBar() {
 
@@ -8,12 +9,13 @@ function NavBar() {
     const [loginElement, setLoginElement] = useState(true)
     const [adminElement, setAdminElement] = useState(false)
     const [userName, setUserName] = useState('')
+    const [numNotifications, setNumNotifications] = useState(0)
 
     const SERVER_URL = process.env.REACT_APP_SERVER_URL
     const accessToken = localStorage.getItem("token")
     const isTokenAvailable = (localStorage.getItem("token") != null)
 
-    //If User is logged-in -> add his name to navBar & remove login button
+    //If User is logged-in -> add his name to navBar & remove login button & retrive number of notifications
     if(isTokenAvailable){
         axios.post(SERVER_URL + '/home', {accessToken})
         .then(response => {
@@ -27,6 +29,11 @@ function NavBar() {
             if(response.data.isAdmin){
                 setAdminElement(true)
             }
+        })
+
+        axios.post(SERVER_URL + '/getNumberOfNotifications', {accessToken})
+        .then(response => {
+            setNumNotifications(response.data)
         })
     }
     
@@ -52,7 +59,7 @@ function NavBar() {
         {
             return(
                 <li class="nav-item">
-                    <a class="nav-link" href="/logout">Log Out</a>
+                    <Button class="nav-link" color="primary" href="/logout">Log Out</Button>
                 </li>
             ) 
         }
@@ -72,7 +79,7 @@ function NavBar() {
         if(!loginElement){
             return(
                 <li class="nav-item">
-                    <a class="nav-link" href="/Connections">Connections</a>
+                    <Button class="nav-link" outline color="secondary" href="/connections">Connections</Button>
                 </li>
             )
         }
@@ -83,7 +90,7 @@ function NavBar() {
         if(!loginElement){
             return(
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Chat</a>
+                    <Button class="nav-link" outline color="secondary" href="#">Chat</Button>
                 </li>
             )
         }
@@ -94,7 +101,11 @@ function NavBar() {
         if(!loginElement){
             return(
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Notifications</a>
+                    <Button class="nav-link" outline color="secondary" href="/notifications">
+                        <a outline color="secondary">Notifications 
+                            <span class='badge badge-warning' id='lblCartCount'>{numNotifications}</span>
+                        </a>
+                    </Button>
                 </li>
             )
         }
@@ -105,7 +116,7 @@ function NavBar() {
         if(!loginElement){
             return(
                 <li class="nav-item">
-                    <a class="nav-link" href="/profile">Profile</a>
+                    <Button class="nav-link" outline color="secondary" href="/profile">Profile</Button>
                 </li>
             )
         }
@@ -123,7 +134,7 @@ function NavBar() {
                 <ul class="navbar-nav mr-auto">
                     {addConnections()}
                     <li class="nav-item">
-                        <a class="nav-link" href="/jobs">Jobs</a>
+                        <Button class="nav-link" outline color="secondary" href="/jobs">Jobs</Button>
                     </li>
                     {addChat()}
                     {addNotifications()}
