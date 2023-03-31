@@ -1448,12 +1448,12 @@ app.post('/user', async(req, res) => {
       //console.log(result.pastJob);
       //console.log(result.education);
       //console.log(result.currentJob);
-      //console.log(result.username);
+      //console.log(result.name);
       
       res.send({
         profileExists: "True",
-        "user": res.user,
-        username : result.username,
+        //"user": res.user,
+        username : result.name,
         education: result.education,   
         pastJob: result.pastJob,
         currentJob: result.currentJob,

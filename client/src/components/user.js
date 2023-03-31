@@ -84,7 +84,8 @@ function User() {
                     setPastJob(response.data.pastJob)
                     setLanguages(response.data.languages)
                     setBio(response.data.bio)*/
-                    setUserName("blank for now");
+                    
+                    setUserName(username);
                     setEducation(education);
                     setPastJob(pastJob);
                     setCurrentJob(currentJob);
