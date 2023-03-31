@@ -43,7 +43,7 @@ function Home() {
     function loggedinHome() {
         if (!login) {
             return(
-                <div class='home_main_container' data-testid="home_main_container">
+                <div class='home_main_container'>
                     <div class='home_main_profile'>
                         <div>
                             <div class='profile_pic'>

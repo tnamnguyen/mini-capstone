@@ -60,7 +60,7 @@ function JobEditForm() {
     <>
       <NavBar></NavBar>
 
-      <div className="createjob-form">
+      <div className="createjob-form" data-testid="createjob-form">
         <div className="createjob-container">
           <h2 id="createjob_title">Edit Job</h2>
           <br />

@@ -1,5 +1,9 @@
+import Signup from "../components/signup";
 import testt from "../components/signup"
 import mockAxios from "../__mocks__/axios";
+import { render, waitFor, screen } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
+import '@testing-library/jest-dom';
 
 //Testing if post method is called properly
 test('Post method is called properly', async() => {
@@ -26,3 +30,9 @@ test('Post method is called properly', async() => {
     expect(mockAxios.post).toHaveBeenCalledTimes(1)
     expect(mockAxios.post).toHaveBeenCalledWith(SERVER_URL + '/signup', {username, email, password, passwordConfirm})
 });
+
+test('Testing the static document', () => {
+    render(<BrowserRouter><Signup></Signup></BrowserRouter>)
+    expect(screen.getByTestId("signup-container")).toBeInTheDocument();
+
+})

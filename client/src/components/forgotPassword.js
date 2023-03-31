@@ -42,7 +42,7 @@ function ForgotPassword() {
   return (
     <>
       <NavBar></NavBar>
-      <div className="login-form">
+      <div className="login-form" data-testid="login-form">
         <div className="login-container">
           <h2 id="login_title">Password Recovery</h2>
           <h3 >Confirm you email below</h3>

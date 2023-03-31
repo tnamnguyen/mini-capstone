@@ -54,7 +54,7 @@ function Signup() {
             <div className="signup-form" data-testid="signUp">
 
                 {error && <div className="error">{error}</div>}
-                <div className="signup-container">
+                <div className="signup-container" data-testid="signup-container">
                     <h2 id='signup_title'>Sign Up</h2>
                     <div>
                         <input

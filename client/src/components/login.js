@@ -44,7 +44,7 @@ function Login() {
   return (
     <>
       <NavBar></NavBar>
-      <div className="login-form">
+      <div className="login-form" data-testid="login-form">
         <div className="login-container">
           <h2 id="login_title">Log In</h2>
           <div>
