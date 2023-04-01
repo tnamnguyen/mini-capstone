@@ -105,7 +105,7 @@ function ViewJob(props) {
   }
 
   return (
-    <>
+    <div data-testid="viewJobs-1">
       <NavBar></NavBar>
       <div className="viewJob_container1">
         <h1>{data ? data.title : "Go to Home"}</h1>
@@ -125,7 +125,7 @@ function ViewJob(props) {
       <Link to="/jobs">
         <button id="viewJob_save">Back</button>
       </Link>
-    </>
+    </div>
   );
 }
 
