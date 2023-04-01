@@ -119,7 +119,7 @@ function AddConnections() {
                     })
                     .map((user) => (
                       <tr key={user.id}>
-                        <td>{user.name}</td>
+                        <td><a href={ '/user?Id=' + user._id }>{user.name}</a></td>
                         <td>
                           <button
                             className="button-14"
