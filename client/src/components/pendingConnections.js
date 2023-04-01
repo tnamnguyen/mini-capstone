@@ -95,7 +95,7 @@ function PendingConnections() {
 
       <h1 id="job_title">Connection Requests</h1>
       <br />
-      <div className="container">
+      <div className="container" data-testid="pendingConnectionsTest">
         <table className="job-table">
           <thead>
             <tr>
