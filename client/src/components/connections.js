@@ -71,7 +71,7 @@ function Connections() {
       <h1 id="job_title">Your connections</h1>
       <br />
       <div className="container">
-        <table className="connection-table">
+        <table className="connection-table" data-testid="connectionsTest">
           <thead>
             <tr>
               <th>Name</th>

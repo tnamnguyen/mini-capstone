@@ -79,7 +79,7 @@ function AddConnections() {
     <>
       <NavBar></NavBar>
       <div className="createjob-form" data-testid="createJob-1">
-        <div className="createjob-container">
+        <div className="createjob-container" data-testid="addConnectionsTest">
           <h2 id="createjob_title">Add Connection</h2>
           <h5 id="createjob_title">More users exist</h5>
           <br />
