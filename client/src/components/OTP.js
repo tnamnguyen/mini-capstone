@@ -34,7 +34,7 @@ function OTP() {
 
   return (
     <><NavBar></NavBar>
-    <div className="container1">
+    <div className="container1" data-testid="otpcontainerTest">
       <div className="container2">
         <div className="mx-auto flex w-full max-w-md flex-col space-y-16">
           <div className="flex flex-col items-center justify-center text-center space-y-2">

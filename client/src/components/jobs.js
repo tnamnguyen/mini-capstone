@@ -216,7 +216,7 @@ function JobList() {
         <h1 id="job_title">All Jobs</h1>
         <br />
         <div className="container">
-          <table className="job-table">
+          <table className="job-table" data-testid="jobsTest">
             <thead>
               <tr>
                 <th>Title</th>

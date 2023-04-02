@@ -15,7 +15,7 @@ function DeleteProfile(){
 
     return(
         <>
-            <div className='log_out'>
+            <div className='log_out' data-testid="deleteProfileTest">
                 <h1 className='log_out_title'>Profile Deleted, redirecting to home page...</h1>
             </div>
         </>

@@ -122,7 +122,7 @@ function AppliedJobList() {
         <h1 id="job_title">My Job applications</h1>
         <br />
         <div className="container">
-          <table className="job-table">
+          <table className="job-table" data-testid="appliedJobsTest">
             <thead>
               <tr>
                 <th>Title</th>
