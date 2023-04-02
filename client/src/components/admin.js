@@ -26,15 +26,15 @@ function Admin(){
         <>
             <NavBar></NavBar>
             
-            <h1 className='admin_title'>Welcome to admin page</h1>
+            <h1 className='admin_title' data-testid="welcomeTest">Welcome to admin page</h1>
 
-            <div className='admin_stats'>
+            <div className='admin_stats' data-testid="adminStatsTest">  
                 <h2 className='admin_stats_main_title'>Platform Statistics</h2>
                 <h4 className='admin_stats_sub_title'>Total number of registered users: {numOfUsers_stat}</h4>
                 <h4 className='admin_stats_sub_title'>Total number of available jobs: {numOfJobs_stat}</h4>
             </div>
 
-            <div className='admin_functionalities'>
+            <div className='admin_functionalities' data-testid="adminFuncTest">
                 <h2 className='admin_functionalities_main_title'>Admin Functionalities</h2>
                 <h4 className='admin_functionalities_sub_title'>To see list of of all platform users:</h4>
                 <button onClick={seeListOfUsers} className='admin_functionalities_button'>List of Users</button>

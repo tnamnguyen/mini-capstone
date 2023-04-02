@@ -53,7 +53,7 @@ function AdminListUsers(){
         <>
             <NavBar></NavBar>
             <h1 className='admin_listUsers_title'>List Of Registered Users</h1>
-            <table className="admin_listUsers_table">
+            <table className="admin_listUsers_table" data-testid="adminListTest">
             <thead>
             
                 <tr>
@@ -82,7 +82,7 @@ function AdminListUsers(){
                 ))}
             </tbody>
             </table>
-            <div className='admin_listUsers_totalNumOfUsers'>Total number of users: {countUsers-1}</div>
+            <div className='admin_listUsers_totalNumOfUsers' >Total number of users: {countUsers-1}</div>
 
             <br></br>
             <button className='admin_listUsers_goBack_button' onClick={backToAdmin}>Go Back</button>

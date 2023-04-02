@@ -107,7 +107,7 @@ function ViewJob(props) {
   return (
     <>
       <NavBar></NavBar>
-      <div className="viewJob_container1">
+      <div className="viewJob_container1" data-testid="containerTest">
         <h1>{data ? data.title : "Go to Home"}</h1>
         <h2>Experience Requirements: {data ? data.experience : "Oops"}</h2>
         <h3>Location of Job Site: {data ? data.location : "Oops"}</h3>
@@ -116,7 +116,7 @@ function ViewJob(props) {
         <h1>Description:</h1>
       </div>
 
-      <div className="viewJob_container2">
+      <div className="viewJob_container2" data-testid="containerTwoTest">
         <h3>{data ? data.description : "Oops"}</h3>
         <br></br>
       </div>
