@@ -447,6 +447,21 @@ app.post("/admin_makeRegularUser", async (req, res) => {
   disconnectMongooseDB()
 });
 
+
+// ************************ Admin/ assign Recruiter ************************ //
+app.post("/admin_makeRecruiter", async (req, res) => {
+  // Connecting to the specific database and collection
+  const database_name = "Accounts";
+  const collection_name = "users";
+  const db_client = await MongoClient.connect(url);
+  const dbo = db_client.db(database_name);
+
+  // update user type to admin
+  const update = await (await dbo.collection(collection_name).updateOne({email: req.body.email}, {$set :{type :"recruiter"}}))
+
+  disconnectMongooseDB()
+});
+
 // ************************ Profile ************************ //
 app.post("/profile", authenticateToken, async (req, res) => {
   console.log(`route for profile is running`);
@@ -713,8 +728,47 @@ app.post('/createJobs', authenticateToken, async(req, res) => {
   })
 
   // Adding Job to DB
-  dbo.collection(collection_name).insertOne(newJob, function (err, result) {
-    if (err) {
+  // dbo.collection(collection_name).insertOne(newJob, function (err, result) {
+  //   if (err) {
+  //     errorMessage = "An error has occured";
+  //     console.log(errorMessage);
+  //     console.log(err);
+  //     res.json({
+  //       isError: "True",
+  //       message: errorMessage
+  //     })
+  //     disconnectMongooseDB()
+  //   }
+  //   else{
+  //     var successMessage = "Job created successfully!"
+  //     console.log(successMessage)
+  //     res.json({
+  //       isError: "False",
+  //       message: successMessage
+  //     })
+  //     disconnectMongooseDB()
+  //   } 
+  //   console.log("-> 1 New Job succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
+  //   db_client.close();
+  // });
+
+
+  //Adding Job to DB
+  dbo.collection(collection_name).insertOne(newJob)
+  .then(result => {
+    var successMessage = "Job created successfully!"
+    console.log(successMessage)
+    console.log("-> 1 New Job succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
+    
+    res.json({
+      isError: "False",
+      job_id: result.insertedId.toString(),
+      message: successMessage
+    })
+    db_client.close();
+    disconnectMongooseDB()
+  })
+    .catch(err => {
       errorMessage = "An error has occured";
       console.log(errorMessage);
       console.log(err);
@@ -723,19 +777,10 @@ app.post('/createJobs', authenticateToken, async(req, res) => {
         message: errorMessage
       })
       disconnectMongooseDB()
-    }
-    else{
-      var successMessage = "Job created successfully!"
-      console.log(successMessage)
-      res.json({
-        isError: "False",
-        message: successMessage
-      })
-      disconnectMongooseDB()
-    } 
-    console.log("-> 1 New Job succesfully added to the " + database_name + " database inside the " + collection_name + " collection!");
-    db_client.close();
   });
+
+
+    
 });
 
 
@@ -1066,15 +1111,15 @@ app.post('/applyJob', authenticateToken, async(req, res) => {
     else{
       dbo.collection(collection_name).insertOne(newAppliedJob, function(err, result) {
         if(err) throw err;
-        console.log("-> 1 new Job application for user on " + database_name + " database inside the " + collection_name + " collection!")
-        res.json({
-          message: 'Job application saved successfully'
-        })
-        disconnectMongooseDB()
+      console.log("-> 1 new Job application for user on " + database_name + " database inside the " + collection_name + " collection!")
+      res.json({
+        message: 'Job application saved successfully'
+      })
+      disconnectMongooseDB()
         db.client.close();
       })
-  }
-    })
+    }
+  })
   
 })
 
@@ -1545,6 +1590,8 @@ app.post('/createNotification', authenticateToken, async(req, res) => {
   //If type of notification is Job Application
   if(req.body.type == "Job Application")
   {
+    let skip = false
+    
     //Retrieving Job info
     const job = await dbo.collection("Jobs").findOne({_id: new ObjectId(req.body.object_id)})
 
@@ -1557,7 +1604,8 @@ app.post('/createNotification', authenticateToken, async(req, res) => {
       type: "Job Application",
       message: message,
       status: "Unread",
-      favorite: false
+      favorite: false,
+      action: "/appliedJobs"
     })
   }
 
@@ -1576,18 +1624,64 @@ app.post('/createNotification', authenticateToken, async(req, res) => {
       type: "Job Application Withdrawal",
       message: message,
       status: "Unread",
-      favorite: false
+      favorite: false,
+      action: "N/A"
     })
   }
 
-  
+
+  //If type of notification is Job Posting
+  else if(req.body.type == "Job Posting")
+  {
+    //skip the second insert
+    skip = true
+
+    //Retrieving all users
+    const users = await await dbo.collection("users").find().toArray();
+
+    //Retrieving Job info
+    const job = await dbo.collection("Jobs").findOne({_id: new ObjectId(req.body.object_id)})
+
+    //Setting up the message that will appear in the notification
+    const message = "A new Job have been posted \"" + job.title + "\" Apply Now!"
+   
+    console.log(users)
+    for(let i = 0; i < users.length; i++)
+    {
+      console.log(users[i])
+      newNotification = new Notifications({
+        time_stamp: Moment().format('DD-MM-YYYY HH:mm'),
+        user_id: users[i]._id.toString(),
+        object_id: req.body.object_id,
+        type: "Job Posting",
+        message: message,
+        status: "Unread",
+        favorite: false,
+        action: "/jobs"
+      })
+
+      dbo.collection(collection_name).insertOne(newNotification, function(err, result) {
+        if(err) throw err;
+        console.log("-> 1 new Notification for user on " + database_name + " database inside the " + collection_name + " collection!")
+        db.client.close();
+        disconnectMongooseDB()
+      })
+    }
+  }
+
+
+
+
   //Adding the notification to the database
+  if(skip == false)
+  {
   dbo.collection(collection_name).insertOne(newNotification, function(err, result) {
     if(err) throw err;
     console.log("-> 1 new Notification for user on " + database_name + " database inside the " + collection_name + " collection!")
     db.client.close();
     disconnectMongooseDB()
   })
+} 
 })
 
 
@@ -1632,7 +1726,7 @@ app.post('/getNumberOfNotifications', authenticateToken,async(req, res) => {
   const db_client = await MongoClient.connect(url)
   const dbo = db_client.db(database_name)
 
-  const num = await dbo.collection(collection_name).countDocuments()
+  const num = await dbo.collection(collection_name).countDocuments({user_id: res.user.id})
   res.json(num)
   disconnectMongooseDB()
 

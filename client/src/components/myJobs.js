@@ -32,7 +32,6 @@ function MyJobList() {
     axios.post(SERVER_URL + '/deletejob', {job_id})
     .then(response => {
       setDeleteSuccess(response.data.message)
-      console.log(deleteSuccess);
     })
     if(jobs.length === 1){
       setJobs([])
@@ -90,9 +89,6 @@ function MyJobList() {
         </div>
         <Link to="/createJobs" className="myButton">
           Create A new Job
-        </Link>
-        <Link to="/savedJobs" className="myButton">
-          View Saved Jobs
         </Link>
         <Link to="/jobs" className="myButton">
           Back
