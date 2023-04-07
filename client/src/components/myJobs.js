@@ -6,7 +6,11 @@ import NavBar from "./navBar";
 import "../Styles/sign-up.scss";
 
 function MyJobList() {
-  const [jobs, setJobs] = useState([]);
+  console.log("asdads")
+  const [jobs, setJobs] = useState([])
+  const [numApplicants, setNumApplicants] = useState([])
+  //let [counter, setCounter] = useState(0)
+  let counter = 0
   const [deleteSuccess, setDeleteSuccess] = useState('')
   const [buttonClicked, setButtonClicked] = useState(false)
 
@@ -24,6 +28,9 @@ function MyJobList() {
       .catch((error) => {
         console.error("Error fetching jobs:", error);
       });
+
+    
+
   }, [buttonClicked]);
 
 
@@ -40,6 +47,7 @@ function MyJobList() {
       setButtonClicked(!buttonClicked)
     }
   };
+  
 
   return (
     <div data-testid="jobs-1">
@@ -53,10 +61,7 @@ function MyJobList() {
             <thead>
               <tr>
                 <th>Title</th>
-                <th>Experience</th>
-                <th>Location</th>
-                <th>Description</th>
-                <th>Edit Button</th>
+                <th>Edit</th>
                 <th>View</th>
                 <th>Delete</th>
               </tr>
@@ -65,16 +70,13 @@ function MyJobList() {
               {jobs.map((job) => (
                 <tr key={job.id}>
                   <td>{job.title}</td>
-                  <td>{job.experience}</td>
-                  <td>{job.location}</td>
-                  <td>{job.description}</td>
                   <td>
                     <Link to={`/editJob/${job._id}`}>
                       <button>Edit Job</button>
                     </Link>
                   </td>
                   <td><Link
-                      to="/viewJob"
+                      to="/recruiterViewJob"
                       state={{
                         data: job,
                       }}
@@ -96,6 +98,7 @@ function MyJobList() {
       </div>
     </div>
   );
+
 }
 
 export default MyJobList;

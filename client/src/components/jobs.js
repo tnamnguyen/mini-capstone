@@ -207,7 +207,7 @@ function JobList() {
     if (!login && recruiter == true) {
       return (
         <Link to="/myJobs" className="myButton">
-          View Created Jobs
+          Manage Created Jobs
         </Link>
       );
     }

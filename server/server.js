@@ -1573,6 +1573,8 @@ app.post('/user', async(req, res) => {
 
 app.post('/createNotification', authenticateToken, async(req, res) => {
 
+  let skip = false
+
   console.log(`route for creating notifications is running`)
 
   // Connecting to the specific database and collection
@@ -1590,8 +1592,6 @@ app.post('/createNotification', authenticateToken, async(req, res) => {
   //If type of notification is Job Application
   if(req.body.type == "Job Application")
   {
-    let skip = false
-    
     //Retrieving Job info
     const job = await dbo.collection("Jobs").findOne({_id: new ObjectId(req.body.object_id)})
 
@@ -1628,6 +1628,46 @@ app.post('/createNotification', authenticateToken, async(req, res) => {
       action: "N/A"
     })
   }
+
+   //If type of notification is Job Application withdrawal
+   else if(req.body.type == "Job Offer Accepted")
+   {
+     //Retrieving Job info
+     const job = await dbo.collection("Jobs").findOne({_id: new ObjectId(req.body.object_id)})
+ 
+     //Setting up the message that will appear in the notification
+     const message = "You job application for the job \"" + job.title + "\" has been accepted by the recruiter, congrats!"
+     newNotification = new Notifications({
+       time_stamp: Moment().format('DD-MM-YYYY HH:mm'),
+       user_id: req.body.user_id,
+       object_id: req.body.object_id,
+       type: "Job Offer Accepted",
+       message: message,
+       status: "Unread",
+       favorite: false,
+       action: "N/A"
+     })
+   }
+
+   //If type of notification is Job Application withdrawal
+   else if(req.body.type == "Job Offer Rejected")
+   {
+     //Retrieving Job info
+     const job = await dbo.collection("Jobs").findOne({_id: new ObjectId(req.body.object_id)})
+ 
+     //Setting up the message that will appear in the notification
+     const message = "You job application for the job \"" + job.title + "\" has been unfortunately refused!"
+     newNotification = new Notifications({
+       time_stamp: Moment().format('DD-MM-YYYY HH:mm'),
+       user_id: req.body.user_id,
+       object_id: req.body.object_id,
+       type: "Job Offer Rejected",
+       message: message,
+       status: "Unread",
+       favorite: false,
+       action: "N/A"
+     })
+   }
 
 
   //If type of notification is Job Posting
@@ -1801,6 +1841,82 @@ app.delete("/connections/:id", async (req, res) => {
   }
 });
 
+
+
+// ************************ Recruiter Page ************************ //
+app.post('/getNumberOfApplicants', async(req, res) => {
+
+  console.log("route for getting the number of applicants is running")
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "applyJob"
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  console.log(req.body)
+  const num = await dbo.collection(collection_name).countDocuments({job_id: req.body.job_id})
+  res.json(num)
+  console.log(num)
+  disconnectMongooseDB()
+
+})
+
+app.post('/getApplicants', async(req, res) => {
+
+  console.log("route for getting Applicants is running")
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "applyJob"
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  const applicants = await dbo.collection(collection_name).find({job_id: req.body.job_id}).toArray()
+
+  let applicantss = []
+
+  for(let i = 0; i < applicants.length; i++)
+  {
+ 
+    applicantss.push(await dbo.collection("users").findOne({_id: new ObjectId(applicants[i].user_id)}))
+  }
+
+  console.log(applicantss)
+  res.json(applicantss)
+  
+  disconnectMongooseDB()
+
+})
+
+
+app.post('/acceptDenyApplication', async(req, res) => {
+
+  console.log("route for accepting Applicantion is running")
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "applyJob"
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  //update status to accepted
+  console.log(req.body.job_id)
+  console.log(req.body.user_id)
+  console.log(req.body.acceptdeny)
+
+  const applicants = await dbo.collection(collection_name).updateOne({job_id: req.body.job_id, user_id: req.body.user_id}, {$set :{status : "asd"}})
+})
+
+app.post('/deleteJob', async(req, res) => {
+
+  console.log("route for deleting Job is running")
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "Jobs"
+  const db_client = await MongoClient.connect(url)
+  const dbo = db_client.db(database_name)
+
+  const applicants = await dbo.collection(collection_name).deleteOne({_id: new ObjectId(job_id)})
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
