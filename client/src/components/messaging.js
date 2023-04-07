@@ -5,21 +5,21 @@ import '../Styles/home.scss';
 import { Button } from 'reactstrap';
 import {Link} from "react-router-dom";
 
-function Home() {
+function Messaging() {
     const [login, setLogin] = useState(true)
     const [userName, setUserName] = useState('UserName');
-    
-   
+
+
     //Check if User is logged-in
     const SERVER_URL = process.env.REACT_APP_SERVER_URL
     const accessToken = localStorage.getItem("token")
     axios.post(SERVER_URL + '/home', {accessToken})
-    .then(response => {
-        setUserName(response.data.user.name)
-        setLogin(false)
-    })
+        .then(response => {
+            setUserName(response.data.user.name)
+            setLogin(false)
+        })
 
-    
+
     function defaultHome() {
         if(login) {
             return (
@@ -51,8 +51,8 @@ function Home() {
                             </div>
                             <div><text>{userName}</text></div>
                             <Link to="/profile"><Button color="primary">Profile</Button></Link>
-                            </div>
                         </div>
+                    </div>
                     <div className='home_posts'>
                         <div class="row">
                         <span class="column">
@@ -61,9 +61,9 @@ function Home() {
                             <div><br></br></div>
                             <div><Link to="/savedJobs"><button class="button_6">Saved Jobs</button></Link></div>
                             <div><br></br></div>
-                            <span><Link to="messaging"><button class="button_6">Messaging</button></Link></span>
+                            <span><Link to="#"><button class="button_6">Messaging</button></Link></span>
                         </span>
-                        <span class="column">
+                            <span class="column">
                             <div><Link to="/pendingConnections"><button class="button_6">Invites</button></Link></div>
                             <div><br></br></div>
                             <div><Link to="/myJobs"><button class="button_6" href="/myJobs">Your Jobs</button></Link></div>
@@ -82,20 +82,15 @@ function Home() {
     useEffect(() => {
         setTimeout(() => {
             setIsPageReady(true);
-        }, 1000); // Delay rendering by a second to let server know if user is logged in or not 
+        }, 1000); // Delay rendering by a second to let server know if user is logged in or not
     }, []);
 
     return (
         <>
-            {isPageReady && (
-                <>
-                    {!login && <NavBar/>} 
-                    {loggedinHome()}
-                    {defaultHome()}
-                </>
-            )}
+            <NavBar></NavBar>
+            <h1>Inbox</h1>
         </>
     );
 }
 
-export default Home
+export default Messaging;
