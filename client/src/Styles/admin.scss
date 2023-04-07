@@ -114,6 +114,16 @@
 }
 
 
+.admin_listUsers_makeRecruiter_button{
+    margin: 2px;
+    background-color: rgb(212, 164, 51);
+}
+.admin_listUsers_makeRecruiter_button:hover{
+    margin: 2px;
+    background-color: rgb(209, 223, 52);
+    color: white;
+}
+
 .admin_listUsers_totalNumOfUsers{
     font-weight: bold;
     margin-left: 30px;
