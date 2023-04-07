@@ -799,6 +799,7 @@ app.post('/editjob', authenticateToken, async(req, res) => {
     })
   }
 
+  db_client.close();
 })
 
 
@@ -874,6 +875,8 @@ app.get("/jobs", async (req, res) => {
         })
       }
     })
+
+    db_client.close();
   })
 
 
@@ -911,11 +914,10 @@ app.get("/jobs", async (req, res) => {
             message: 'Job saved successfully'
           })
           disconnectMongooseDB()
-          db.client.close();
         })
     }
       })
-
+      db_client.close();
   })
 
 
@@ -952,6 +954,7 @@ app.post("/savedjobs", authenticateToken, async (req, res) => {
     // Finding all jobs matching ids from array
     const jobs = await dbo.collection(collection_name_Jobs).find({_id: {$in: object_ids}}).toArray();
     res.json(jobs)
+    db_client.close();
     disconnectMongooseDB()
 
   } catch(error) {
@@ -987,7 +990,7 @@ app.post("/removejob", authenticateToken, async (req, res) => {
     }
   }
   )
-
+  db_client.close();
 })
 
 
@@ -1071,7 +1074,7 @@ app.post('/applyJob', authenticateToken, async(req, res) => {
           message: 'Job application saved successfully'
         })
         disconnectMongooseDB()
-        db.client.close();
+        db_client.close();
       })
   }
     })

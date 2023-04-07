@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import NavBar from "./navBar";
 import "../Styles/create-job.scss";
 import "../Styles/editJob.scss";
 
-function JobEditForm() {
-  const [title, setTitle] = useState("");
-  const [experience, setExperience] = useState("");
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
+function JobEditForm(props) {
+  const [title, setTitle] = useState('');
+  const [experience, setExperience] = useState('');
+  const [location, setLocation] = useState('');
+  const [description, setDescription] = useState('');
   const [editSuccess, setEditSuccess] = useState('');
   const [editErr, setEditErr] = useState('');
 
@@ -17,9 +17,22 @@ function JobEditForm() {
 
   const accessToken = localStorage.getItem("token")
 
-  // Getting the parameter from my jobs page
   const { jobId } = useParams();
   console.log(jobId);
+  const l = useLocation();
+  console.log(l.state)
+  const job = l.state.data
+  useEffect(() => {
+
+    setTitle(job.title)
+    setExperience(job.experience)
+    setLocation(job.location)
+    setDescription(job.experience)
+  }, [])
+
+  // Getting the parameter from my jobs page
+
+
   const handleSubmit = async (event) => {
     event.preventDefault()
     // Do something with the form data, such as send it to a server

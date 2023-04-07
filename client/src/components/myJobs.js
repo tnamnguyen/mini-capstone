@@ -70,7 +70,10 @@ function MyJobList() {
                   <td>{job.location}</td>
                   <td>{job.description}</td>
                   <td>
-                    <Link to={`/editJob/${job._id}`}>
+                    <Link to={`/editJob/${job._id}`}
+                      state={{
+                        data: job,
+                      }}>
                       <button>Edit Job</button>
                     </Link>
                   </td>
