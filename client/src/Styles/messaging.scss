@@ -1,0 +1,81 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.inbox-header h1 {
+  margin: 0;
+}
+
+.inbox-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #696969;
+}
+
+.inbox-header button {
+  background-color: #00BFFF;
+  font-size:24px;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.inbox-list li .sentTime {
+  color: #999;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.inbox-container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.inbox-list {
+  padding: 20px;
+}
+
+.inbox-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.inbox-list li:hover{
+  transform: scale(1.1);
+  cursor:pointer;
+}
+
+.inbox-list li:last-child {
+  border-bottom: none;
+}
+
+.inbox-list li.unread {
+  font-weight: bold;
+}
+
+.inbox-list li .sender {
+  font-weight: bold;
+}
+
+
+.addButton:hover{
+    font-size: 20px;
+    padding: 12px 24px;
+}
+
+.inbox-list li {
+  border-bottom: 1px solid #696969;
+  padding: 10px;
+  transition: transform 0.2s ease-in-out;
+}

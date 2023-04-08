@@ -4,6 +4,7 @@ import axios from "axios";
 import '../Styles/home.scss';
 import { Button } from 'reactstrap';
 import {Link} from "react-router-dom";
+import "../Styles/messaging.scss";
 
 function Messaging() {
     const [login, setLogin] = useState(true)
@@ -40,43 +41,6 @@ function Messaging() {
         }
     }
 
-    function loggedinHome() {
-        if (!login) {
-            return(
-                <div class='home_main_container'>
-                    <div class='home_main_profile'>
-                        <div>
-                            <div class='profile_pic'>
-                                <img src={require('../assets/images/profile.png')} width='140' height='140' alt='profile pic' id='home_profile_pic'></img>
-                            </div>
-                            <div><text>{userName}</text></div>
-                            <Link to="/profile"><Button color="primary">Profile</Button></Link>
-                        </div>
-                    </div>
-                    <div className='home_posts'>
-                        <div class="row">
-                        <span class="column">
-                            <text>&nbsp;&nbsp;&nbsp;&nbsp;</text>
-                            <Link to="/connections"><button class="button_6">Connections</button></Link>&nbsp;&nbsp;&nbsp;&nbsp;
-                            <div><br></br></div>
-                            <div><Link to="/savedJobs"><button class="button_6">Saved Jobs</button></Link></div>
-                            <div><br></br></div>
-                            <span><Link to="#"><button class="button_6">Messaging</button></Link></span>
-                        </span>
-                            <span class="column">
-                            <div><Link to="/pendingConnections"><button class="button_6">Invites</button></Link></div>
-                            <div><br></br></div>
-                            <div><Link to="/myJobs"><button class="button_6" href="/myJobs">Your Jobs</button></Link></div>
-                            <div><br></br></div>
-                            <div><Link to="/appliedJobs"><button class="button_6">Applied Jobs</button></Link></div>
-                        </span>
-                        </div>
-                    </div>
-                </div>
-            )
-        }
-    }
-
     const [isPageReady, setIsPageReady] = useState(false);
 
     useEffect(() => {
@@ -85,10 +49,45 @@ function Messaging() {
         }, 1000); // Delay rendering by a second to let server know if user is logged in or not
     }, []);
 
+    const handleClick = () => {
+        // Your click event handler code here
+        window.location = "#";
+
+    };
     return (
         <>
             <NavBar></NavBar>
-            <h1>Inbox</h1>
+            <div className="inbox-container">
+                <div className="inbox-header">
+                    <h1>Inbox</h1>
+                        <button className="addButton">+</button>
+                </div>
+                <div className="inbox-list">
+                    <ul>
+                        <li className="unread"  onClick={handleClick}>
+                            <div className="sender">Alice Lawrence</div>
+                            <div className="message">Hi, just want to remind you that our interview is tomorrow at
+                                10am. See you then!
+                            </div>
+                            <div className="sentTime">10 minutes ago</div>
+                        </li>
+                        <li onClick={handleClick}>
+                            <div className="sender">Peter Patel</div>
+                            <div className="message">Hi, we would like to let you know that you have been selected for
+                                this position. More information will follow in the next hours.
+                            </div>
+                            <div className="sentTime">2 hours ago</div>
+                        </li>
+                        <li onClick={handleClick}>
+                            <div className="sender">John Doe</div>
+                            <div className="message">We are sorry to inform you this position has been filled else where.
+                                Therefore we have no choice but to cancel your upcoming interview.
+                            </div>
+                            <div className="sentTime">3 days ago</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </>
     );
 }
