@@ -56,7 +56,7 @@ function Notifications() {
 
   function makeFavorite(id)
   {
-    console.log("make favo")
+    console.log("make favorite")
     //call API to update the favorite status
     axios
       .post(SERVER_URL + "/makeFavoriteNotification", {accessToken, notification_id: id})
@@ -118,6 +118,25 @@ function Notifications() {
     }
   }
 
+
+  function action(action)
+  {
+    if(action != "N/A"){
+      if(action == "/appliedJobs")
+      {
+        return(
+          <Link to="/appliedJobs"><button class="" href="/appliedJobs">View Applied Jobs</button></Link>
+        )
+      }
+
+      else if(action == "/jobs")
+      {
+        return(
+          <Link to="/jobs"><button class="" href="/jobs">View All Jobs</button></Link>
+        )
+      }
+    }
+  }
   
 
   // Hold a reference to the timer
@@ -146,6 +165,7 @@ function Notifications() {
                 <th>message</th>
                 <th>Add to favorite</th>
                 <th>Delete Notification</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -164,15 +184,15 @@ function Notifications() {
                       </svg>
                     </button>
                   </td>
+                  <td>
+                    {action(noti.action)}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         <div id="notifications_remove_message">{message}</div>
-        <Link to="/jobs" className="myButton">
-          See All Notifications
-        </Link>
       </div>
     </div>
   );}

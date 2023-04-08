@@ -24,13 +24,25 @@ function AdminListUsers(){
     //To assign User as an admin
     function assignAdmin(email){
         axios.post(SERVER_URL+ '/admin_makeAdmin', {email})
-        window.location.href = "/adminListUsers"
+        setTimeout(()=>{
+            window.location.href = "/adminListUsers"
+        }, 1500)
     }
 
     //To assign User as a regular user
     function assignRegularUser(email){
         axios.post(SERVER_URL+ '/admin_makeRegularUser', {email})
-        window.location.href = "/adminListUsers"
+        setTimeout(()=>{
+            window.location.href = "/adminListUsers"
+        }, 1500)
+    }
+
+    //To assign User as a recruiter role
+    function assignRecruiter(email){
+        axios.post(SERVER_URL+ '/admin_makeRecruiter', {email})
+        setTimeout(()=>{
+            window.location.href = "/adminListUsers"
+        }, 1500)
     }
 
     
@@ -60,7 +72,6 @@ function AdminListUsers(){
                 <th>#</th>
                 <th>UserName</th>
                 <th>email</th>
-                <th>Password</th>
                 <th>Type</th>
                 <th>Action</th>
                 </tr>
@@ -72,11 +83,11 @@ function AdminListUsers(){
                     <td>{countUsers++}</td>
                     <td>{user.name}</td>
                     <td>{user.email}</td>
-                    <td>{user.password}</td>
                     <td>{user.type}</td>
                     <td>
                         <button onClick={() => assignAdmin(user.email)} className='admin_listUsers_makeAdmin_button'>Make Admin</button>
                         <button onClick={() => assignRegularUser(user.email)} className='admin_listUsers_makeRegular_button'>Make Regular</button>
+                        <button onClick={() => assignRecruiter(user.email)} className='admin_listUsers_makeRecruiter_button'>Make Recruiter</button>
                     </td>
                 </tr>
                 ))}

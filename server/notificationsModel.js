@@ -35,8 +35,12 @@ const notificationsSchema = new mongoose.Schema({
     favorite: {
         type: Boolean,
         required: true
-    }
+    },
 
+    action: {
+        type: String,
+        required: true
+    }
 
 })
 

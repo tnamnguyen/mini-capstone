@@ -14,7 +14,7 @@ function ViewJob(props) {
   const data = location.state.data;
 
   const [login, setLogin] = useState(true);
-
+  const [recruiter, setRecruiter] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState("");
   const [savedJobId, setSavedJobId] = useState(null);
   const [applySuccess, setApplySuccess] = useState("");
@@ -26,6 +26,10 @@ function ViewJob(props) {
   if (isTokenAvailable) {
     axios.post(SERVER_URL + "/home", { accessToken }).then((response) => {
       setLogin(false);
+      if(response.data.user.type == "recruiter")
+      {
+        setRecruiter(true)
+      }
     });
   }
 
@@ -63,7 +67,7 @@ function ViewJob(props) {
   }
   //Job Application Button
   function addApply(job_id) {
-    if (!login) {
+    if (!login && recruiter == false) {
       return (
         <td>
           <button onClick={() => applyJob(job_id)} id="viewJob_apply">
@@ -82,7 +86,7 @@ function ViewJob(props) {
 
   // Add the save button if the user is logged in
   function addSave(job_id) {
-    if (!login) {
+    if (!login && recruiter == false) {
       return (
         <td>
           <button onClick={() => saveJob(job_id)} id="viewJob_save">
