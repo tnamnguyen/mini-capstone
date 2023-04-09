@@ -20,27 +20,6 @@ function Messaging() {
             setLogin(false)
         })
 
-
-    function defaultHome() {
-        if(login) {
-            return (
-                <div className="content">
-                    <header className="header">
-                        <h1 className="header-title">Jobilee</h1>
-                        <div className="button-container">
-                            <Link to="/login">
-                                <button className="rounded-button" id='log_in_button'>Log In</button>
-                            </Link>
-                            <Link to="/jobs">
-                                <button className="normal-button" id='log_in_button' >View Jobs</button>
-                            </Link>
-                        </div>
-                    </header>
-                </div>
-            )
-        }
-    }
-
     const [isPageReady, setIsPageReady] = useState(false);
 
     useEffect(() => {
@@ -64,23 +43,23 @@ function Messaging() {
                 </div>
                 <div className="inbox-list">
                     <ul>
-                        <li className="unread"  onClick={handleClick}>
+                        <li className="newMess"  onClick={handleClick}>
                             <div className="sender">Alice Lawrence</div>
-                            <div className="message">Hi, just want to remind you that our interview is tomorrow at
+                            <div>Hi, just want to remind you that our interview is tomorrow at
                                 10am. See you then!
                             </div>
                             <div className="sentTime">10 minutes ago</div>
                         </li>
                         <li onClick={handleClick}>
                             <div className="sender">Peter Patel</div>
-                            <div className="message">Hi, we would like to let you know that you have been selected for
+                            <div>Hi, we would like to let you know that you have been selected for
                                 this position. More information will follow in the next hours.
                             </div>
                             <div className="sentTime">2 hours ago</div>
                         </li>
                         <li onClick={handleClick}>
                             <div className="sender">John Doe</div>
-                            <div className="message">We are sorry to inform you this position has been filled else where.
+                            <div>We are sorry to inform you this position has been filled else where.
                                 Therefore we have no choice but to cancel your upcoming interview.
                             </div>
                             <div className="sentTime">3 days ago</div>

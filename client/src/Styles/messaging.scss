@@ -51,23 +51,22 @@ body {
   margin: 0;
 }
 
+.inbox-list li:last-child {
+  border-bottom: none;
+}
+
 .inbox-list li:hover{
   transform: scale(1.1);
   cursor:pointer;
 }
 
-.inbox-list li:last-child {
-  border-bottom: none;
-}
-
-.inbox-list li.unread {
+.inbox-list li.newMess {
   font-weight: bold;
 }
 
 .inbox-list li .sender {
   font-weight: bold;
 }
-
 
 .addButton:hover{
     font-size: 20px;
