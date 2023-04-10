@@ -27,6 +27,8 @@ import DeleteProfile from "./components/deleteProfile";
 import ViewJob from "./components/viewJob";
 import Notifications from "./components/notifications";
 import Messaging from "./components/messaging"
+import RecruiterViewJob from "./components/recruiterViewJob";
+
 
 
 
@@ -58,6 +60,7 @@ ReactDOM.render(
         <Route path="/addConnections" element={<AddConnections/>}/>
         <Route path="/pendingConnections" element={<PendingConnections/>}/>
         <Route path="/viewJob" element={<ViewJob />} />
+        <Route path="/recruiterViewJob" element={<RecruiterViewJob />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/messaging" element={<Messaging />} />
 

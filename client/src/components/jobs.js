@@ -8,6 +8,7 @@ import "../Styles/job.scss";
 
 function JobList() {
   const [login, setLogin] = useState(true);
+  const [recruiter, setRecruiter] = useState(false);
   const [jobs, setJobs] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState("");
   const [applySuccess, setApplySuccess] = useState("");
@@ -20,6 +21,10 @@ function JobList() {
   if (isTokenAvailable) {
     axios.post(SERVER_URL + "/home", { accessToken }).then((response) => {
       setLogin(false);
+      if(response.data.user.type == "recruiter")
+      {
+        setRecruiter(true)
+      }
     });
   }
 
@@ -100,20 +105,20 @@ function JobList() {
 
   //All Row buttons
   function applyRow() {
-    if (!login) {
+    if (!login && recruiter == false) {
       return <th>Apply</th>;
     }
   }
 
   function saveRow() {
-    if(!login) {
+    if(!login && recruiter == false) {
       return <th>Save</th>
     }
   }
 
   //Job Application Button
   function addApply(job_id) {
-    if (!login) {
+    if (!login && recruiter == false) {
       return (
         <td>
           <button
@@ -132,7 +137,7 @@ function JobList() {
 
   //Save Job Button
   function addSave(job_id) {
-    if (!login) {
+    if (!login && recruiter == false) {
       return (
         <td>
           <button
@@ -166,7 +171,7 @@ function JobList() {
 
   //Create new job button
   function addCreateJobButton() {
-    if (!login) {
+    if (!login && recruiter == true) {
       return (
         <Link to="/createJobs" className="myButton">
           Create A new Job
@@ -177,7 +182,7 @@ function JobList() {
 
   //View saved jobs button
   function addSavedJobButton() {
-    if (!login) {
+    if (!login && recruiter == false) {
       return (
         <Link to="/savedJobs" className="myButton">
           View Saved Jobs
@@ -188,7 +193,7 @@ function JobList() {
 
   //view job applications button
   function addAppliedJobButton() {
-    if (!login) {
+    if (!login && recruiter == false) {
       return (
         <Link to="/appliedJobs" className="myButton">
           View my applications
@@ -199,10 +204,10 @@ function JobList() {
 
   //view created jobs button
   function addCreatedJobButton() {
-    if (!login) {
+    if (!login && recruiter == true) {
       return (
         <Link to="/myJobs" className="myButton">
-          View Created Jobs
+          Manage Created Jobs
         </Link>
       );
     }

@@ -43,7 +43,7 @@ function JobApplicationForm() {
       // Do something with the form data, such as send it to a server
       console.log({ title, experience, location, description });
 
-      await axios.post(SERVER_URL + '/createJobs', {title,experience, location, description, accessToken})
+      await axios.post(SERVER_URL + '/createJobs', {title, experience, location, description, accessToken})
       .then(response => {
         console.log(response.data.isError);
           //If backend returns an error
@@ -54,6 +54,10 @@ function JobApplicationForm() {
 
           //If backend returns success
           if(response.data.isError == "False"){
+
+            //Create a notification
+            createNotification(response.data.job_id, "Job Posting")
+
             setCreateErr('')
             setCreateSuccess(response.data.message)
             console.log("Redirecting to jobs page");
@@ -67,6 +71,17 @@ function JobApplicationForm() {
          console.log(error);
       });
   };
+
+
+  // Call to create a new notification
+  function createNotification(job_id, typeOfNotification) {
+    console.log("Notification creation is called!");
+    axios
+      .post(SERVER_URL + "/createNotification", { object_id: job_id , accessToken, type: typeOfNotification })
+      .then((response) => {
+        
+      });
+  }
 
   return (
     <>
