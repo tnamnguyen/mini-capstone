@@ -416,7 +416,7 @@ app.get("/admin_listUsers", async (req, res) => {
   } catch (error) {
     console.log("Error when fetching from database");
     console.log(error);
-    db_client.close();
+    //db_client.close();
   }
 });
 
@@ -509,7 +509,7 @@ app.post("/profile", authenticateToken, async (req, res) => {
                   collection_name +
                   "collection!"
               );
-              db_client.close();
+              //db_client.close();
             });
         } else {
           res.send({
@@ -522,7 +522,7 @@ app.post("/profile", authenticateToken, async (req, res) => {
             languages: result.languages,
             bio: result.bio,
           });
-          db_client.close();
+          //db_client.close();
         }
       })
       .catch((err) => {
@@ -561,7 +561,7 @@ app.post("/editprofile", authenticateToken, async (req, res) => {
           bio: result.bio
         })
         disconnectMongooseDB()
-        db_client.close();
+        //db_client.close();
       }
     })
     .catch(err => {
@@ -689,7 +689,7 @@ app.post('/confirmdelete', authenticateToken, async(req, res) => {
   dbo.collection(collection_name_users).deleteOne({_id: new ObjectId(userid)}, (err, result) => {
     if (err) throw err;
     console.log("User login credentials were deleted successfully")
-    db_client.close();
+    //db_client.close();
     res.json('User deleted successfully')
   })
 
@@ -765,7 +765,7 @@ app.post('/createJobs', authenticateToken, async(req, res) => {
       job_id: result.insertedId.toString(),
       message: successMessage
     })
-    db_client.close();
+    //db_client.close();
     disconnectMongooseDB()
   })
     .catch(err => {
@@ -844,7 +844,7 @@ app.post('/editjob', authenticateToken, async(req, res) => {
     })
   }
 
-  db_client.close();
+  //db_client.close();
 })
 
 
@@ -867,7 +867,7 @@ app.get("/jobs", async (req, res) => {
   } catch (error) {
     console.log("Error when fetching from database");
     console.log(error);
-    db_client.close();
+    //db_client.close();
     disconnectMongooseDB()
 
   }
@@ -892,7 +892,7 @@ app.get("/jobs", async (req, res) => {
         catch (error) {
           console.log("Error when fetching from database");
           console.log(error);
-          db_client.close();
+          //db_client.close();
         }
 
   })
@@ -921,7 +921,7 @@ app.get("/jobs", async (req, res) => {
       }
     })
 
-    db_client.close();
+    //db_client.close();
   })
 
 
@@ -962,7 +962,7 @@ app.get("/jobs", async (req, res) => {
         })
     }
       })
-      db_client.close();
+      //db_client.close();
   })
 
 
@@ -999,14 +999,14 @@ app.post("/savedjobs", authenticateToken, async (req, res) => {
     // Finding all jobs matching ids from array
     const jobs = await dbo.collection(collection_name_Jobs).find({_id: {$in: object_ids}}).toArray();
     res.json(jobs)
-    db_client.close();
+    //db_client.close();
     disconnectMongooseDB()
 
   } catch(error) {
     console.log("Error when fetching from database");
     console.log(error);
     disconnectMongooseDB()
-    db_client.close();
+    //db_client.close();
   }
 });
 
@@ -1035,7 +1035,7 @@ app.post("/removejob", authenticateToken, async (req, res) => {
     }
   }
   )
-  db_client.close();
+  //db_client.close();
 })
 
 
@@ -1075,7 +1075,7 @@ app.post('/savedjobs', authenticateToken, async(req, res) => {
     console.log("Error when fetching from database");
     console.log(error);
     disconnectMongooseDB()
-    db_client.close();
+    //db_client.close();
   }
 })
 
@@ -1119,7 +1119,7 @@ app.post('/applyJob', authenticateToken, async(req, res) => {
           message: 'Job application saved successfully'
         })
         disconnectMongooseDB()
-        db_client.close();
+        //db_client.close();
 
       })
     }
@@ -1166,7 +1166,7 @@ app.post('/appliedjobs', authenticateToken, async(req, res) => {
     console.log("Error when fetching from database");
     console.log(error);
     disconnectMongooseDB()
-    db_client.close();
+    //db_client.close();
   }
 })
 
@@ -1347,7 +1347,7 @@ app.post("/reset", async (req, res) => {
     );
 
   // Close the database connection
-  db_client.close();
+  //db_client.close();
 
   //Sending back response to front end
   if (anyError) {
@@ -1376,7 +1376,7 @@ app.get("/addConnections", async (req, res) => {
   } catch (error) {
     console.log("Error when fetching from database");
     console.log(error);
-    db_client.close();
+    //db_client.close();
   }
 });
 
@@ -1560,7 +1560,7 @@ app.post('/user', async(req, res) => {
         languages: result.languages,
         bio: result.bio
       })
-      db_client.close();
+      //db_client.close();
     }
   })
   .catch(err => {
