@@ -6,6 +6,9 @@ import ViewJob from "../components/viewJob.js"
 
 //To keep the rendering of pages clean
 afterEach(cleanup);
+jest.mock('reactstrap', () => ({
+    Button: jest.fn().mockReturnValue('MockButton'),
+  }));
 
 //Testing if the navbar is loaded properly
 test('NavBar is loaded', () => {

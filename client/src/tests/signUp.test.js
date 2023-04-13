@@ -5,6 +5,10 @@ import { render, waitFor, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import '@testing-library/jest-dom';
 
+jest.mock('reactstrap', () => ({
+    Button: jest.fn().mockReturnValue('MockButton'),
+  }));
+
 //Testing if post method is called properly
 test('Post method is called properly', async() => {
 

@@ -4,7 +4,10 @@ import { BrowserRouter } from "react-router-dom";
 import axios from 'axios';
 import Profile from "../components/profile.js";
 
-// jest.mock('axios');
+jest.mock('axios');
+jest.mock('reactstrap', () => ({
+    Button: jest.fn().mockReturnValue('MockButton'),
+  }));
 
 // describe('Profile component', () => {
 //   it('should set the state variables correctly when the axios call is successful', async () => {
@@ -24,14 +27,14 @@ import Profile from "../components/profile.js";
 
 //     const { getByTestId } = render(<BrowserRouter><Profile /></BrowserRouter>);
 
-//     await waitFor(() => {
-//       expect(getByTestId('profile_greeting')).toHaveTextContent('Good Night, John Doe');
-//       expect(getByTestId('profile_education')).toHaveTextContent('Education: B.S. in Computer Science');
-//       expect(getByTestId('profile_current_job')).toHaveTextContent('Current Job: Software Engineer');
-//       expect(getByTestId('profile_past_job')).toHaveTextContent('Past Job: Web Developer');
-//       expect(getByTestId('profile_languages')).toHaveTextContent('Languages: JavaScript, Python');
-//       expect(getByTestId('profile_bio')).toHaveTextContent('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
-//     });
+//     setTimeout(() => {
+//             expect(getByTestId('profile_greeting')).toHaveTextContent('Good Night, John Doe');
+//             expect(getByTestId('profile_education')).toHaveTextContent('Education: B.S. in Computer Science');
+//             expect(getByTestId('profile_current_job')).toHaveTextContent('Current Job: Software Engineer');
+//             expect(getByTestId('profile_past_job')).toHaveTextContent('Past Job: Web Developer');
+//             expect(getByTestId('profile_languages')).toHaveTextContent('Languages: JavaScript, Python');
+//             expect(getByTestId('profile_bio')).toHaveTextContent('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
+//     }, 3000)
 //   });
 // });
 

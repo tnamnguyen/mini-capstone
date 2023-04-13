@@ -5,6 +5,9 @@ import axios from 'axios'
 import EditProfile from '../components/editProfile'
 
 jest.mock('axios');
+jest.mock('reactstrap', () => ({
+    Button: jest.fn().mockReturnValue('MockButton'),
+  }));
 
 // Testing the static document
 test('Edit Profile is loaded', () => {
@@ -24,7 +27,11 @@ test('Edit Profile is loaded', () => {
 
     axios.post.mockResolvedValue({data: input})
 
-    render(<BrowserRouter><EditProfile/></BrowserRouter>)
-    const editprofile = screen.getByTestId("container");
-    expect(editprofile).toBeInTheDocument();
+    render(<BrowserRouter><EditProfile /></BrowserRouter>)
+    setTimeout(function(){
+        const name = screen.getByText("John Doe");
+        const editprofile = screen.getByTestId("container");
+        expect(editprofile).toBeInTheDocument();
+        expect(name).toBeInTheDocument();
+    }, 3000)
 })

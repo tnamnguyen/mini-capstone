@@ -25,7 +25,7 @@ function Home() {
             return (
                 <div className="content">
                     <header className="header">
-                        <h1 className="header-title">Jobilee</h1>
+                        <h1 className="header-title" id="header-title">Jobilee</h1>
                         <div className="button-container">
                             <Link to="/login">
                                 <button className="rounded-button" id='log_in_button'>Log In</button>

@@ -7,6 +7,9 @@ import SavedJobList from "../components/savedJobs"
 afterEach(cleanup)
 
 jest.mock('axios');
+jest.mock('reactstrap', () => ({
+    Button: jest.fn().mockReturnValue('MockButton'),
+  }));
 
 test('Saved Jobs List is loaded', () => {
     const jobs = [{

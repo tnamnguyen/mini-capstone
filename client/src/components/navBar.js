@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "../Styles/navBar.scss"
 import axios from "axios"
-import { Button } from 'reactstrap';
+const { Button } = require('reactstrap')
 
 function NavBar() {
 

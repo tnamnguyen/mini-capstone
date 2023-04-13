@@ -15,6 +15,9 @@ test('NavBar is loaded', () => {
 });
 
 jest.mock('axios')
+jest.mock('reactstrap', () => ({
+    Button: jest.fn().mockReturnValue('MockButton'),
+  }));
 
 test('applied jobs is loaded', () => {
     render(<BrowserRouter><AppliedJobList /></BrowserRouter>);
