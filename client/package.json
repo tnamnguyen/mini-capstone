@@ -9,7 +9,6 @@
     "@usedapp/core": "^1.2.2",
     "axios": "^1.2.4",
     "bootstrap": "^5.2.3",
-    "chai": "^4.3.7",
     "chromedriver": "^112.0.0",
     "dotenv": "^16.0.3",
     "jquery": "^3.6.3",
@@ -29,7 +28,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "coverage": "react-scripts test --coverage --watchAll",
-    "selenium": "npx mocha SeleniumTests/*.js"
+    "selenium": "npx mocha SeleniumTests/*.js",
+    "seleniumreport": "npx mocha --reporter mochawesome --reporter-options reportDir=coverage/SeleniumReports SeleniumTests/*.js"
   },
   "eslintConfig": {
     "extends": [
@@ -50,7 +50,9 @@
     ]
   },
   "devDependencies": {
+    "chai": "^4.3.7",
     "eslint-plugin-import": "^2.27.5",
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "mochawesome": "^7.1.3"
   }
 }
