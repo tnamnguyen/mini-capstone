@@ -3,9 +3,6 @@ import '@testing-library/jest-dom'
 import { BrowserRouter } from "react-router-dom"
 import ResetPassword from "../components/resetPassword";
 
-jest.mock('reactstrap', () => ({
-    Button: jest.fn().mockReturnValue('MockButton'),
-  }));
 
 test('Reset Password is loaded', () => {
     render(<BrowserRouter><ResetPassword/></BrowserRouter>)

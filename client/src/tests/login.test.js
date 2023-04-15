@@ -4,10 +4,6 @@ import { BrowserRouter } from "react-router-dom"
 import Login from '../components/login'
 import mockAxios from '../__mocks__/axios'
 
-jest.mock('reactstrap', () => ({
-    Button: jest.fn().mockReturnValue('MockButton'),
-  }));
-
 //Testing if login form returns an active token 
 test("should return an ative token", async() => {
     //Setup

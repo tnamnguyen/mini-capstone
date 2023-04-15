@@ -8,9 +8,6 @@ import DeleteProfile from "../components/deleteProfile.js"
 afterEach(cleanup);
 
 jest.mock('axios')
-jest.mock('reactstrap', () => ({
-    Button: jest.fn().mockReturnValue('MockButton'),
-  }));
 
 beforeAll(() => {
     jest.useFakeTimers();

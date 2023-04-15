@@ -7,10 +7,7 @@ import MyJobList from "../components/myJobs"
 afterEach(cleanup)
 
 jest.mock('axios');
-jest.mock('reactstrap', () => ({
-    Button: jest.fn().mockReturnValue('MockButton'),
-  }));
-  
+
 test('My Jobs List is loaded', () => {
     const jobs = [{
         title: 'test',
@@ -27,17 +24,6 @@ test('My Jobs List is loaded', () => {
 ]
     axios.post.mockResolvedValue({data: jobs});
     render(<BrowserRouter><MyJobList/></BrowserRouter>)
-    setTimeout(() => {
-        const myjobs = screen.getByTestId("jobs-1");
-        const title = screen.getByText('test');
-        const experience = screen.getByText('experience')
-        const location = screen.getByText('location')
-        const description = screen.getByText('description')
-        expect(myjobs).toBeInTheDocument();
-        expect(title).toBeInTheDocument();
-        expect(experience).toBeInTheDocument();
-        expect(location).toBeInTheDocument();
-        expect(description).toBeInTheDocument();
-    }, 3000)
-
+    const myjobs = screen.getByTestId("jobs-1");
+    expect(myjobs).toBeInTheDocument();
 });

@@ -7,9 +7,6 @@ import AddConnections from "../components/addConnections";
 import NavBar from "../components/navBar.js"
 
 jest.mock("axios");
-jest.mock('reactstrap', () => ({
-    Button: jest.fn().mockReturnValue('MockButton'),
-  }));
 
 
 //Testing if the navbar is loaded properly
