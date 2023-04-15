@@ -9,7 +9,7 @@
     "@usedapp/core": "^1.2.2",
     "axios": "^1.2.4",
     "bootstrap": "^5.2.3",
-    "chromedriver": "^110.0.0",
+    "chromedriver": "^112.0.0",
     "dotenv": "^16.0.3",
     "jquery": "^3.6.3",
     "moment": "^2.29.4",
