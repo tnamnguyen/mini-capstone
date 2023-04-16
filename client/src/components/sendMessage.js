@@ -16,7 +16,8 @@ function Messages() {
   const [selectedUserName, setSelectedUserName] = useState("");
   const [messageValue, setMessageValue] = useState("");
 
-  const SERVER_URL = "http://localhost:3001"
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL
+
 
     // assigning user 1 as the logged-in user
     useEffect(() => {
