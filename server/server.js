@@ -213,6 +213,7 @@ app.post("/signup", async (req, res) => {
   const input_email = req.body.email;
   const input_password = req.body.password;
   const input_confirm_password = req.body.passwordConfirm;
+  const input_role = req.body.role;
 
   //Connecting to the specific database and collection
   // const database_name = "Accounts"
@@ -324,7 +325,7 @@ app.post("/signup", async (req, res) => {
     name: input_name,
     email: input_email,
     password: hashedPassword,
-    type: "regular_user",
+    type: input_role,
   });
 
   //Storing the new registered user if all checks are completed
