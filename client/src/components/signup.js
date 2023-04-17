@@ -10,6 +10,7 @@ function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
+    const [role, setRole] = useState("regular_user");
     const [error, setError] = useState('');
     const [signUpStatus_success, setSignUpStatus_success] = useState('');
     const [signUpStatus_err, setSignUpStatus_err] = useState('');
@@ -23,7 +24,7 @@ function Signup() {
 
         // Code Example:
         
-        await axios.post(SERVER_URL + '/signup', {username, email, password, passwordConfirm})
+        await axios.post(SERVER_URL + '/signup', {username, email, password, passwordConfirm, role})
             .then(response => {
                 //If backend returns an error
                 if(response.data.isError == "True"){
@@ -81,6 +82,15 @@ function Signup() {
                             value={passwordConfirm}
                             onChange={e => setPasswordConfirm(e.target.value)}
                         />
+                        <div className='signup_checkbox'>Recruiter Account ?
+                        <input 
+                            type="checkbox"
+                            value="recruiter"
+                            onChange={e => setRole(e.target.value)}
+                        />
+                        </div>
+                        
+                        
                     </div>
                     <button id='signup_button' onClick={handleSignup}>Sign Up</button>
                     <Link to="/login">Already have an account?</Link>

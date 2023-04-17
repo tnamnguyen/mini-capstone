@@ -61,7 +61,7 @@ function Home() {
                             <div><br></br></div>
                             <div><Link to="/savedJobs"><button class="button_6">Saved Jobs</button></Link></div>
                             <div><br></br></div>
-                            <span><Link to="#"><button class="button_6">Messaging</button></Link></span>
+                            <span><Link to="messaging"><button class="button_6">Messaging</button></Link></span>
                         </span>
                         <span class="column">
                             <div><Link to="/pendingConnections"><button class="button_6">Invites</button></Link></div>
