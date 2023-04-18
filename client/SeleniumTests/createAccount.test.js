@@ -5,12 +5,11 @@ const { describe, it } = require('mocha');
 require("chromedriver");
 
 describe('Creating an account', function() {
-    it('Creating Default Account', async function() {
-        this.timeout(10000); // Allow the timeout of the test to be at 10 seconds instead
+    it('Creating Account using email that already exists', async function() {
+        this.timeout(15000); // Allow the timeout of the test to be at 10 seconds instead
         let driver = await new Builder().forBrowser('chrome').build();
 
-        // await driver.get("https://mini-capstone.vercel.app");
-        await driver.get('http://localhost:3000/');
+        await driver.get("https://mini-capstone.vercel.app");
         await driver.sleep(3000); // timeout for 3 seconds
 
         // Finding and clicking on login button
@@ -35,23 +34,22 @@ describe('Creating an account', function() {
 
         await driver.sleep(2000);
         try{
-        let success = await driver.findElement(By.xpath("//*[contains(text(), 'User succesfully added to database, Redirecting to login page...')]"));
+        let success = await driver.findElement(By.xpath("//*[contains(text(), 'Error! email already registered in database, Please try again!')]"));
         expect(success).to.exist;
         } catch (error) {
             console.error('Error while creating account: ', error);
-            expect.fail('Account already exists');
+            expect.fail('Expected to fail creating account');
         } finally {
             await driver.quit();
         }
     })
 
     // only will execute this Individual Test only and ignore the remaining its
-    it.only('Creating an account to be deleted', async function() {
+    it('Creating an account to be deleted', async function() {
         this.timeout(35000)
         let driver = await new Builder().forBrowser('chrome').build();
 
-        // await driver.get("https://mini-capstone.vercel.app");
-        await driver.get('http://localhost:3000/');
+        await driver.get("https://mini-capstone.vercel.app");
         await driver.sleep(3000); // timeout for 3 seconds
 
         // Finding and clicking on login button
@@ -64,7 +62,7 @@ describe('Creating an account', function() {
         const inputName = await driver.findElement(By.css('.signup-container > div:nth-child(2) > input:nth-child(1)'));
         await inputName.sendKeys('Temporary User');
         const inputEmail = await driver.findElement(By.css('.signup-container > div:nth-child(2) > input:nth-child(2)'));
-        await inputEmail.sendKeys('seleniumtemp@test.com');
+        await inputEmail.sendKeys('deleteuser@test.com');
         const inputPassword = await driver.findElement(By.xpath('/html/body/div/div/div/div[1]/input[3]'));
         await inputPassword.sendKeys('Qwerty123!');
         const inputConfirmPass = await driver.findElement(By.xpath('/html/body/div/div/div/div[1]/input[4]'));
@@ -81,7 +79,7 @@ describe('Creating an account', function() {
 
         // Filling the fields
         const inputLogin = await driver.findElement(By.xpath('/html/body/div/div/div/div[1]/input[1]'));
-        await inputLogin.sendKeys('seleniumtemp@test.com');
+        await inputLogin.sendKeys('deleteuser@test.com');
         const inputLoginPassword = await driver.findElement(By.xpath('/html/body/div/div/div/div[1]/input[2]'));
         inputLoginPassword.sendKeys('Qwerty123!');
 

@@ -4,13 +4,12 @@ const { expect } = require('chai');
 const { describe, it } = require('mocha');
 require("chromedriver");
 
-describe('loading home page', function() {
-    it('should have a home page rendered', async function() {
+describe('Render Test', function() {
+    it('Home Page rendering', async function() {
         this.timeout(10000);    // Allow the timeout of the test to be at 10 seconds instead
         let driver = await new Builder().forBrowser('chrome').build();
 
-        // await driver.get("https://mini-capstone.vercel.app");
-        await driver.get('http://localhost:3000/');
+        await driver.get("https://mini-capstone.vercel.app");
         await driver.sleep(3000); // timeout for 3 seconds
 
         // Asserts
