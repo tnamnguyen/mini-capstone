@@ -39,29 +39,24 @@ describe("Edit Job test", function () {
     // Waiting for redirection
     await driver.sleep(1000);
 
+    saveIt = await driver.findElement(
+      By.xpath("/html/body/div/div/div/div/table/tbody/tr[4]/td[6]/button")
+    );
+    saveIt.click();
+
+    await driver.sleep(1000);
+
     manageButton = await driver.findElement(By.id("manage-button"));
     manageButton.click();
 
-    editButton = await driver.findElement(
-      By.xpath('//*[@id="root"]/div/div/div/table/tbody/tr[1]/td[2]/a/button')
-    );
-    editButton.click();
-
-    // Waiting for redirection
-    await driver.sleep(1000);
-
-    const inputA = await driver.findElement(By.id("inputA"));
-    await inputA.sendKeys("Stuff new");
-
-    submitButton = await driver.findElement(By.id("submit"));
-    submitButton.click();
-
     try {
-      let success = await driver.findElement(By.id("success"));
+      success = await driver.findElement(
+        By.xpath("/html/body/div/div/div/div/table/tbody/tr/td[1]")
+      );
       expect(success).to.exist;
     } catch (error) {
-      console.error("Error while editing job", error);
-      expect.fail("Job couldn't be edited");
+      console.error("Error while saving job", error);
+      expect.fail("Job couldn't be saved");
     } finally {
       await driver.sleep(4000);
       await driver.quit();

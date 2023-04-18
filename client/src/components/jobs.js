@@ -195,7 +195,7 @@ function JobList() {
   function addAppliedJobButton() {
     if (!login && recruiter == false) {
       return (
-        <Link to="/appliedJobs" className="myButton">
+        <Link to="/appliedJobs" className="myButton" id="applications-button">
           View my applications
         </Link>
       );

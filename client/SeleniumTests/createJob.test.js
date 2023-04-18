@@ -64,9 +64,9 @@ describe("Create Job test", function () {
 
     await driver.sleep(4000);
     try {
-      let success = await driver.findElement(By.id("success"));
+      let success = await driver.findElement(By.xpath(""));
       expect(success).to.exist;
-    } catch {
+    } catch (error) {
       console.error("Error while creating job", error);
       expect.fail("Job couldn't be created");
     } finally {
