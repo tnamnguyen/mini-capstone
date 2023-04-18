@@ -48,7 +48,7 @@ function SentConnections() {
         console.log(response);
         //If backend returns an error
         if (response.data.status) {
-          setShowPopUp("connection Denied");
+          setShowPopUp("Connection un-sent");
           setRefetch(refetch + 1);
           setTimeout(() => {
             setShowPopUp("");
@@ -109,8 +109,8 @@ function SentConnections() {
               <tr key={connection._id}>
                 <td>
                   {connection.user2Name === user1?.name
-                    ? connection.user2Name
-                    : connection.user1Name}
+                    ? connection.user1Name
+                    : connection.user2Name}
                 </td>
                 <td>{connection.status}</td>
                 <td>

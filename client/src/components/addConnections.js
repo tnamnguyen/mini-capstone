@@ -16,7 +16,6 @@ function AddConnections() {
   
   const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
-
   // assigning user 1 as the logged-in user
   useEffect(() => {
     if (isTokenAvailable) {
