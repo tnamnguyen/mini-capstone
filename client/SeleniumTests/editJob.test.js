@@ -3,7 +3,7 @@ const { expect } = require("chai");
 const { describe, it } = require("mocha");
 require("chromedriver");
 
-describe("Create Job test", function () {
+describe("Edit Job test", function () {
   it("Logging test user in", async function () {
     this.timeout(10000);
 
@@ -39,36 +39,29 @@ describe("Create Job test", function () {
     // Waiting for redirection
     await driver.sleep(1000);
 
-    toCreateButton = await driver.findElement(By.id("create-button"));
-    toCreateButton.click();
+    manageButton = await driver.findElement(By.id("manage-button"));
+    manageButton.click();
+
+    editButton = await driver.findElement(
+      By.xpath('//*[@id="root"]/div/div/div/table/tbody/tr[1]/td[2]/a/button')
+    );
+    editButton.click();
 
     // Waiting for redirection
     await driver.sleep(1000);
 
     const inputA = await driver.findElement(By.id("inputA"));
-    await inputA.sendKeys("SeleniumTest Job");
+    await inputA.sendKeys("Stuff new");
 
-    const inputB = await driver.findElement(By.id("inputB"));
-    await inputB.sendKeys("None");
-
-    const inputC = await driver.findElement(By.id("inputC"));
-    await inputC.sendKeys("Laval");
-
-    const inputD = await driver.findElement(By.id("inputD"));
-    await inputD.sendKeys("SeleniumTest Job boy howdy this works");
-
-    submitButton = await driver.findElement(
-      By.xpath("/html/body/div/div/div/form/button")
-    );
+    submitButton = await driver.findElement(By.id("submit"));
     submitButton.click();
 
-    await driver.sleep(4000);
     try {
       let success = await driver.findElement(By.id("success"));
       expect(success).to.exist;
     } catch {
-      console.error("Error while creating job", error);
-      expect.fail("Job couldn't be created");
+      console.error("Error while editing job", error);
+      expect.fail("Job couldn't be edited");
     } finally {
       await driver.sleep(4000);
       await driver.quit();

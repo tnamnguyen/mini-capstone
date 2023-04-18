@@ -6,35 +6,33 @@ import "../Styles/create-job.scss";
 import "../Styles/editJob.scss";
 
 function JobEditForm(props) {
-  const [title, setTitle] = useState('');
-  const [experience, setExperience] = useState('');
-  const [location, setLocation] = useState('');
-  const [description, setDescription] = useState('');
-  const [editSuccess, setEditSuccess] = useState('');
-  const [editErr, setEditErr] = useState('');
+  const [title, setTitle] = useState("");
+  const [experience, setExperience] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+  const [editSuccess, setEditSuccess] = useState("");
+  const [editErr, setEditErr] = useState("");
 
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
-  const accessToken = localStorage.getItem("token")
+  const accessToken = localStorage.getItem("token");
 
   const { jobId } = useParams();
   console.log(jobId);
   const l = useLocation();
-  console.log(l.state)
-  const job = l.state.data
+  console.log(l.state);
+  const job = l.state.data;
   useEffect(() => {
-
-    setTitle(job.title)
-    setExperience(job.experience)
-    setLocation(job.location)
-    setDescription(job.experience)
-  }, [])
+    setTitle(job.title);
+    setExperience(job.experience);
+    setLocation(job.location);
+    setDescription(job.experience);
+  }, []);
 
   // Getting the parameter from my jobs page
 
-
   const handleSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     // Do something with the form data, such as send it to a server
     console.log({ title, experience, location, description });
     //Change to edit and not post
@@ -45,28 +43,30 @@ function JobEditForm(props) {
         experience,
         location,
         description,
-        accessToken
+        accessToken,
       })
       .then((response) => {
         //If backend returns an error
         if (response.data.isError == "True") {
-          setEditErr(response.data.message)
-          setEditSuccess('')
+          setEditErr(response.data.message);
+          setEditSuccess("");
           setTimeout(() => {
             window.location.href = "/myJobs";
-          }, 3000)
+          }, 3000);
         }
 
         //If backend returns success
         if (response.data.isError == "False") {
-          setEditErr('')
-          setEditSuccess(response.data.message)
+          setEditErr("");
+          setEditSuccess(response.data.message);
           setTimeout(() => {
             window.location.href = "/myJobs";
           }, 3000);
         }
       })
-      .catch((error) => {console.log(error);});
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -85,6 +85,7 @@ function JobEditForm(props) {
                 required
                 type="text"
                 value={title}
+                id="inputA"
                 onChange={(event) => setTitle(event.target.value)}
               />
             </label>
@@ -121,9 +122,13 @@ function JobEditForm(props) {
 
             <br />
 
-            <button type="submit">Submit</button>
-            <div className='editErr'>{editErr}</div>
-            <div className='editSuccess'>{editSuccess}</div>
+            <button type="submit" id="submit">
+              Submit
+            </button>
+            <div className="editErr">{editErr}</div>
+            <div className="editSuccess" id="success">
+              {editSuccess}
+            </div>
           </form>
         </div>
       </div>
