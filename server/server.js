@@ -1490,6 +1490,32 @@ app.get("/getPendingConnection/:id", async (req, res) => {
   }
 });
 
+//************************* Sent Connections **************************//
+app.get("/getSentConnection/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await Connection.find({ user1: id, status: "pending" });
+
+    if (result) {
+      res.status(200).json({
+        message: "Connections fetched successfully",
+        status: false,
+        data: result,
+      });
+    } else {
+      res.status(200).json({
+        message: "Failed to Fetch Connection",
+        status: false,
+      });
+    }
+  } catch (error) {
+    res.status(200).json({
+      message: "Failed to Fetch Connection",
+      status: false,
+    });
+  }
+});
+
 app.patch("/connections/:id", async (req, res) => {
   try {
     const id = req.params.id;
