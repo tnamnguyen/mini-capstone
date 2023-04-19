@@ -18,28 +18,28 @@ function RecruiterViewJob(props) {
 
   const accessToken = localStorage.getItem("token");
 
- 
   useEffect(() => {
-    console.log(data)
+    console.log(data);
 
     // Fetch all jobs from the backend API when the component mounts
     axios
-      .post(SERVER_URL + "/getApplicants", {job_id: data._id})
+      .post(SERVER_URL + "/getApplicants", { job_id: data._id })
       .then((response) => {
         setApplicants(response.data);
       })
       .catch((error) => {
         console.error("Error fetching jobs:", error);
       });
-
   }, []);
 
-  
-
-  function acceptDeny(job_id, user_id, acceptdeny, typeOfNotification)
-  {
+  function acceptDeny(job_id, user_id, acceptdeny, typeOfNotification) {
     //Update status of the job
-    axios.post(SERVER_URL + "/acceptDenyApplication", {job_id, user_id, acceptdeny})
+    axios
+      .post(SERVER_URL + "/acceptDenyApplication", {
+        job_id,
+        user_id,
+        acceptdeny,
+      })
       .then((response) => {
         setApplicants(response.data);
       })
@@ -48,32 +48,31 @@ function RecruiterViewJob(props) {
       });
 
     //Send a notification
-    axios.post(SERVER_URL + "/createNotification", { object_id: job_id , accessToken, type: typeOfNotification, user_id })
-      .then((response) => {
-  
+    axios
+      .post(SERVER_URL + "/createNotification", {
+        object_id: job_id,
+        accessToken,
+        type: typeOfNotification,
+        user_id,
       })
+      .then((response) => {})
       .catch((error) => {
         console.error("Error fetching jobs:", error);
       });
 
-    //updating the message 
-    if (typeOfNotification == "Job Offer Accepted"){
-      setMessage("Job Offer have been successfully accepted! Deleting Job...")
+    //updating the message
+    if (typeOfNotification == "Job Offer Accepted") {
+      setMessage("Job Offer have been successfully accepted! Deleting Job...");
+    } else {
+      setMessage("Job Offer have been successfully rejected! Deleting Job...");
     }
-    else{
-      setMessage("Job Offer have been successfully rejected! Deleting Job...")
-    }
-    
 
     //Redirect to Jobs page and deleting the job
-    setTimeout(()=>{
-      axios.post(SERVER_URL + "/deleteJob", {job_id})
-      window.location.href = "/myJobs"
-    }, 3000)
-
+    setTimeout(() => {
+      axios.post(SERVER_URL + "/deleteJob", { job_id });
+      window.location.href = "/myJobs";
+    }, 3000);
   }
-
-
 
   return (
     <>
@@ -91,7 +90,6 @@ function RecruiterViewJob(props) {
         <h3>{data ? data.description : "Oops"}</h3>
         <br></br>
       </div>
-
 
       <div>
         <h1 id="job_title">List of Applicants</h1>
@@ -111,31 +109,47 @@ function RecruiterViewJob(props) {
                 <tr key={app.id}>
                   <td>{app.name}</td>
                   <td>{app.email}</td>
-                  <td>TO BE IMPLEMENTED</td>
                   <td>
-                    <button onClick={() => acceptDeny(data._id, app._id, "accepted", "Job Offer Accepted")}>
+                    <a href={"/user?Id=" + app._id}>View Profile</a>
+                  </td>
+                  <td>
+                    <button
+                      onClick={() =>
+                        acceptDeny(
+                          data._id,
+                          app._id,
+                          "accepted",
+                          "Job Offer Accepted"
+                        )
+                      }
+                    >
                       Accept Application
                     </button>
                     <br></br>
-                    <button onClick={() => acceptDeny(data._id, app._id, "rejected", "Job Offer Rejected")}>
+                    <button
+                      onClick={() =>
+                        acceptDeny(
+                          data._id,
+                          app._id,
+                          "rejected",
+                          "Job Offer Rejected"
+                        )
+                      }
+                    >
                       Reject Application
                     </button>
                   </td>
-         
                 </tr>
               ))}
-             
             </tbody>
           </table>
           <div className="loginStatus_success">{message}</div>
         </div>
       </div>
 
-
       <Link to="/myJobs">
         <button id="viewJob_save">Back</button>
       </Link>
-    
     </>
   );
 }
