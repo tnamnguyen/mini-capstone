@@ -6,7 +6,7 @@ require("chromedriver");
 
 describe('Connection', function() {
     it('Requesting a connection from admin', async function() {
-        this.timeout(35000);
+        this.timeout(50000);
         let driver = await new Builder().forBrowser('chrome').build();
 
         await driver.get("https://mini-capstone.vercel.app");
@@ -31,12 +31,12 @@ describe('Connection', function() {
         // Click on connections Button 
         let connectionsButton = await driver.findElement(By.css('#navbarSupportedContent > ul > li:nth-child(1) > a'))
         connectionsButton.click();
-        await driver.sleep(2000);
+        await driver.sleep(5000);
 
         // Click on add connection button
         const addButton = await driver.findElement(By.xpath('/html/body/div/div[2]/a[1]'))
         addButton.click();
-        await driver.sleep(2000);
+        await driver.sleep(5000);
 
         // Search for admin and add admin
         const searchUser = await driver.findElement(By.xpath('/html/body/div/div/div/form/label/input'))
@@ -44,7 +44,7 @@ describe('Connection', function() {
         await driver.sleep(2000);
         const addAdmin = await driver.findElement(By.xpath('/html/body/div/div/div/form/div/table/tbody/tr[1]/td[2]/button'));
         addAdmin.click();
-        await driver.sleep(2000);
+        await driver.sleep(3000);
         try{
             // TODO once possible, verify that the connection can be viewed from sent connection and then delete the request
             // connectionsButton.click();

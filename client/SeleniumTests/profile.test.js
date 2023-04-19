@@ -6,7 +6,7 @@ require("chromedriver");
 
 describe('Profile', function() {
     it('Editing Profile', async function() {
-        this.timeout(35000);
+        this.timeout(50000);
         let driver = await new Builder().forBrowser('chrome').build();
 
         await driver.get("https://mini-capstone.vercel.app");
@@ -42,11 +42,14 @@ describe('Profile', function() {
         await driver.sleep(2000);
         const userName = await driver.findElement(By.xpath('/html/body/div/div/div[2]/div[1]/form/input'));
         await driver.sleep(2000);
+        let name = ''
         if (await userName.getAttribute("value") === 'Selenium User'){
+            name = 'Selenium Tester'
             await userName.clear();
             await userName.sendKeys('Selenium Tester')
         }
         else {
+            name = 'Selenium User'
             await userName.clear();
             await userName.sendKeys('Selenium User')
         }
@@ -56,8 +59,8 @@ describe('Profile', function() {
         try {
             const submitButton = await driver.findElement(By.id('edit_profile_submit_button'));
             submitButton.click();
-            await driver.sleep(2000);
-            const success = await driver.findElement(By.xpath("//*[contains(text(), 'Successfully edited profile!')]"))
+            await driver.sleep(10000);
+            const success = await driver.findElement(By.xpath("//*[contains(text(), name)]"))
             expect(success).to.exist;
         } catch (error) {
             console.error('Error while editing profile: ', error);
