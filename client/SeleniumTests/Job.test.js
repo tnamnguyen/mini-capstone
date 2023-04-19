@@ -168,8 +168,8 @@ describe('Jobs', function() {
 
         let driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
     
-        // await driver.get("https://mini-capstone.vercel.app");
-        await driver.get("http://localhost:3000/");
+        await driver.get("https://mini-capstone.vercel.app");
+        // await driver.get("http://localhost:3000/");
         await driver.sleep(5000); // timeout for 3 seconds
     
         // Finding and clicking on login button
@@ -234,8 +234,8 @@ describe('Jobs', function() {
 
         let driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
     
-        // await driver.get("https://mini-capstone.vercel.app");
-        await driver.get("http://localhost:3000/");
+        await driver.get("https://mini-capstone.vercel.app");
+        // await driver.get("http://localhost:3000/");
         await driver.sleep(5000); // timeout for 3 seconds
     
         // Finding and clicking on login button
