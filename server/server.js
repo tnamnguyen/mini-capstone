@@ -725,7 +725,8 @@ app.post('/createJobs', authenticateToken, async(req, res) => {
     experience: input_experience,
     location: input_location,
     description: input_description,
-    user_id: userId
+    user_id: userId,
+    accepting_applications: true
   })
 
   // Adding Job to DB
@@ -860,9 +861,9 @@ app.get("/jobs", async (req, res) => {
   const db_client = await MongoClient.connect(url);
   const dbo = db_client.db(database_name);
 
-  // Query all the jobs
+  // Query all the jobs which are accepting applications
   try {
-    const jobs = await await dbo.collection(collection_name).find().toArray();
+    const jobs = await await dbo.collection(collection_name).find({accepting_applications: true}).toArray();
     res.json(jobs);
     disconnectMongooseDB()
   } catch (error) {
@@ -1201,6 +1202,42 @@ app.post('/removejobApplication', authenticateToken, async(req, res) => {
 
 })
 
+
+// ************************ Stop accepting job applications ************************ //
+app.post('/stopAcceptingApplications', async(req, res) => {
+  console.log(`stop accepting route is running`)
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "Jobs"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // Delete document containing user id and job id
+  dbo.collection(collection_name).findOneAndUpdate(
+    { _id: new ObjectId(req.body.job_id) },
+    { $set: { accepting_applications: false } }
+  );
+
+})
+
+// ************************ Start accepting job applications ************************ //
+app.post('/startAcceptingApplications', async(req, res) => {
+  console.log(`start accepting route is running`)
+
+  // Connecting to the specific database and collection
+  const database_name = "Accounts"
+  const collection_name = "Jobs"
+  const db_client =  await MongoClient.connect(url) 
+  const dbo = db_client.db(database_name)
+
+  // Delete document containing user id and job id
+  dbo.collection(collection_name).findOneAndUpdate(
+    { _id: new ObjectId(req.body.job_id) },
+    { $set: { accepting_applications: true } }
+  );
+
+})
 
 
 

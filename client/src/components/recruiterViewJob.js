@@ -73,6 +73,29 @@ function RecruiterViewJob(props) {
 
   }
 
+  function displayApplicationsButton()
+  {
+    if(data.accepting_applications == true)
+    {
+      return (<><h5>You are currently accepting new applications for this job!</h5><button id="viewJob_save" onClick={()=>{stopAccepting()}}>Stop Accepting Applications!</button></>)
+    }
+    else
+    {
+      return (<><h5>You are currently not accepting any new applications for this job!</h5><button id="viewJob_save" onClick={()=>{startAccepting()}}>Start Accepting Applications!</button></>)
+
+    }
+  }
+
+  function stopAccepting()
+  {
+    axios.post(SERVER_URL + "/stopAcceptingApplications", {job_id: data._id})
+  }
+
+  function startAccepting()
+  {
+    axios.post(SERVER_URL + "/startAcceptingApplications", {job_id: data._id})
+  }
+
 
 
   return (
@@ -135,6 +158,10 @@ function RecruiterViewJob(props) {
       <Link to="/myJobs">
         <button id="viewJob_save">Back</button>
       </Link>
+      <br></br>
+
+      {displayApplicationsButton()}
+      
     
     </>
   );
