@@ -100,18 +100,17 @@ function RecruiterViewJob(props) {
               <tr>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Visit Profile</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
               {applicants.map((app) => (
                 <tr key={app.id}>
-                  <td>{app.name}</td>
-                  <td>{app.email}</td>
                   <td>
-                    <a href={"/user?Id=" + app._id}>View Profile</a>
+                    <a href={"/user?Id=" + app._id}>{app.name}</a>
                   </td>
+                  <td>{app.email}</td>
+
                   <td>
                     <button
                       onClick={() =>
