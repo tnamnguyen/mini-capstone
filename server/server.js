@@ -999,7 +999,7 @@ app.post("/savedjobs", authenticateToken, async (req, res) => {
     );
 
     // Finding all jobs matching ids from array
-    const jobs = await dbo.collection(collection_name_Jobs).find({_id: {$in: object_ids}}).toArray();
+    const jobs = await dbo.collection(collection_name_Jobs).find({_id: {$in: object_ids}, accepting_applications: true}).toArray();
     res.json(jobs)
     //db_client.close();
     disconnectMongooseDB()
