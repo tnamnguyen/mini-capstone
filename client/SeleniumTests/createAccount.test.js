@@ -1,5 +1,6 @@
 // Loading WebDriver test module
 const {By, Key, Builder} = require("selenium-webdriver");
+const chrome = require('selenium-webdriver/chrome');
 const { expect } = require('chai');
 const { describe, it } = require('mocha');
 require("chromedriver");
@@ -7,7 +8,10 @@ require("chromedriver");
 describe('Creating an account', function() {
     it('Creating Account using email that already exists', async function() {
         this.timeout(15000); // Allow the timeout of the test to be at 10 seconds instead
-        let driver = await new Builder().forBrowser('chrome').build();
+        let chromeOptions = new chrome.Options();
+        chromeOptions.addArguments("--start-maximized");
+
+        let driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
 
         await driver.get("https://mini-capstone.vercel.app");
         await driver.sleep(3000); // timeout for 3 seconds
@@ -47,7 +51,10 @@ describe('Creating an account', function() {
     // only will execute this Individual Test only and ignore the remaining its
     it('Creating an account to be deleted', async function() {
         this.timeout(35000)
-        let driver = await new Builder().forBrowser('chrome').build();
+        let chromeOptions = new chrome.Options();
+        chromeOptions.addArguments("--start-maximized");
+
+        let driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
 
         await driver.get("https://mini-capstone.vercel.app");
         await driver.sleep(3000); // timeout for 3 seconds

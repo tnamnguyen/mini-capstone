@@ -1,5 +1,6 @@
 // Loading WebDriver test module
 const {By, Key, Builder} = require("selenium-webdriver");
+const chrome = require('selenium-webdriver/chrome');
 const { expect } = require('chai');
 const { describe, it } = require('mocha');
 require("chromedriver");
@@ -7,7 +8,10 @@ require("chromedriver");
 describe('Connection', function() {
     it('Requesting a connection from admin', async function() {
         this.timeout(50000);
-        let driver = await new Builder().forBrowser('chrome').build();
+        let chromeOptions = new chrome.Options();
+        chromeOptions.addArguments("--start-maximized");
+
+        let driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
 
         await driver.get("https://mini-capstone.vercel.app");
         await driver.sleep(3000); // timeout for 3 seconds
@@ -26,12 +30,12 @@ describe('Connection', function() {
         loginButton.click();
         
         // Waiting for redirection
-        await driver.sleep(8000);
+        await driver.sleep(10000);
 
         // Click on connections Button 
         let connectionsButton = await driver.findElement(By.css('#navbarSupportedContent > ul > li:nth-child(1) > a'))
         connectionsButton.click();
-        await driver.sleep(5000);
+        await driver.sleep(6000);
 
         // Click on add connection button
         const addButton = await driver.findElement(By.xpath('/html/body/div/div[2]/a[1]'))

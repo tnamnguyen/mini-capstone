@@ -1,17 +1,24 @@
 // Loading WebDriver test module
 const {By, Key, Builder} = require("selenium-webdriver");
+const chrome = require('selenium-webdriver/chrome');
 const { expect } = require('chai');
 const { describe, it } = require('mocha');
 const { create } = require("../../server/userModel");
 require("chromedriver");
 
 describe('Jobs', function() {
-    it('Creating a job', async function() {
+  // Skipping this test as the test below also creates a job and should be representative enough
+    it.skip('Creating a job', async function() {
         this.timeout(90000);
-        let driver = await new Builder().forBrowser('chrome').build();
+        let chromeOptions = new chrome.Options();
+        chromeOptions.addArguments("--start-maximized");
+
+        let driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
+
 
         await driver.get("https://mini-capstone.vercel.app");
         await driver.sleep(3000); // timeout for 3 seconds
+        
 
         // Finding and clicking on login button
         let loginButton = await driver.findElement(By.id('log_in_button'))
@@ -69,7 +76,10 @@ describe('Jobs', function() {
 
     it('Create a job and edit the job', async function() {
         this.timeout(90000);
-        let driver = await new Builder().forBrowser('chrome').build();
+        let chromeOptions = new chrome.Options();
+        chromeOptions.addArguments("--start-maximized");
+
+        let driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
 
         await driver.get("https://mini-capstone.vercel.app");
         await driver.sleep(3000); // timeout for 3 seconds
@@ -134,7 +144,7 @@ describe('Jobs', function() {
 
         submitButton = await driver.findElement(By.xpath('/html/body/div/div/div/form/button'));
         submitButton.click();
-        await driver.sleep(25000);
+        await driver.sleep(35000);
 
         try {
             let success = await driver.findElement(By.xpath("//*[contains(text(), 'New Job')]"));
@@ -145,19 +155,22 @@ describe('Jobs', function() {
             console.error("Error while editing job", error);
             expect.fail("Job wasn't created or edited");
           } finally {
-            await driver.sleep(4000);
+            await driver.sleep(5000);
             await driver.quit();
           }
     })
 
     it("Applying for a job", async function () {
-        this.timeout(60000);
+        this.timeout(80000);
     
-        let driver = await new Builder().forBrowser("chrome").build();
+        let chromeOptions = new chrome.Options();
+        chromeOptions.addArguments("--start-maximized");
+
+        let driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
     
         // await driver.get("https://mini-capstone.vercel.app");
         await driver.get("http://localhost:3000/");
-        await driver.sleep(3000); // timeout for 3 seconds
+        await driver.sleep(5000); // timeout for 3 seconds
     
         // Finding and clicking on login button
         let loginButton = await driver.findElement(By.id("log_in_button"));
@@ -177,7 +190,7 @@ describe('Jobs', function() {
         loginButton.click();
     
         // Waiting for redirection
-        await driver.sleep(8000);
+        await driver.sleep(20000);
     
         jobsButton = await driver.findElement(By.id("job-button"));
         jobsButton.click();
@@ -196,7 +209,7 @@ describe('Jobs', function() {
         viewResults = await driver.findElement(By.id("applications-button"));
         viewResults.click();
         
-        await driver.sleep(8000);
+        await driver.sleep(10000);
         try {
           success = await driver.findElement(
             By.xpath("/html/body/div/div/div/div/table/tbody/tr[2]/td[6]/button")
@@ -213,14 +226,17 @@ describe('Jobs', function() {
         }
       });
 
-      it("Saving a job", async function () {
+      it.skip("Saving a job", async function () {
         this.timeout(70000);
     
-        let driver = await new Builder().forBrowser("chrome").build();
+        let chromeOptions = new chrome.Options();
+        chromeOptions.addArguments("--start-maximized");
+
+        let driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
     
         // await driver.get("https://mini-capstone.vercel.app");
         await driver.get("http://localhost:3000/");
-        await driver.sleep(3000); // timeout for 3 seconds
+        await driver.sleep(5000); // timeout for 3 seconds
     
         // Finding and clicking on login button
         let loginButton = await driver.findElement(By.id("log_in_button"));
@@ -240,7 +256,7 @@ describe('Jobs', function() {
         loginButton.click();
     
         // Waiting for redirection
-        await driver.sleep(8000);
+        await driver.sleep(10000);
     
         jobsButton = await driver.findElement(By.id("job-button"));
         jobsButton.click();

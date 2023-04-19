@@ -1,11 +1,13 @@
 // Loading WebDriver test module
 const {By, Key, Builder} = require("selenium-webdriver");
+const chrome = require('selenium-webdriver/chrome');
 const { expect } = require('chai');
 const { describe, it } = require('mocha');
 require("chromedriver");
 
 describe('Login', function() {
-    it('Logging test user in', async function() {
+    // Skipping this test as most tests require a login anyways
+    it.skip('Logging test user in', async function() {
         this.timeout(20000);
         let driver = await new Builder().forBrowser('chrome').build();
 
