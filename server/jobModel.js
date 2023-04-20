@@ -28,7 +28,12 @@ const jobSchema = new mongoose.Schema({
     user_id: {
         type: String,
         required: true
-    }
+    },
+
+    accepting_applications: {
+        type: Boolean,
+        required: true
+    },
 });
 
 
