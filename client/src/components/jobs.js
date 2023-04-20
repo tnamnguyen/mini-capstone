@@ -21,9 +21,8 @@ function JobList() {
   if (isTokenAvailable) {
     axios.post(SERVER_URL + "/home", { accessToken }).then((response) => {
       setLogin(false);
-      if(response.data.user.type == "recruiter")
-      {
-        setRecruiter(true)
+      if (response.data.user.type == "recruiter") {
+        setRecruiter(true);
       }
     });
   }
@@ -62,16 +61,14 @@ function JobList() {
   // Call to apply to the job
   function applyJob(job_id) {
     clearTimer();
-    
+
     console.log("apply button was clicked");
     axios
       .post(SERVER_URL + "/applyJob", { job_id, accessToken })
       .then((response) => {
-
         //Create notification only if first time applying to the job
-        if(response.data.message != 'ALready applied to this job!')
-        {
-          createNotification(job_id, "Job Application")
+        if (response.data.message != "ALready applied to this job!") {
+          createNotification(job_id, "Job Application");
         }
 
         setAppliedJobId(job_id);
@@ -84,12 +81,15 @@ function JobList() {
       });
   }
 
-
   // Call to create a new notification
   function createNotification(job_id, typeOfNotification) {
     console.log("Notification creation is called!");
     axios
-      .post(SERVER_URL + "/createNotification", { object_id: job_id , accessToken, type: typeOfNotification })
+      .post(SERVER_URL + "/createNotification", {
+        object_id: job_id,
+        accessToken,
+        type: typeOfNotification,
+      })
       .then((response) => {
         setAppliedJobId(job_id);
         setApplySuccess(response.data.message);
@@ -111,8 +111,8 @@ function JobList() {
   }
 
   function saveRow() {
-    if(!login && recruiter == false) {
-      return <th>Save</th>
+    if (!login && recruiter == false) {
+      return <th>Save</th>;
     }
   }
 
@@ -173,7 +173,7 @@ function JobList() {
   function addCreateJobButton() {
     if (!login && recruiter == true) {
       return (
-        <Link to="/createJobs" className="myButton">
+        <Link to="/createJobs" className="myButton" id="create-button">
           Create A new Job
         </Link>
       );
@@ -195,7 +195,7 @@ function JobList() {
   function addAppliedJobButton() {
     if (!login && recruiter == false) {
       return (
-        <Link to="/appliedJobs" className="myButton">
+        <Link to="/appliedJobs" className="myButton" id="applications-button">
           View my applications
         </Link>
       );
@@ -206,7 +206,7 @@ function JobList() {
   function addCreatedJobButton() {
     if (!login && recruiter == true) {
       return (
-        <Link to="/myJobs" className="myButton">
+        <Link to="/myJobs" className="myButton" id="manage-button">
           Manage Created Jobs
         </Link>
       );

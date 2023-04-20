@@ -29,6 +29,7 @@ import Notifications from "./components/notifications";
 import Messaging from "./components/messaging"
 import RecruiterViewJob from "./components/recruiterViewJob";
 import SentConnections from './components/sentConnections.js';
+import Messages from './components/sendMessage.js';
 
 
 
@@ -65,6 +66,7 @@ ReactDOM.render(
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/messaging" element={<Messaging />} />
         <Route path="/sentConnections" element={<SentConnections />} />
+        <Route path="/sendMessage" element={<Messages />} />
 
 
       </Routes>

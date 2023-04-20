@@ -17,6 +17,7 @@ const nodemailer = require("nodemailer")
 const Profile = require("./profileModel.js")
 const jwt = require("jsonwebtoken")
 const Connection = require("./connectionModel.js")
+const Message = require("./messageModel.js")
 
 
 // **************************************** Connecting to Mongoose DB **************************************** //
@@ -1400,7 +1401,7 @@ app.post("/reset", async (req, res) => {
 
 // ************************ Print all users names ************************ //
 app.get("/addConnections", async (req, res) => {
-  console.log(`route  for printing connections is running`);
+  console.log(`route for printing users is running`);
 
   // Connecting to the specific database and collection
   const database_name = "Accounts";
@@ -1985,6 +1986,73 @@ app.post('/deleteJob', async(req, res) => {
 
   const applicants = await dbo.collection(collection_name).deleteOne({_id: new ObjectId(job_id)})
 })
+
+
+
+
+//*************************** Messaging *************************//
+app.post("/sendMessages", async (req, res) => {
+  try {
+    const { user1,user1Name, user2, user2Name, message } = req.body;
+    // trying to fix the vulnerabilities
+    if (typeof user1Name !== 'string' || typeof user1 !== 'string' || typeof user2Name
+       !== 'string' || typeof user2 !== 'string' || typeof message !== 'string' ) {
+      throw new Error('Invalid input: user1, user2, and message must be strings');
+    }
+
+    const newMessage = new Message({ user1, user1Name, user2, user2Name, message });
+    const result = await newMessage.save();
+    if (result) {
+      res.status(200).json({
+        message: "Message sent successfully",
+        status: true,
+        data: result,
+      });
+    } else {
+      res.status(200).json({
+        message: "Failed to send message first",
+        status: false,
+      });
+    }
+  } catch (error) {
+    res.status(200).json({
+      message: "Failed to send message second"+ error.message,
+      status: false,
+    });
+  }
+});
+
+// ************************ Printing Messages ************************ //
+app.get("/messages/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await Message.find({ user1: id});
+    const result1 = await Message.find({ user2: id});
+    const totalMessage = [...result, ...result1];
+    console.log(totalMessage);
+    const uniqueArr = [
+      ...new Set(totalMessage.map((obj) => JSON.stringify(obj))),
+    ].map((str) => JSON.parse(str));
+
+    if (result) {
+      res.status(200).json({
+        message: "Messages Fetched successfully",
+        status: true,
+        data: uniqueArr,
+      });
+    } else {
+      res.status(200).json({
+        message: "Failed to Fetch Messages",
+        status: false,
+      });
+    }
+  } catch (error) {
+    res.status(200).json({
+      message: "Failed to Fetch Messages",
+      status: false,
+    });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
