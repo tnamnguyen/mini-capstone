@@ -15,6 +15,12 @@
   flex-wrap: nowrap;
   gap: 50px 30px;
   justify-content: flex-start;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    margin-top: 100px;
+    padding: 30px;
+  }
 }
 
 .edit_profile_profile_pic{
@@ -31,6 +37,12 @@
   flex-wrap: nowrap;
   gap: 50px 30px;
   justify-content:space-around;
+
+  @media (max-width: 768px) {
+    margin: 10px;
+    padding: 10px;
+    gap: 50px 30px;
+  }
 }
 
 .edit_profile_greeting{
@@ -142,4 +154,11 @@
 .editStatus_success{
   color: green;
   font-size: 23px;
+}
+
+@media only screen and (max-width: 768px) {
+  .edit_profile_pic {
+    display: flex;
+    justify-content: center;
+  }
 }

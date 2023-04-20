@@ -17,6 +17,12 @@
   gap: 50px 30px;
   justify-content: flex-start;
   //gap:140;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    margin-top: 100px;
+    padding: 30px;
+  }
 }
 
 .profile_profile_pic{
@@ -34,6 +40,12 @@
   flex-wrap: nowrap;
   gap: 50px 30px;
   justify-content:space-around;
+  
+  @media (max-width: 768px) {
+    margin: 10px;
+    padding: 10px;
+    gap: 50px 30px;
+  }
 }
 
 .profile_greeting{
@@ -94,4 +106,14 @@
 #profile_edit_profile_button:hover{
   color: beige;
   background-color: grey;
+}
+
+@media only screen and (max-width: 768px) {
+  #profile_edit_profile_button:last-of-type {
+    margin-top: 5px; /* add gap between buttons as to not stick together */
+  }
+  .profile_pic {
+    display: flex;
+    justify-content: center;
+  }
 }

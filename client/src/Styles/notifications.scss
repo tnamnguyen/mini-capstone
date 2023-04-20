@@ -48,26 +48,26 @@ button-job {
     }
   
   
-    .job-table {
+    .noti-table {
       border-collapse: collapse;
       
       width: 100%;
       max-width: 800px;
     }
   
-    .job-table th,
-    .job-table td {
+    .noti-table th,
+    .noti-table td {
       padding: 10px;
       text-align: left;
       border: 1px solid #ccc;
     }
     
-    .job-table th {
+    .noti-table th {
       background-color: #f0f0f0;
       font-weight: bold;
     }
     
-    .job-table td {
+    .noti-table td {
       background-color: #fff;
     }
   
@@ -160,4 +160,10 @@ button-job {
   background-color: white;
   border-color: white;
   border: 0px solid;
+}
+
+@media (max-width: 768px) { /* Targets mobile devices only */
+  .noti-table {
+    margin-right: calc(50vw - 250px);
+  }
 }

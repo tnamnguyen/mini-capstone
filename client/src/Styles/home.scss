@@ -2,18 +2,18 @@
 @import "./variables/variables.scss";
 
 
-.header {
+.header-home {
     color: $blue_Color;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 500px; 
+    height: 100vh; 
 }
 
 .header-title {
-    font-size: 85px; 
-    text-align: center;
+    font-size: 95px; 
+    text-align: center;  
 }
 
 .content {
@@ -27,7 +27,7 @@
     margin-top: 10px; 
 }
 
-.rounded-button {
+.rounded-homebutton {
     background-color: blue;
     color: white;
     border: none;
@@ -36,7 +36,7 @@
     margin-right: 10px;
 }
   
-.normal-button {
+.normal-homebutton {
     background-color: white;
     color: blue;
     border: 2px solid blue;
@@ -101,5 +101,39 @@ flex-grow: 3;
     color: white;
     background: #2563eb;
     border-radius: 10px;
+}
 
+@media screen and (max-width: 768px) {
+  .home_main_container {
+    flex-direction: column;
+  }
+
+  .home_main_profile {
+    border-radius: 25px 25px 0 0;
+    order: 2;
+    flex-grow: 0;
+  }
+
+  .home_posts {
+    border-radius: 0 0 25px 25px;  
+    padding-top: 20px;
+    padding-bottom: 130px;
+    flex-direction: column;
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+
+      .column {
+        width: 0%;
+
+        button {
+          display: block;
+          width: 100%;
+        }
+      }
+    }
+  }
 }

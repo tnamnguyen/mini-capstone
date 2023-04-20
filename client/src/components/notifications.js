@@ -158,7 +158,7 @@ function Notifications() {
         <h1 id="job_title">Notifications</h1>
         <br />
         <div className="container">
-          <table className="job-table" data-testid="notificationsTest">
+          <table className="noti-table" data-testid="notificationsTest">
             <thead>
               <tr>
                 <th>Time</th>
