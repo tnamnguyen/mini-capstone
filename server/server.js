@@ -1698,7 +1698,7 @@ app.post('/createNotification', authenticateToken, async(req, res) => {
     })
   }
 
-   //If type of notification is Job Application withdrawal
+   //If type of notification is Job Application Accepted
    else if(req.body.type == "Job Offer Accepted")
    {
      //Retrieving Job info
@@ -1718,7 +1718,7 @@ app.post('/createNotification', authenticateToken, async(req, res) => {
      })
    }
 
-   //If type of notification is Job Application withdrawal
+   //If type of notification is Job Application Rejected
    else if(req.body.type == "Job Offer Rejected")
    {
      //Retrieving Job info
@@ -1971,7 +1971,7 @@ app.post('/acceptDenyApplication', async(req, res) => {
   console.log(req.body.user_id)
   console.log(req.body.acceptdeny)
 
-  const applicants = await dbo.collection(collection_name).updateOne({job_id: req.body.job_id, user_id: req.body.user_id}, {$set :{status : "asd"}})
+  const applicants = await dbo.collection(collection_name).updateOne({job_id: req.body.job_id, user_id: req.body.user_id}, {$set :{status : req.body.acceptdeny}})
 })
 
 app.post('/deleteJob', async(req, res) => {
