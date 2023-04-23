@@ -1779,6 +1779,31 @@ app.post('/createNotification', authenticateToken, async(req, res) => {
   }
 
 
+  //If type of notification is Messaging
+  if(req.body.type == "Message Sent")
+  {
+    //Retrieve the sender's name
+    const sender_name = res.user.name;
+
+    //Retrieve receipient's name
+    const user = await dbo.collection("users").findOne({_id: new ObjectId(req.body.object_id)})
+    const receipient_name = user.name;
+
+    //Setting up the message that will appear in the notification
+    const message = " You have received a new message \"" + req.body.message + "\" from the user \"" + sender_name + "\"."
+    newNotification = new Notifications({
+      time_stamp: Moment().format('DD-MM-YYYY HH:mm'),
+      user_id: req.body.object_id,
+      object_id: req.body.object_id,
+      type: "Message Sent",
+      message: message,
+      status: "Unread",
+      favorite: false,
+      action: "/messaging"
+    })
+  }
+
+
 
 
   //Adding the notification to the database

@@ -135,6 +135,13 @@ function Notifications() {
           <Link to="/jobs"><button class="" href="/jobs">View All Jobs</button></Link>
         )
       }
+
+      else if(action == "/messaging")
+      {
+        return(
+          <Link to="/messaging"><button class="" href="/messaging">View Message</button></Link>
+        )
+      }
     }
   }
   

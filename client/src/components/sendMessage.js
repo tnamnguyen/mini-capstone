@@ -78,9 +78,22 @@ function Messages() {
               setTimeout(()=>{
                 setShowPopUp('')
               },3000)
+
+              //Send a notification to the other user
+              axios
+              .post(SERVER_URL + "/createNotification", {
+                accessToken,
+                object_id: selectedUser,
+                type: "Message Sent",
+                message:  messageValue
+              })
+              .then((response) => {});
+
+
+
             } else {
               setTimeout(() => {
-                window.location.href = "http://localhost:3000/";
+                window.location.href = "/";
               }, 4000);
             }
           })
