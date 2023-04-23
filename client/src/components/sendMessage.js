@@ -4,7 +4,6 @@ import axios from "axios";
 import NavBar from "./navBar";
 import "../Styles/sendMessage.scss";
 
-
 function Messages() {
   const isTokenAvailable = localStorage.getItem("token");
   const accessToken = localStorage.getItem("token");
@@ -95,7 +94,7 @@ function Messages() {
     <div>
       <NavBar></NavBar>
         <form onSubmit={handleSubmit} >
-        <div> Select the user you wish to send a message to &nbsp;
+        <div class="textbox"> Select the user you wish to send a message to &nbsp;
             <select id="users-dropdown" value={selectedUser} onChange={handleUserChange}>
                 {users.map((user) => (
                       <option key={user.id} value={user._id}>
@@ -103,9 +102,10 @@ function Messages() {
                       </option>
                     ))}  
             </select> <br></br>
-            
+          <br></br>
             <label>
               <input
+                  class="textbox"
                 type="text"
                 id="messages-form"
                 placeholder="Type your Message Here"
@@ -119,7 +119,7 @@ function Messages() {
                 }}
               />
             </label> <br></br>
-                
+          <br></br>
             <button
                 className="button_6"
                 onClick={() => handleSend(selectedUser, selectedUserName, messageValue)}
