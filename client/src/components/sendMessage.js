@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import NavBar from "./navBar";
-import "../Styles/connections.scss";
+import "../Styles/sendMessage.scss";
 
 
 function Messages() {
@@ -94,7 +94,7 @@ function Messages() {
   return (
     <div>
       <NavBar></NavBar>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} >
         <div> Select the user you wish to send a message to &nbsp;
             <select id="users-dropdown" value={selectedUser} onChange={handleUserChange}>
                 {users.map((user) => (
@@ -107,6 +107,7 @@ function Messages() {
             <label>
               <input
                 type="text"
+                id="messages-form"
                 placeholder="Type your Message Here"
                 onChange={(event) => {
                   setMessageValue(event.target.value);
@@ -120,7 +121,7 @@ function Messages() {
             </label> <br></br>
                 
             <button
-                className="button-14"
+                className="button_6"
                 onClick={() => handleSend(selectedUser, selectedUserName, messageValue)}
                 >
                 Send
