@@ -102,7 +102,7 @@ function NavBar() {
     if (!loginElement) {
       return (
         <li class="nav-item">
-          <Button class="nav-link" outline color="secondary" href="#">
+          <Button class="nav-link" outline color="secondary" href="/messaging">
             Chat
           </Button>
         </li>
