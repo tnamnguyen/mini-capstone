@@ -58,9 +58,15 @@ function Messaging() {
     console.log(user1.id);
 
 
-    const handleClick = () => {
+    const handleSend = () => {
         // Your click event handler code here
         window.location = "#";
+
+    };
+
+    const handleClick = () => {
+        // Your click event handler code here
+        window.location = "/sendMessage";
 
     };
     return (
@@ -69,12 +75,12 @@ function Messaging() {
             <div className="inbox-container">
                 <div className="inbox-header">
                     <h1>Inbox</h1>
-                        <button className="addButton" >+</button>
+                        <button className="addButton" onClick={handleClick}>+</button>
                 </div>
                 <div className="inbox-list">
                     <ul>
                         {messages?.map((message) => (
-                        <li className="newMess"  onClick={handleClick} key={message._id}>
+                        <li className="newMess"  onClick={handleSend} key={message._id}>
                             <div className="sender">{message.user2Name === user1?.name
                                                     ? message.user1Name
                                                     : message.user2Name}</div>
