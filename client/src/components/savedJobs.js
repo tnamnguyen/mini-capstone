@@ -105,9 +105,6 @@ function SavedJobList() {
             </tbody>
           </table>
         </div>
-        <Link to="/createJobs" className="myButton">
-          Create A new Job
-        </Link>
         <Link to="/jobs" className="myButton">
           Back
         </Link>
