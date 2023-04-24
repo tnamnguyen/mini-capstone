@@ -1698,7 +1698,7 @@ app.post('/createNotification', authenticateToken, async(req, res) => {
     })
   }
 
-   //If type of notification is Job Application withdrawal
+   //If type of notification is Job Application Accepted
    else if(req.body.type == "Job Offer Accepted")
    {
      //Retrieving Job info
@@ -1718,7 +1718,7 @@ app.post('/createNotification', authenticateToken, async(req, res) => {
      })
    }
 
-   //If type of notification is Job Application withdrawal
+   //If type of notification is Job Application Rejected
    else if(req.body.type == "Job Offer Rejected")
    {
      //Retrieving Job info
@@ -1776,6 +1776,31 @@ app.post('/createNotification', authenticateToken, async(req, res) => {
         disconnectMongooseDB()
       })
     }
+  }
+
+
+  //If type of notification is Messaging
+  if(req.body.type == "Message Sent")
+  {
+    //Retrieve the sender's name
+    const sender_name = res.user.name;
+
+    //Retrieve receipient's name
+    const user = await dbo.collection("users").findOne({_id: new ObjectId(req.body.object_id)})
+    const receipient_name = user.name;
+
+    //Setting up the message that will appear in the notification
+    const message = " You have received a new message \"" + req.body.message + "\" from the user \"" + sender_name + "\"."
+    newNotification = new Notifications({
+      time_stamp: Moment().format('DD-MM-YYYY HH:mm'),
+      user_id: req.body.object_id,
+      object_id: req.body.object_id,
+      type: "Message Sent",
+      message: message,
+      status: "Unread",
+      favorite: false,
+      action: "/messaging"
+    })
   }
 
 
@@ -1971,7 +1996,7 @@ app.post('/acceptDenyApplication', async(req, res) => {
   console.log(req.body.user_id)
   console.log(req.body.acceptdeny)
 
-  const applicants = await dbo.collection(collection_name).updateOne({job_id: req.body.job_id, user_id: req.body.user_id}, {$set :{status : "asd"}})
+  const applicants = await dbo.collection(collection_name).updateOne({job_id: req.body.job_id, user_id: req.body.user_id}, {$set :{status : req.body.acceptdeny}})
 })
 
 app.post('/deleteJob', async(req, res) => {

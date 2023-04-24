@@ -62,16 +62,16 @@ function RecruiterViewJob(props) {
 
     //updating the message
     if (typeOfNotification == "Job Offer Accepted") {
-      setMessage("Job Offer have been successfully accepted! Deleting Job...");
+      setMessage("Job Offer have been successfully accepted!");
     } else {
-      setMessage("Job Offer have been successfully rejected! Deleting Job...");
+      setMessage("Job Offer have been successfully rejected!");
     }
 
-    //Redirect to Jobs page and deleting the job
-    setTimeout(() => {
-      axios.post(SERVER_URL + "/deleteJob", { job_id });
-      window.location.href = "/myJobs";
-    }, 3000);
+    // //Redirect to Jobs page and deleting the job
+    // setTimeout(() => {
+    //   axios.post(SERVER_URL + "/deleteJob", { job_id });
+    //   window.location.href = "/myJobs";
+    // }, 3000);
   }
 
 
